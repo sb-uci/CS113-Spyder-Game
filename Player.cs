@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Player : Area2D
+public class Player : KinematicBody2D
 {
 	[Export]
 	public int moveSpeed = 400;
@@ -18,7 +18,8 @@ public class Player : Area2D
 	{
 		Vector2 moveVector = modifyVelocityFromInput();
 		playSpriteAnimation(moveVector);
-		updatePosition(moveVector, delta);
+		MoveAndCollide(moveVector * delta);
+		//updatePosition(moveVector, delta);
 	}
 	
 	private Vector2 modifyVelocityFromInput()
