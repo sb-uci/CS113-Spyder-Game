@@ -11,6 +11,7 @@ animations = [ {
 } ]
 
 [node name="StaticBody2D" type="StaticBody2D"]
+scale = Vector2( 0.25, 0.25 )
 __meta__ = {
 "_edit_group_": true
 }
