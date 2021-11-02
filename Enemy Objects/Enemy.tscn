@@ -9,7 +9,7 @@ radius = 11.1885
 "Enemies",
 ]]
 collision_layer = 4
-collision_mask = 0
+collision_mask = 15
 __meta__ = {
 "_edit_group_": true
 }

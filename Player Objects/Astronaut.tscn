@@ -12,7 +12,7 @@ height = 4.31881
 [node name="Astronaut" type="KinematicBody2D" groups=[
 "Player",
 ]]
-collision_layer = 514
+collision_mask = 6
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true
