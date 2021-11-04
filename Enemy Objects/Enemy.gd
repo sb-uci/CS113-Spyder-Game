@@ -1,11 +1,17 @@
 extends KinematicBody2D
 
+class_name Enemy
+
 var speed = 75
 onready var player = get_parent().get_node("Astronaut")
+onready var player_box = get_player_collision_node(player)
 onready var navigation = get_parent().get_node("Navigation")
 
 func _physics_process(delta):
-	var move_vectors = navigate(speed * delta, global_position, player.global_position)
+	do_movement(delta)
+
+func do_movement(delta):
+	var move_vectors = navigate(speed * delta, global_position, player_box.global_position)
 	for vector in move_vectors:
 		self.position += vector # move entity, ignoring collision
 	move_and_slide(Vector2(0,0)) # apply collision after movement
@@ -38,3 +44,8 @@ func navigate(move_distance, start, end):
 			path.remove(0)
 	
 	return vectors
+
+func get_player_collision_node(var player_node):
+	for child in player_node.get_children():
+		if child.get_class() == "CollisionShape2D":
+			return child

@@ -2,7 +2,7 @@ extends RigidBody2D
 
 func _on_Bullet_body_entered(body):
 	if !body.is_in_group("Player"):
-		if body.is_in_group("Enemies"):
+		if body is Enemy:
 			body.queue_free()
 		queue_free()
 
