@@ -44,3 +44,8 @@ margin_right = -7.67318
 margin_bottom = -17.8691
 rect_scale = Vector2( 0.16, 0.16 )
 isEnemy = false
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true

@@ -2,22 +2,33 @@ extends KinematicBody2D
 
 class_name Enemy
 
-var speed = 75
-var max_hp = 3
+export var speed = 75
+export var max_hp = 3
+export var damage = 1
+
 var health
+
 onready var player = get_parent().get_node("Astronaut")
-onready var player_box = get_player_collision_node(player)
+onready var player_box = _get_player_collision_node(player)
 onready var navigation = get_parent().get_node("Navigation")
 onready var hp = $HealthBar
 
+func register_hit(damage):
+	health -= damage
+	hp.update_hp(health)
+	if health <= 0:
+		self.queue_free()
+
 func _ready():
-	init_hp(max_hp)
+	_init_hp(max_hp)
 
 func _physics_process(delta):
-	do_movement(delta)
+	_do_movement(delta)
+	if _detect_player_collision(player):
+		_on_collide_with_player(player)
 
-func do_movement(delta):
-	var move_vectors = navigate(speed * delta, global_position, player_box.global_position)
+func _do_movement(delta):
+	var move_vectors = _navigate(speed * delta, global_position, player_box.global_position)
 	for vector in move_vectors:
 		self.position += vector # move entity, ignoring collision
 	move_and_slide(Vector2(0,0)) # apply collision after movement
@@ -28,7 +39,7 @@ func do_movement(delta):
 # But this can cause it to partially clip into obstacles (never fully clip,
 # though). To avoid that, collision is applied on a non-movement after movement.
 
-func navigate(move_distance, start, end):
+func _navigate(move_distance, start, end):
 	var path = navigation.get_simple_path(start, end, true)
 	path.remove(0) # first point is start point
 	
@@ -50,19 +61,23 @@ func navigate(move_distance, start, end):
 			path.remove(0)
 	
 	return vectors
+	
+func _detect_player_collision(player_node):
+	for i in get_slide_count():
+		var collision = get_slide_collision(i)
+		if collision.collider == player_node:
+			return true
+	return false
 
-func get_player_collision_node(player_node):
+func _get_player_collision_node(player_node):
 	for child in player_node.get_children():
 		if child.get_class() == "CollisionShape2D":
 			return child
 
-func register_hit(damage):
-	health -= damage
-	hp.update_hp(health)
-	if health <= 0:
-		self.queue_free()
-
-func init_hp(max_hp):
+func _init_hp(max_hp):
 	health = max_hp
 	hp.set_max(max_hp)
 	hp.update_hp(max_hp)
+
+func _on_collide_with_player(player_node):
+	player_node.damage_player(1)

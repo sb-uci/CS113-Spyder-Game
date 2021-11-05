@@ -3,17 +3,17 @@ extends "res://Enemy Objects/Enemy.gd"
 func _ready():
 	max_hp = 2 # override parent class health
 	speed = 100 # override parent class speed
-	init_hp(max_hp)
+	_init_hp(max_hp)
 
-func do_movement(delta):
-	var move_vectors = navigate(speed * delta, global_position, player_box.global_position)
+func _do_movement(delta):
+	var move_vectors = _navigate(speed * delta, global_position, player_box.global_position)
 	for vector in move_vectors:
-		if has_line_of_sight():
+		if _has_line_of_sight():
 			break
 		self.position += vector # move entity, ignoring collision
 	move_and_slide(Vector2(0,0)) # apply collision after movement
 
-func has_line_of_sight():
+func _has_line_of_sight():
 	var space_state = get_world_2d().direct_space_state
 	var pt1 = player_box.global_position
 	var pt2 = self.global_position
