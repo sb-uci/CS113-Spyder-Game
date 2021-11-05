@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/Player/astro.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Astronaut.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Player/Space Gun (PoC).png" type="Texture" id=3]
 [ext_resource path="res://Scripts/Primary Weapon.gd" type="Script" id=4]
+[ext_resource path="res://UI Objects/HealthBar.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 5.13465
@@ -29,9 +30,17 @@ shape = SubResource( 1 )
 [node name="Primary Weapon" type="Sprite" parent="." groups=[
 "Player",
 ]]
-position = Vector2( 8, 2 )
+position = Vector2( 6.0135, 3.45676 )
 texture = ExtResource( 3 )
 script = ExtResource( 4 )
 
 [node name="FiringPoint" type="Node2D" parent="Primary Weapon"]
 position = Vector2( 9.408, -1.44 )
+
+[node name="HealthBar" parent="." instance=ExtResource( 5 )]
+margin_left = -7.67318
+margin_top = -17.8691
+margin_right = -7.67318
+margin_bottom = -17.8691
+rect_scale = Vector2( 0.16, 0.16 )
+isEnemy = false

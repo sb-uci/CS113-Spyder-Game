@@ -3,9 +3,15 @@ extends KinematicBody2D
 class_name Enemy
 
 var speed = 75
+var max_hp = 3
+var health
 onready var player = get_parent().get_node("Astronaut")
 onready var player_box = get_player_collision_node(player)
 onready var navigation = get_parent().get_node("Navigation")
+onready var hp = $HealthBar
+
+func _ready():
+	init_hp(max_hp)
 
 func _physics_process(delta):
 	do_movement(delta)
@@ -45,7 +51,18 @@ func navigate(move_distance, start, end):
 	
 	return vectors
 
-func get_player_collision_node(var player_node):
+func get_player_collision_node(player_node):
 	for child in player_node.get_children():
 		if child.get_class() == "CollisionShape2D":
 			return child
+
+func register_hit(damage):
+	health -= damage
+	hp.update_hp(health)
+	if health <= 0:
+		self.queue_free()
+
+func init_hp(max_hp):
+	health = max_hp
+	hp.set_max(max_hp)
+	hp.update_hp(max_hp)

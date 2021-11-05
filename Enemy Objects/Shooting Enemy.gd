@@ -1,7 +1,9 @@
 extends "res://Enemy Objects/Enemy.gd"
 
 func _ready():
+	max_hp = 2 # override parent class health
 	speed = 100 # override parent class speed
+	init_hp(max_hp)
 
 func do_movement(delta):
 	var move_vectors = navigate(speed * delta, global_position, player_box.global_position)

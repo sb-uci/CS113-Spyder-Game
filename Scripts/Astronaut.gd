@@ -3,10 +3,16 @@ extends KinematicBody2D
 export var MAX_SPEED = 150
 export var ACCELERATION = 450
 export var FRICTION = 650
+export var MAX_HP = 5
 
 var velocity = Vector2.ZERO
+var health = MAX_HP
 
+onready var health_bar = $HealthBar
 #onready var animationPlayer = $AnimationPlayer
+
+func _ready():
+	_init_hp()
 
 #Movement for player
 func _physics_process(delta):
@@ -26,3 +32,7 @@ func _physics_process(delta):
 #func _process(delta):
 #	pass
 	
+
+func _init_hp():
+	health_bar.set_max(MAX_HP)
+	health_bar.update_hp(MAX_HP)
