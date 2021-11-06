@@ -1,47 +1,47 @@
 extends Control
 
-export var tween_delay = 0.4
-export (Color) var p_healthy_color = Color.green
-export (Color) var p_hurt_color = Color.yellow
-export (Color) var p_critical_color = Color.red
-export (float) var hurt_thresh = 0.5
-export (float) var critical_thresh = 0.25
-export (Color) var enemy_color = Color.darkred
-export var isEnemy = true 
+export var TWEEN_DELAY = 0.4
+export (Color) var P_HEALTHY_COLOR = Color.green
+export (Color) var P_HURT_COLOR = Color.yellow
+export (Color) var P_CRITICAL_COLOR = Color.red
+export (float) var HURT_THRESH = 0.5
+export (float) var CRITICAL_THRESH = 0.25
+export (Color) var ENEMY_COLOR = Color.darkred
+export var ISENEMY = true 
 
-onready var health_bar = $HealthBar
-onready var damage_bar = $DamageBar
-onready var tween = $Tween
+onready var HEALTH_BAR = $HealthBar
+onready var DAMAGE_BAR = $DamageBar
+onready var TWEEN = $Tween
 
 func update_hp(new_hp):
 	new_hp *= 100 # scaled for smoother tweening
-	health_bar.value = new_hp
+	HEALTH_BAR.value = new_hp
 	_do_health_tween(new_hp)
 	_update_color(new_hp)
 	
 func set_max(max_hp):
-	health_bar.max_value = max_hp * 100 # values scaled for smoother tweening
-	damage_bar.max_value = max_hp * 100
+	HEALTH_BAR.max_value = max_hp * 100 # values scaled for smoother tweening
+	DAMAGE_BAR.max_value = max_hp * 100
 	_init_color()
 
 func _do_health_tween(new_hp):
-	tween.stop(damage_bar)
-	tween.interpolate_property(damage_bar, "value", damage_bar.value, new_hp, 0.4, tween.TRANS_SINE, tween.EASE_IN_OUT, tween_delay)
-	tween.start()
+	TWEEN.stop(DAMAGE_BAR)
+	TWEEN.interpolate_property(DAMAGE_BAR, "value", DAMAGE_BAR.value, new_hp, 0.4, TWEEN.TRANS_SINE, TWEEN.EASE_IN_OUT, TWEEN_DELAY)
+	TWEEN.start()
 
 func _update_color(new_hp):
-	if isEnemy:
+	if ISENEMY:
 		return
 
-	if new_hp < critical_thresh * health_bar.max_value:
-		health_bar.tint_progress = p_critical_color
-	elif new_hp < hurt_thresh * health_bar.max_value:
-		health_bar.tint_progress = p_hurt_color
+	if new_hp < CRITICAL_THRESH * HEALTH_BAR.max_value:
+		HEALTH_BAR.tint_progress = P_CRITICAL_COLOR
+	elif new_hp < HURT_THRESH * HEALTH_BAR.max_value:
+		HEALTH_BAR.tint_progress = P_HURT_COLOR
 	else:
-		health_bar.tint_progress = p_healthy_color
+		HEALTH_BAR.tint_progress = P_HEALTHY_COLOR
 
 func _init_color():
-	if isEnemy:
-		health_bar.tint_progress = enemy_color
+	if ISENEMY:
+		HEALTH_BAR.tint_progress = ENEMY_COLOR
 	else:
-		health_bar.tint_progress = p_healthy_color
+		HEALTH_BAR.tint_progress = P_HEALTHY_COLOR

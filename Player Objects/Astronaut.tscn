@@ -13,10 +13,11 @@ height = 4.31881
 [node name="Astronaut" type="KinematicBody2D" groups=[
 "Player",
 ]]
-collision_mask = 6
+collision_mask = 86
 script = ExtResource( 2 )
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_edit_horizontal_guides_": [ 1.65895 ]
 }
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -43,7 +44,6 @@ margin_top = -17.8691
 margin_right = -7.67318
 margin_bottom = -17.8691
 rect_scale = Vector2( 0.16, 0.16 )
-isEnemy = false
 
 [node name="Tween" type="Tween" parent="."]
 

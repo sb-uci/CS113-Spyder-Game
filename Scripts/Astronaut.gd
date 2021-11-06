@@ -1,43 +1,66 @@
 extends KinematicBody2D
 
+const FixedStack = preload("res://Scripts/FixedStack.gd")
+
 export var MAX_SPEED = 150
 export var ACCELERATION = 450
 export var FRICTION = 650
 export var MAX_HP = 5
 export var INVULN_TIME = 1.5
 export var FLASH_FREQ = .15
+export var KNOCKBACK_RESISTANCE = 1.1 # how quickly the astronaut recovers from (1 is no resistance)
+export var MOVEMENT_AVERAGE = 1 # length of history of previous movements
 
 var velocity = Vector2.ZERO
 var health = MAX_HP
 var is_invuln = false
 var invuln_timer
 var flash_timer
+var impulses = []
 
-onready var health_bar = $HealthBar
-onready var sprite = $Sprite
-onready var weapon = $"Primary Weapon"
-onready var tween = $Tween
+onready var HEALTH_BAR = $HealthBar
+onready var SPRITE = $Sprite
+onready var WEAPON = $"Primary Weapon"
+onready var TWEEN = $Tween
+onready var recent_movement = FixedStack.new()
 #onready var animationPlayer = $AnimationPlayer
 
 func damage_player(damage):
 	if is_invuln:
 		return
 	health -= damage # do damage
-	health_bar.update_hp(health) # update health bar
+	HEALTH_BAR.update_hp(health) # update health bar
 	 # trigger invuln
 	is_invuln = true
 	invuln_timer = INVULN_TIME
 	# trigger invuln flash
 	flash_timer = FLASH_FREQ
-	_flash_sprite(sprite, Color(1,1,1,0), tween.EASE_OUT)
-	_flash_sprite(weapon, Color(1,1,1,0), tween.EASE_OUT)
+	_flash_sprite(SPRITE, Color(1,1,1,0), TWEEN.EASE_OUT)
+	_flash_sprite(WEAPON, Color(1,1,1,0), TWEEN.EASE_OUT)
+	
+func get_collision_center():
+	var collision_shape = $CollisionShape2D
+	return collision_shape.global_position
+	
+func get_velocity():
+	var average = Vector2()
+	for i in range(recent_movement.size()):
+		average += recent_movement.get(i)
+	return average / MOVEMENT_AVERAGE
+
+func apply_pseudo_impulse(direction, force):
+	direction = direction.normalized()
+	var impulse = direction * force
+	impulses.append(impulse)
 
 func _ready():
 	_init_hp()
+	recent_movement.set_size(MOVEMENT_AVERAGE)
 
 #Movement for player
 func _physics_process(delta):
 	_do_movement(delta)
+	_handle_impulses(delta)
 
 func _process(delta):
 	_handle_invuln(delta)
@@ -55,6 +78,18 @@ func _do_movement(delta):
 		#animationPlayer.play("idle")
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 	velocity = move_and_slide(velocity)
+	recent_movement.append(velocity)
+
+func _handle_impulses(delta):
+	var pop_list = [] # used to remove impulses without modifying list during main loop
+	for i in impulses.size():
+		move_and_collide(impulses[i] * delta)
+		impulses[i] /= KNOCKBACK_RESISTANCE
+		if impulses[i].length() <= 1:
+			pop_list.append(i)
+	
+	for i in pop_list:
+		impulses.remove(i)
 
 func _handle_invuln(delta):
 	if is_invuln:
@@ -67,31 +102,29 @@ func _handle_invuln(delta):
 func _invuln_flash(delta):
 	flash_timer -= delta
 	if flash_timer <= 0:
-		tween.stop(sprite)
-		tween.stop(weapon)
+		TWEEN.stop(SPRITE)
+		TWEEN.stop(WEAPON)
 		
-		if sprite.modulate == Color(1,1,1,0):
-			print("undoing flash")
-			_flash_sprite(sprite, Color(1,1,1,1), tween.EASE_IN)
-			_flash_sprite(weapon, Color(1,1,1,1), tween.EASE_IN)
+		if SPRITE.modulate == Color(1,1,1,0):
+			_flash_sprite(SPRITE, Color(1,1,1,1), TWEEN.EASE_IN)
+			_flash_sprite(WEAPON, Color(1,1,1,1), TWEEN.EASE_IN)
 		else:
-			print("flashing")
-			_flash_sprite(sprite, Color(1,1,1,0), tween.EASE_OUT)
-			_flash_sprite(weapon, Color(1,1,1,0), tween.EASE_OUT)
+			_flash_sprite(SPRITE, Color(1,1,1,0), TWEEN.EASE_OUT)
+			_flash_sprite(WEAPON, Color(1,1,1,0), TWEEN.EASE_OUT)
 		
 		flash_timer = FLASH_FREQ + flash_timer # reset and add any overflow
 
 func _cancel_flash():
-	tween.stop(sprite)
-	tween.stop(weapon)
-	sprite.modulate = Color(1,1,1,1)
-	weapon.modulate = Color(1,1,1,1)
+	TWEEN.stop(SPRITE)
+	TWEEN.stop(WEAPON)
+	SPRITE.modulate = Color(1,1,1,1)
+	WEAPON.modulate = Color(1,1,1,1)
 
 func _flash_sprite(sprite_node, color_state, easing):
-	tween.interpolate_property(sprite_node, "modulate", sprite_node.modulate, color_state, 
-	FLASH_FREQ, tween.TRANS_LINEAR, easing)
-	tween.start()
+	TWEEN.interpolate_property(sprite_node, "modulate", sprite_node.modulate, color_state, 
+	FLASH_FREQ, TWEEN.TRANS_LINEAR, easing)
+	TWEEN.start()
 	
 func _init_hp():
-	health_bar.set_max(MAX_HP)
-	health_bar.update_hp(MAX_HP)
+	HEALTH_BAR.set_max(MAX_HP)
+	HEALTH_BAR.update_hp(MAX_HP)

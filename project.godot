@@ -116,3 +116,4 @@ shoot={
 2d_physics/layer_4="Bullet (player)"
 2d_physics/layer_5="Bullet (enemy)"
 2d_physics/layer_6="Enemy (air)"
+2d_physics/layer_7="World Boundary"
