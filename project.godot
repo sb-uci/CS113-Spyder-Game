@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Enemy",
 "language": "GDScript",
 "path": "res://Enemy Objects/Enemy.gd"
+}, {
+"base": "Node",
+"class": "PowerUp",
+"language": "GDScript",
+"path": "res://PowerUps Objects/PowerUp.gd"
 } ]
 _global_script_class_icons={
-"Enemy": ""
+"Enemy": "",
+"PowerUp": ""
 }
 
 [application]
@@ -117,3 +123,4 @@ shoot={
 2d_physics/layer_5="Bullet (enemy)"
 2d_physics/layer_6="Enemy (air)"
 2d_physics/layer_7="World Boundary"
+2d_physics/layer_8="PowerUps"

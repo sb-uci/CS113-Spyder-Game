@@ -48,6 +48,13 @@ func get_velocity():
 		average += recent_movement.get(i)
 	return average / MOVEMENT_AVERAGE
 
+func set_speed(new_speed):
+	MAX_SPEED = new_speed
+
+func set_fire_rate(fire_rate_increase):
+	var weaponInstance = get_node("Primary Weapon")
+	weaponInstance.BULLET_FIRE_RATE /= fire_rate_increase
+	
 func apply_pseudo_impulse(direction, force):
 	direction = direction.normalized()
 	var impulse = direction * force
@@ -128,3 +135,4 @@ func _flash_sprite(sprite_node, color_state, easing):
 func _init_hp():
 	HEALTH_BAR.set_max(MAX_HP)
 	HEALTH_BAR.update_hp(MAX_HP)
+	
