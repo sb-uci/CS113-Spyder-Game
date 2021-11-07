@@ -7,7 +7,7 @@ export var MAX_HP = 3
 export var DAMAGE = 1
 export var KNOCKBACK_FORCE = 0
 export var KNOCKBACK_COOLDOWN = 1
-export var POWERUP_DROP_CHANCE = 0.5
+export var POWERUP_DROP_CHANCE = 0.35
 
 var knockback_cd = 0
 var health
@@ -18,7 +18,8 @@ onready var player_node_name = "Astronaut"
 onready var navigate_node_name = "Navigation"
 onready var HP = $HealthBar
 onready var POWERUP_LIST = [preload("res://PowerUps Objects/MovementPowerUp.tscn"),
-							preload("res://PowerUps Objects/FireRatePowerUp.tscn")]
+							preload("res://PowerUps Objects/FireRatePowerUp.tscn"),
+							preload("res://PowerUps Objects/HealthPowerUp.tscn")]
 
 func register_hit(DAMAGE):
 	health -= DAMAGE
