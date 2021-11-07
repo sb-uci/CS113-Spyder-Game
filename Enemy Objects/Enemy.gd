@@ -7,6 +7,7 @@ export var MAX_HP = 3
 export var DAMAGE = 1
 export var KNOCKBACK_FORCE = 0
 export var KNOCKBACK_COOLDOWN = 1
+export var POWERUP_DROP_CHANCE = 0.5
 
 var knockback_cd = 0
 var health
@@ -14,11 +15,14 @@ var health
 onready var PLAYER = get_parent().get_node("Astronaut")
 onready var NAVIGATION = get_parent().get_node("Navigation")
 onready var HP = $HealthBar
+onready var POWERUP_LIST = [preload("res://PowerUps Objects/MovementPowerUp.tscn"),
+							preload("res://PowerUps Objects/FireRatePowerUp.tscn")]
 
 func register_hit(DAMAGE):
 	health -= DAMAGE
 	HP.update_hp(health)
 	if health <= 0:
+		_spawn_powerup()
 		self.queue_free()
 
 func _ready():
@@ -92,3 +96,13 @@ func _on_collide_with_player(player_node):
 	if knockback_cd <= 0:
 		player_node.apply_pseudo_impulse(hit_direction, KNOCKBACK_FORCE)
 		knockback_cd = KNOCKBACK_COOLDOWN
+	
+func _spawn_powerup():
+	var powerUpDropChance = RandomNumberGenerator.new()
+	powerUpDropChance.randomize()
+	var willDrop = powerUpDropChance.randf_range(0, 1)
+	if (willDrop < POWERUP_DROP_CHANCE):
+		var powerUpChosen = powerUpDropChance.randi_range(0, POWERUP_LIST.size()-1)
+		var powerUp = POWERUP_LIST[powerUpChosen].instance()
+		powerUp.position = global_position
+		get_parent().add_child(powerUp)

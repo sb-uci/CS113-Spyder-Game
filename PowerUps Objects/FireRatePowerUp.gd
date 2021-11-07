@@ -5,7 +5,7 @@ export var FIRE_RATE_INCREASE = 1.65 #Greater the number, the faster the fire_ra
 func _ready():
 	pass
 
-func _on_Movement_PowerUp_body_entered(body):
+func _on_FireRate_PowerUp_body_entered(body):
 	if body.is_in_group("Player"):
 		for child in self.get_children():
 			child.queue_free()

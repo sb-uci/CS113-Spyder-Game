@@ -1,4 +1,4 @@
-extends "res://PowerUps Objects/PowerUp.gd"
+extends PowerUp
 
 export var MOVEMENT_SPEED_INCREASE = 1.5 #Greater value = Faster
 func _ready():
