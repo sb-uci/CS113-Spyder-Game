@@ -18,69 +18,69 @@
 radius = 5.13465
 height = 4.31881
 
-[sub_resource type="AnimationNodeAnimation" id=19]
+[sub_resource type="AnimationNodeAnimation" id=2]
 animation = "astro_idle_down"
 
-[sub_resource type="AnimationNodeAnimation" id=20]
+[sub_resource type="AnimationNodeAnimation" id=3]
 animation = "astro_idle_left"
 
-[sub_resource type="AnimationNodeAnimation" id=21]
+[sub_resource type="AnimationNodeAnimation" id=4]
 animation = "astro_idle_up"
 
-[sub_resource type="AnimationNodeAnimation" id=22]
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "astro_idle_right"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=23]
-blend_point_0/node = SubResource( 19 )
+[sub_resource type="AnimationNodeBlendSpace2D" id=6]
+blend_point_0/node = SubResource( 2 )
 blend_point_0/pos = Vector2( 0, 1.1 )
-blend_point_1/node = SubResource( 20 )
+blend_point_1/node = SubResource( 3 )
 blend_point_1/pos = Vector2( -1, 0 )
-blend_point_2/node = SubResource( 21 )
+blend_point_2/node = SubResource( 4 )
 blend_point_2/pos = Vector2( 0, -1.1 )
-blend_point_3/node = SubResource( 22 )
+blend_point_3/node = SubResource( 5 )
 blend_point_3/pos = Vector2( 1, 0 )
 min_space = Vector2( -1, -1.1 )
 max_space = Vector2( 1, 1.1 )
 blend_mode = 1
 
-[sub_resource type="AnimationNodeAnimation" id=15]
+[sub_resource type="AnimationNodeAnimation" id=7]
 animation = "astro_down"
 
-[sub_resource type="AnimationNodeAnimation" id=16]
+[sub_resource type="AnimationNodeAnimation" id=8]
 animation = "astro_left"
 
-[sub_resource type="AnimationNodeAnimation" id=17]
+[sub_resource type="AnimationNodeAnimation" id=9]
 animation = "astro_up"
 
-[sub_resource type="AnimationNodeAnimation" id=18]
+[sub_resource type="AnimationNodeAnimation" id=10]
 animation = "astro_right"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=3]
-blend_point_0/node = SubResource( 15 )
+[sub_resource type="AnimationNodeBlendSpace2D" id=11]
+blend_point_0/node = SubResource( 7 )
 blend_point_0/pos = Vector2( 0, 1.1 )
-blend_point_1/node = SubResource( 16 )
+blend_point_1/node = SubResource( 8 )
 blend_point_1/pos = Vector2( -1, 0 )
-blend_point_2/node = SubResource( 17 )
+blend_point_2/node = SubResource( 9 )
 blend_point_2/pos = Vector2( 0, -1.1 )
-blend_point_3/node = SubResource( 18 )
+blend_point_3/node = SubResource( 10 )
 blend_point_3/pos = Vector2( 1, 0 )
 min_space = Vector2( -1, -1.1 )
 max_space = Vector2( 1, 1.1 )
 blend_mode = 1
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
 
-[sub_resource type="AnimationNodeStateMachine" id=4]
-states/Idle/node = SubResource( 23 )
+[sub_resource type="AnimationNodeStateMachine" id=14]
+states/Idle/node = SubResource( 6 )
 states/Idle/position = Vector2( 183, 102 )
-states/Run/node = SubResource( 3 )
+states/Run/node = SubResource( 11 )
 states/Run/position = Vector2( 375, 102 )
-transitions = [ "Idle", "Run", SubResource( 24 ), "Run", "Idle", SubResource( 25 ) ]
+transitions = [ "Idle", "Run", SubResource( 12 ), "Run", "Idle", SubResource( 13 ) ]
 start_node = "Idle"
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=5]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=15]
 
 [node name="Astronaut" type="KinematicBody2D" groups=[
 "Player",
@@ -118,6 +118,7 @@ margin_top = -17.8691
 margin_right = -7.67318
 margin_bottom = -17.8691
 rect_scale = Vector2( 0.16, 0.16 )
+ISENEMY = false
 
 [node name="Tween" type="Tween" parent="."]
 
@@ -135,9 +136,9 @@ anims/astro_right = ExtResource( 10 )
 anims/astro_up = ExtResource( 1 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 4 )
+tree_root = SubResource( 14 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource( 5 )
+parameters/playback = SubResource( 15 )
 parameters/Idle/blend_position = Vector2( 0, 0 )
 parameters/Run/blend_position = Vector2( 0, 0 )

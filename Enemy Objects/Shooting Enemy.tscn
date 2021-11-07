@@ -8,12 +8,12 @@
 radius = 11.1885
 
 [node name="Shooting Enemy" type="KinematicBody2D"]
-position = Vector2( -0.0701523, 0 )
+position = Vector2( -0.210457, 0 )
 collision_layer = 4
 collision_mask = 15
 script = ExtResource( 2 )
-BULLET_SPEED = 300
-TRACKING_AMOUNT = 15
+SPEED = 100
+MAX_HP = 2
 
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 0.0196078, 0.219608, 1, 1 )

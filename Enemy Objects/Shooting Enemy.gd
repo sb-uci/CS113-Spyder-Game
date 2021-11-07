@@ -4,30 +4,35 @@ onready var BULLET = preload("res://Enemy Objects/Enemy Bullet.tscn")
 onready var BULLET_WIDTH = _get_bullet_sprite_width(BULLET)
 
 export var BULLET_SPEED = 250
-export var FIRE_RATE = 1
+export var FIRE_RATE = 1.0
+export var FIRE_RANGE = 1000
 export var TRACKING_AMOUNT = 0
 
 var fire_timer = 0
 
-func _ready():
-	MAX_HP = 2 # override parent class health
-	SPEED = 100 # override parent class speed
-	_init_hp(MAX_HP)
-		
-	
 func _process(delta):
-	var move_and_shoot_target = _predict_future_player_location(TRACKING_AMOUNT)
-	if _has_line_of_sight(move_and_shoot_target):
-		_shoot(move_and_shoot_target)
+	var target = _predict_future_player_location(TRACKING_AMOUNT)
+	if _can_shoot(target):
+		_shoot(target)
 	
 	if fire_timer > 0:
 		fire_timer -= delta
+		
+func _can_shoot(target):
+	var is_visible_and_in_range = _is_on_screen() and _is_in_range(target)
+	return is_visible_and_in_range and _has_line_of_sight(target)
+
+func _is_in_range(target):
+	return (target - global_position).length() <= FIRE_RANGE
+
+func _is_on_screen():
+	return PLAYER.can_see_point(global_position)
 
 func _do_movement(delta):
 	var move_target = _predict_future_player_location(TRACKING_AMOUNT)
 	var move_vectors = _navigate(SPEED * delta, global_position, move_target)
 	for vector in move_vectors:
-		if _has_line_of_sight(PLAYER.get_collision_center()):
+		if _can_shoot(move_target):
 			break
 		self.position += vector # move entity, ignoring collision
 	move_and_slide(Vector2(0,0)) # apply collision after movement

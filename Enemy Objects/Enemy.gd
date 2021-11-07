@@ -11,9 +11,11 @@ export var POWERUP_DROP_CHANCE = 0.5
 
 var knockback_cd = 0
 var health
+var PLAYER
+var NAVIGATION
 
-onready var PLAYER = get_parent().get_node("Astronaut")
-onready var NAVIGATION = get_parent().get_node("Navigation")
+onready var player_node_name = "Astronaut"
+onready var navigate_node_name = "Navigation"
 onready var HP = $HealthBar
 onready var POWERUP_LIST = [preload("res://PowerUps Objects/MovementPowerUp.tscn"),
 							preload("res://PowerUps Objects/FireRatePowerUp.tscn")]
@@ -25,7 +27,14 @@ func register_hit(DAMAGE):
 		_spawn_powerup()
 		self.queue_free()
 
+# when an enemy is spawned, it's not attached to the tree, so it's PLAYER and NAVIGATION
+# references will be null. After adding to tree, run this.
+func refresh_node_references():
+	PLAYER = get_parent().get_node(player_node_name)
+	NAVIGATION = get_parent().get_node(navigate_node_name)
+
 func _ready():
+	refresh_node_references()
 	_init_hp(MAX_HP)
 	
 func _process(delta):

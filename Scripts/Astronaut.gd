@@ -11,6 +11,9 @@ export var FLASH_FREQ = .15
 export var KNOCKBACK_RESISTANCE = 1.1 # how quickly the astronaut recovers from (1 is no resistance)
 export var MOVEMENT_AVERAGE = 1 # length of history of previous movements
 
+export var design_width = 320 # design resolution; different from real resolution
+export var design_height = 180
+
 var velocity = Vector2.ZERO
 var health = MAX_HP
 var is_invuln = false
@@ -62,6 +65,16 @@ func apply_pseudo_impulse(direction, force):
 	direction = direction.normalized()
 	var impulse = direction * force
 	impulses.append(impulse)
+
+func can_see_point(point):
+	var x_low = global_position.x - design_width/2
+	var x_high = global_position.x + design_width/2
+	var y_low = global_position.y - design_height/2
+	var y_high = global_position.y + design_height/2
+	
+	var is_in_x_bound = point.x >= x_low and point.x <= x_high
+	var is_in_y_bound = point.y >= y_low and point.y <= y_high
+	return is_in_x_bound and is_in_y_bound
 
 func _ready():
 	_init_hp()

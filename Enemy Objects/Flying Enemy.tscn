@@ -29,9 +29,13 @@ animations = [ {
 radius = 11.1885
 
 [node name="Flying" type="KinematicBody2D"]
+position = Vector2( -0.222733, 0.111362 )
 collision_layer = 32
 collision_mask = 41
 script = ExtResource( 2 )
+MAX_HP = 2
+FIRE_RATE = 1.5
+FIRE_RANGE = 100
 
 [node name="Shadow" type="Sprite" parent="."]
 modulate = Color( 1, 1, 1, 0.364706 )
@@ -41,7 +45,6 @@ texture = ExtResource( 5 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 4 )
 animation = "Fly"
-frame = 1
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
