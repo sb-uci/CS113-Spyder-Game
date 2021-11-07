@@ -3,6 +3,8 @@ extends "res://Enemy Objects/Enemy.gd"
 onready var BULLET = preload("res://Enemy Objects/Enemy Bullet.tscn")
 onready var BULLET_WIDTH = _get_bullet_sprite_width(BULLET)
 
+onready var sprite = $AnimatedSprite
+
 export var BULLET_SPEED = 250
 export var FIRE_RATE = 1.5
 export var TRACKING_AMOUNT = 0
@@ -30,6 +32,7 @@ func _do_movement(delta):
 		if _has_line_of_sight(PLAYER.get_collision_center()):
 			break
 		self.position += vector # move entity, ignoring collision
+		sprite.flip_h = vector.x > 0
 	move_and_slide(Vector2(0,0)) # apply collision after movement
 
 func _has_line_of_sight(target):
