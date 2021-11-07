@@ -23,7 +23,10 @@ onready var SPRITE = $Sprite
 onready var WEAPON = $"Primary Weapon"
 onready var TWEEN = $Tween
 onready var recent_movement = FixedStack.new()
-#onready var animationPlayer = $AnimationPlayer
+
+onready var animationPlayer = $AnimationPlayer
+onready var animationTree = $AnimationTree
+onready var animationState = animationTree.get("parameters/playback")
 
 func damage_player(damage):
 	if is_invuln:
@@ -79,10 +82,12 @@ func _do_movement(delta):
 	input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
-		#animationPlayer.play("RunDown")
+		animationTree.set("parameters/Idle/blend_position", input_vector)
+		animationTree.set("parameters/Run/blend_position", input_vector)
+		animationState.travel("Run")
 		velocity = velocity.move_toward(input_vector * MAX_SPEED, ACCELERATION * delta)
 	else:
-		#animationPlayer.play("idle")
+		animationState.travel("Idle")
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 	velocity = move_and_slide(velocity)
 	recent_movement.append(velocity)
