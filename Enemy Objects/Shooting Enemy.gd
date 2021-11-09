@@ -1,5 +1,6 @@
 extends "res://Enemy Objects/Enemy.gd"
 
+
 onready var BULLET = preload("res://Enemy Objects/Enemy Bullet.tscn")
 onready var BULLET_WIDTH = _get_bullet_sprite_width(BULLET)
 
@@ -36,6 +37,10 @@ func _do_movement(delta):
 			break
 		self.position += vector # move entity, ignoring collision
 	move_and_slide(Vector2(0,0)) # apply collision after movement
+	
+	# makes the sprite face player
+	var angle = global_position.angle_to_point(PLAYER.global_position) 
+	sprite.flip_h = abs(angle) > PI/2
 
 func _has_line_of_sight(target):
 	# get points, define raycast "with width" to accomodate bullet size

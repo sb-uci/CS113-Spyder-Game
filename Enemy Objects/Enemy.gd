@@ -14,6 +14,7 @@ var health
 var PLAYER
 var NAVIGATION
 
+onready var sprite = $AnimatedSprite
 onready var player_node_name = "Astronaut"
 onready var navigate_node_name = "Navigation"
 onready var HP = $HealthBar
@@ -51,6 +52,7 @@ func _do_movement(delta):
 	var move_vectors = _navigate(SPEED * delta, global_position, PLAYER.get_collision_center())
 	for vector in move_vectors:
 		self.position += vector # move entity, ignoring collision
+		sprite.flip_h = vector.x > 0
 	move_and_slide(Vector2(0,0)) # apply collision after movement
 	
 # Explanation for above: using collision movement will cause weird movement
