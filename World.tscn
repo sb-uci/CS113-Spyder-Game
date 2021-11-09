@@ -66,8 +66,10 @@ z_index = 1
 script = ExtResource( 6 )
 
 [node name="NavMesh" type="NavigationPolygonInstance" parent="Navigation"]
-position = Vector2( -9.34387, -28.6991 )
 navpoly = SubResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Rock" parent="Navigation" instance=ExtResource( 3 )]
 position = Vector2( 400, 192 )
