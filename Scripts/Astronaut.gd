@@ -14,6 +14,9 @@ export var MOVEMENT_AVERAGE = 1 # length of history of previous movements
 export var design_width = 320 # design resolution; different from real resolution
 export var design_height = 180
 
+var DEFAULT_MASK = 0b00000000000001010110
+var INVULN_MASK =  0b00000000000001000010
+
 var velocity = Vector2.ZERO
 var health = MAX_HP
 var is_invuln = false
@@ -39,6 +42,8 @@ func damage_player(damage):
 	 # trigger invuln
 	is_invuln = true
 	invuln_timer = INVULN_TIME
+	self.collision_mask = INVULN_MASK
+	self.collision_layer = 0
 	# trigger invuln flash
 	flash_timer = FLASH_FREQ
 	_flash_sprite(SPRITE, Color(1,1,1,0), TWEEN.EASE_OUT)
@@ -122,6 +127,8 @@ func _handle_invuln(delta):
 		invuln_timer -= delta
 		if invuln_timer <= 0:
 			is_invuln = false
+			self.collision_mask = DEFAULT_MASK
+			self.collision_layer = 1
 			_cancel_flash()
 
 func _invuln_flash(delta):

@@ -39,13 +39,14 @@ script = ExtResource( 2 )
 SPEED = 35
 MAX_HP = 6
 DAMAGE = 2
-KNOCKBACK_FORCE = 400
+KNOCKBACK_FORCE = 450
 TYPE = "brute"
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 1.25993, -0.31498 )
 frames = SubResource( 5 )
 animation = "walk"
+frame = 2
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
