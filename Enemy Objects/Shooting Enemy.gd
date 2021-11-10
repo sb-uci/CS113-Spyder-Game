@@ -7,14 +7,14 @@ onready var BULLET_WIDTH = _get_bullet_sprite_width(BULLET)
 export var BULLET_SPEED = 250
 export var FIRE_RATE = 1.0
 export var FIRE_RANGE = 1000
-export var TRACKING_AMOUNT = 0
+export var SHOT_TRACKING = 0
 
 var fire_timer = 0
 
 func _process(delta):
-	var target = _predict_future_player_location(TRACKING_AMOUNT)
-	if _can_shoot(target):
-		_shoot(target)
+	var shoot_target = _predict_future_player_location(SHOT_TRACKING, BULLET_SPEED)
+	if _can_shoot(shoot_target):
+		_shoot(shoot_target)
 	
 	if fire_timer > 0:
 		fire_timer -= delta
@@ -30,7 +30,7 @@ func _is_on_screen():
 	return PLAYER.can_see_point(global_position)
 
 func _do_movement(delta):
-	var move_target = _predict_future_player_location(TRACKING_AMOUNT)
+	var move_target = _predict_future_player_location(MOVEMENT_TRACKING, SPEED)
 	var move_vectors = _navigate(SPEED * delta, global_position, move_target)
 	for vector in move_vectors:
 		if _can_shoot(move_target):
@@ -85,23 +85,6 @@ func _line_of_sight_helper(upper, lower, mid):
 	var mid_valid = mid.empty() or mid.collider == PLAYER
 	
 	return upper_valid and lower_valid and mid_valid
-
-func _predict_bullet_travel_time(target):
-	var distance = target - global_position
-	return distance.length() / BULLET_SPEED
-
-func _predict_future_player_location(cycles):
-	var player_vector = PLAYER.get_velocity()
-	var predicted_location = PLAYER.get_collision_center()
-	var time_offset = 0
-	var distance_offset = 0
-	
-	for i in range(cycles):
-		time_offset = _predict_bullet_travel_time(predicted_location)
-		distance_offset = player_vector * time_offset
-		predicted_location = PLAYER.get_collision_center() + distance_offset
-	
-	return predicted_location
 
 func _get_bullet_sprite_width(bullet):
 	var width = 0

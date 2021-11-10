@@ -2,12 +2,14 @@ extends KinematicBody2D
 
 class_name Enemy
 
-export var SPEED = 75
-export var MAX_HP = 3
-export var DAMAGE = 1
+export var SPEED = 75.0
+export var MAX_HP = 3.0
+export var DAMAGE = 1.0
 export var KNOCKBACK_FORCE = 0
 export var KNOCKBACK_COOLDOWN = 1
 export var POWERUP_DROP_CHANCE = 0.35
+export var MOVEMENT_TRACKING = 0
+export var TYPE = "basic"
 
 var knockback_cd = 0
 var health
@@ -49,7 +51,8 @@ func _physics_process(delta):
 		_on_collide_with_player(PLAYER)
 
 func _do_movement(delta):
-	var move_vectors = _navigate(SPEED * delta, global_position, PLAYER.get_collision_center())
+	var move_target = _predict_future_player_location(MOVEMENT_TRACKING, SPEED)
+	var move_vectors = _navigate(SPEED * delta, global_position, move_target)
 	for vector in move_vectors:
 		self.position += vector # move entity, ignoring collision
 		sprite.flip_h = vector.x > 0
@@ -118,3 +121,20 @@ func _spawn_powerup():
 		var powerUp = POWERUP_LIST[powerUpChosen].instance()
 		powerUp.position = global_position
 		get_parent().add_child(powerUp)
+
+func _predict_travel_time(target, speed):
+	var distance = target - global_position
+	return distance.length() / speed
+
+func _predict_future_player_location(cycles, speed):
+	var player_vector = PLAYER.get_velocity()
+	var predicted_location = PLAYER.get_collision_center()
+	var time_offset = 0
+	var distance_offset = 0
+	
+	for i in range(cycles):
+		time_offset = _predict_travel_time(predicted_location, speed)
+		distance_offset = player_vector * time_offset
+		predicted_location = PLAYER.get_collision_center() + distance_offset
+	
+	return predicted_location

@@ -34,6 +34,7 @@ collision_layer = 32
 collision_mask = 41
 script = ExtResource( 2 )
 MAX_HP = 2
+TYPE = "flyer"
 FIRE_RATE = 1.5
 FIRE_RANGE = 100
 
@@ -56,3 +57,4 @@ margin_top = -15.3888
 margin_right = -8.33109
 margin_bottom = -15.3888
 rect_scale = Vector2( 0.16, 0.16 )
+TWEEN_DELAY = 0.0

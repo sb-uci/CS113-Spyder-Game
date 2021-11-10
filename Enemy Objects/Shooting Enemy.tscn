@@ -44,6 +44,7 @@ collision_mask = 15
 script = ExtResource( 2 )
 SPEED = 100
 MAX_HP = 2
+TYPE = "shooter"
 
 [node name="Sprite" type="Sprite" parent="."]
 visible = false
@@ -53,7 +54,7 @@ texture = ExtResource( 1 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
 animation = "move"
-frame = 3
+frame = 2
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -66,3 +67,4 @@ margin_top = -20.7636
 margin_right = -8.1403
 margin_bottom = -20.7636
 rect_scale = Vector2( 0.16, 0.16 )
+TWEEN_DELAY = 0.0

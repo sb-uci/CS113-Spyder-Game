@@ -40,6 +40,7 @@ SPEED = 35
 MAX_HP = 6
 DAMAGE = 2
 KNOCKBACK_FORCE = 400
+TYPE = "brute"
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 1.25993, -0.31498 )
@@ -57,3 +58,4 @@ margin_top = -32.6389
 margin_right = -8.31498
 margin_bottom = -32.6389
 rect_scale = Vector2( 0.16, 0.16 )
+TWEEN_DELAY = 0.0

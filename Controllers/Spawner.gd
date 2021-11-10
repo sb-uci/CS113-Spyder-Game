@@ -1,11 +1,15 @@
 extends Node2D
 
-export var rate = 20 # avg number of spawns per minute
-export var basic_weight = 1 # likelihood of basic enemy spawning
-export var flyer_weight = 1 # likelihood of flyer enemy spawning
-export var shooter_weight = 1 # likelihood of shooter enemy spawning
-export var brute_weight  = 1 # likelihood of brute enemy spawning
-export var screen_edge_buffer = 25 # n pixel "deadzone" around screen where spawning cannot occur
+export var rate = 30 # avg number of spawns per minute
+export var basic_weight = 7 # likelihood of basic enemy spawning
+export var flyer_weight = 2 # likelihood of flyer enemy spawning
+export var shooter_weight = 2 # likelihood of shooter enemy spawning
+export var brute_weight  = 2 # likelihood of brute enemy spawning
+export var flyer_time_comp = 1 # time compensation for spawning flyer
+export var shooter_time_comp = 2 # time compensation for spawning shooter
+export var brute_time_comp = 2 # time compensation for spawning brute
+export var interval_thresh = 10 # clips spawn intervals to not be too long
+export var screen_edge_buffer = 50 # n pixel "deadzone" around screen where spawning cannot occur
 export var enabled = true
 
 export var design_width = 320 # design resolution; different from real resolution
@@ -22,6 +26,8 @@ onready var basic = preload("res://Enemy Objects/Enemy.tscn")
 onready var flyer = preload("res://Enemy Objects/Flying Enemy.tscn")
 onready var shooter = preload("res://Enemy Objects/Shooting Enemy.tscn")
 onready var brute = preload("res://Enemy Objects/Brute Enemy.tscn")
+
+onready var DIFFICULTY_CONTROLLER = get_tree().get_root().get_child(0).get_node("ProgressController").get_node("DifficultyController")
 
 var next_spawn
 
@@ -43,6 +49,8 @@ func _process(delta):
 		if next_spawn <= 0:
 			_spawn()
 			next_spawn = _generate_interval() + next_spawn
+			if next_spawn > interval_thresh:
+				next_spawn = interval_thresh
 			print("next spawn in {sec} seconds".format({"sec":next_spawn}))
 		else:
 			next_spawn -= delta
@@ -51,6 +59,7 @@ func _spawn():
 	var point = _generate_spawn_point()
 	var enemy = _choose_enemy()
 	print("Spawning enemy at {point}".format({"point":point}))
+	enemy = DIFFICULTY_CONTROLLER.scale_enemy_stats(enemy)
 	get_tree().get_root().get_child(0).add_child(enemy)
 	enemy.position = point
 
@@ -82,9 +91,15 @@ func _choose_enemy():
 	var enemy_seed = rng.randf_range(0,total_weight)
 	if enemy_seed <= basic_weight:
 		return basic.instance()
+		
 	elif enemy_seed <= basic_weight + flyer_weight:
+		next_spawn += flyer_time_comp
 		return flyer.instance()
+		
 	elif enemy_seed <= basic_weight + flyer_weight + shooter_weight:
+		next_spawn += shooter_time_comp
 		return shooter.instance()
+		
 	else:
+		next_spawn += brute_time_comp
 		return brute.instance()
