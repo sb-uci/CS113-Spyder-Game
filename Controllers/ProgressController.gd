@@ -1,5 +1,7 @@
 extends Node
 
+export var DIFFICULTY = 1 # 0 = easy, 1 = medium, 2 = hard
+
 onready var SPAWNER = get_tree().get_root().get_child(0).get_node("Astronaut").get_node("Spawner")
 onready var DIFFICULTY_CONTROLLER = $DifficultyController
 onready var MAX_STAGE = 5 # number of ship parts on map

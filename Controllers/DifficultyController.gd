@@ -1,8 +1,7 @@
 extends Node
 
-export var difficulty = 1 # 0 = easy, 1 = medium, 2 = hard
-
 onready var ProgressController = get_parent()
+onready var DIFFICULTY = ProgressController.DIFFICULTY # 0 = easy, 1 = medium, 2 = hard
 
 # Guide to variable names in this class:
 # e = "easy"; values for easy difficulty, formatted as [e1,e2,e3,e4,e5] for each
@@ -64,23 +63,23 @@ var SpawnScale
 func scale_enemy_stats(enemy):
 	var stage = ProgressController.get_stage()
 	if enemy.TYPE == "brute":
-		enemy.MAX_HP += BruteHPScale[difficulty][stage]
+		enemy.MAX_HP += BruteHPScale[DIFFICULTY][stage]
 	else:
-		enemy.MAX_HP += GeneralHPScale[difficulty][stage]
+		enemy.MAX_HP += GeneralHPScale[DIFFICULTY][stage]
 	
 	if enemy.TYPE == "shooter" or enemy.TYPE == "flyer":
-		enemy.BULLET_SPEED *= ShotSpeedFactor[difficulty][stage]
-		enemy.SHOT_TRACKING += LeadScale[difficulty][stage]
+		enemy.BULLET_SPEED *= ShotSpeedFactor[DIFFICULTY][stage]
+		enemy.SHOT_TRACKING += LeadScale[DIFFICULTY][stage]
 	
-	enemy.SPEED *= SpeedFactor[difficulty][stage]
-	enemy.DAMAGE *= DamageFactor[difficulty][stage]
-	enemy.MOVEMENT_TRACKING += TrackScale[difficulty][stage]
+	enemy.SPEED *= SpeedFactor[DIFFICULTY][stage]
+	enemy.DAMAGE *= DamageFactor[DIFFICULTY][stage]
+	enemy.MOVEMENT_TRACKING += TrackScale[DIFFICULTY][stage]
 	
 	return enemy
 
 func get_spawn_rate():
 	var stage = ProgressController.get_stage()
-	return SpawnScale[difficulty][stage]
+	return SpawnScale[DIFFICULTY][stage]
 	
 func _ready():
 	GeneralHPScale = [eGeneralHPScale, mGeneralHPScale, hGeneralHPScale]

@@ -45,9 +45,6 @@ extents = Vector2( 8, 248 )
 extents = Vector2( 320, 8 )
 
 [node name="World" type="Node2D"]
-__meta__ = {
-"_edit_horizontal_guides_": [  ]
-}
 
 [node name="Background" type="TileMap" parent="."]
 tile_set = SubResource( 1 )
@@ -59,7 +56,7 @@ __meta__ = {
 }
 
 [node name="Astronaut" parent="." instance=ExtResource( 2 )]
-position = Vector2( 160, 40 )
+position = Vector2( 128, 0 )
 z_index = 1
 
 [node name="Spawner" parent="Astronaut" instance=ExtResource( 5 )]

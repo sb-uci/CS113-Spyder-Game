@@ -121,11 +121,13 @@ func _spawn_powerup():
 		var powerUp = POWERUP_LIST[powerUpChosen].instance()
 		powerUp.position = global_position
 		get_parent().add_child(powerUp)
-
+	
+# helper for _predict_future_player_location; calculates travel time to target by enemy or bullet
 func _predict_travel_time(target, speed):
 	var distance = target - global_position
 	return distance.length() / speed
 
+# estimates future player position assuming optimal pathing by enemy or bullet
 func _predict_future_player_location(cycles, speed):
 	var player_vector = PLAYER.get_velocity()
 	var predicted_location = PLAYER.get_collision_center()
