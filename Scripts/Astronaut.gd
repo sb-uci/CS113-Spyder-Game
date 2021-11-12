@@ -23,6 +23,7 @@ var is_invuln = false
 var invuln_timer
 var flash_timer
 var impulses = []
+var is_alive = true
 
 onready var HEALTH_BAR = $HealthBar
 onready var SPRITE = $Sprite
@@ -48,6 +49,8 @@ func damage_player(damage):
 	flash_timer = FLASH_FREQ
 	_flash_sprite(SPRITE, Color(1,1,1,0), TWEEN.EASE_OUT)
 	_flash_sprite(WEAPON, Color(1,1,1,0), TWEEN.EASE_OUT)
+	if health <= 0:
+		dead()
 	
 func get_collision_center():
 	var collision_shape = $CollisionShape2D
@@ -87,8 +90,9 @@ func _ready():
 
 #Movement for player
 func _physics_process(delta):
-	_do_movement(delta)
-	_handle_impulses(delta)
+	if is_alive == true:
+		_do_movement(delta)
+		_handle_impulses(delta)
 
 func _process(delta):
 	_handle_invuln(delta)
@@ -156,6 +160,10 @@ func _flash_sprite(sprite_node, color_state, easing):
 	TWEEN.interpolate_property(sprite_node, "modulate", sprite_node.modulate, color_state, 
 	FLASH_FREQ, TWEEN.TRANS_LINEAR, easing)
 	TWEEN.start()
+	
+func dead():
+	is_alive = false
+	get_tree().change_scene("res://Game Over/Game Over.tscn")
 	
 func _init_hp():
 	HEALTH_BAR.set_max(MAX_HP)

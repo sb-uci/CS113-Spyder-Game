@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Game Over/GameOver.gd" type="Script" id=1]
+
+[node name="Game Over" type="CanvasLayer"]
+layer = 100
+
+[node name="GameOVer" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="GameOVer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.54902, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GameOVer/ColorRect"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -76.0
+margin_top = 12.681
+margin_right = 77.0
+margin_bottom = 85.681
+text = "You're Dead!"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Play Again" type="Button" parent="GameOVer/ColorRect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -38.5
+margin_top = -10.0
+margin_right = 38.5
+margin_bottom = 10.0
+text = "Play Again"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Quit" type="Button" parent="GameOVer/ColorRect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -38.5
+margin_top = 18.0316
+margin_right = 38.5
+margin_bottom = 38.0316
+text = "Quit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="GameOVer/ColorRect/Play Again" to="GameOVer" method="_on_Play_Again_pressed"]
+[connection signal="pressed" from="GameOVer/ColorRect/Quit" to="GameOVer" method="_on_Quit_pressed"]
