@@ -10,8 +10,13 @@ onready var isBeaten = false
 onready var stage = 0 # measures progress (number of ship parts collected)
 
 func _ready():
-	print("setting spawnrate")
+	SPAWNER.enabled = false
+	
+func start(difficulty):
+	DIFFICULTY = difficulty
+	DIFFICULTY_CONTROLLER.DIFFICULTY = difficulty
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
+	SPAWNER.enabled = true
 
 func advance():
 	print("advancing stage")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Pause Overlay/Pause.gd" type="Script" id=1]
+[ext_resource path="res://Overlays-Menus/Pause.gd" type="Script" id=1]
 
 [node name="PauseOverlay" type="CanvasLayer"]
 
