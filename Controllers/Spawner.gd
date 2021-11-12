@@ -27,7 +27,7 @@ onready var flyer = preload("res://Enemy Objects/Flying Enemy.tscn")
 onready var shooter = preload("res://Enemy Objects/Shooting Enemy.tscn")
 onready var brute = preload("res://Enemy Objects/Brute Enemy.tscn")
 
-onready var DIFFICULTY_CONTROLLER = get_tree().get_root().get_child(0).get_node("ProgressController").get_node("DifficultyController")
+onready var DIFFICULTY_CONTROLLER = get_tree().get_root().get_node("World").get_node("ProgressController").get_node("DifficultyController")
 
 var next_spawn
 
@@ -60,7 +60,7 @@ func _spawn():
 	var enemy = _choose_enemy()
 	print("Spawning enemy at {point}".format({"point":point}))
 	enemy = DIFFICULTY_CONTROLLER.scale_enemy_stats(enemy)
-	get_tree().get_root().get_child(0).add_child(enemy)
+	get_tree().get_root().get_node("World").add_child(enemy)
 	enemy.position = point
 
 func _generate_interval():
