@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Assets/Animation/astro_up.tres" type="Animation" id=1]
 [ext_resource path="res://Scripts/Astronaut.gd" type="Script" id=2]
@@ -13,6 +13,9 @@
 [ext_resource path="res://Assets/Animation/astro_idle_left.tres" type="Animation" id=11]
 [ext_resource path="res://Assets/Animation/astro_down.tres" type="Animation" id=12]
 [ext_resource path="res://Assets/Animation/astro_idle_up.tres" type="Animation" id=13]
+[ext_resource path="res://Assets/Shadows/shadow.png" type="Texture" id=14]
+
+
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 5.13465
@@ -91,6 +94,11 @@ __meta__ = {
 "_edit_group_": true,
 "_edit_horizontal_guides_": [ 1.65895 ]
 }
+
+[node name="Shadow" type="Sprite" parent="."]
+modulate = Color( 0.117647, 0.101961, 0.101961, 0.34902 )
+texture = ExtResource( 14 )
+offset = Vector2( 0, -1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 6 )
