@@ -1,9 +1,12 @@
 extends Control
 
 func _process(delta):
-	if Input.is_action_pressed("ui_cancel"):
-		visible = true
-		get_tree().paused = true
+	if Input.is_action_just_pressed("ui_cancel"):
+		if visible:
+			_on_continue_pressed()
+		else:
+			visible = true
+			get_tree().paused = true
 
 func _on_restart_pressed():
 	get_tree().change_scene("res://World.tscn")

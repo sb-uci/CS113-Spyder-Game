@@ -8,6 +8,7 @@ extents = Vector2( 6.13514, 5.94668 )
 
 [node name="ShipPart" type="Area2D"]
 collision_layer = 128
+collision_mask = 129
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]

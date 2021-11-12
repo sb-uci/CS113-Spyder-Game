@@ -43,7 +43,7 @@ func damage_player(damage):
 	is_invuln = true
 	invuln_timer = INVULN_TIME
 	self.collision_mask = INVULN_MASK
-	self.collision_layer = 7
+	self.collision_layer = 128
 	# trigger invuln flash
 	flash_timer = FLASH_FREQ
 	_flash_sprite(SPRITE, Color(1,1,1,0), TWEEN.EASE_OUT)
