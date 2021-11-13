@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Game Over/GameOver.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Sounds/death.wav" type="AudioStream" id=2]
+[ext_resource path="res://Assets/Sounds/hurt.wav" type="AudioStream" id=3]
 
 [node name="Game Over" type="CanvasLayer"]
 layer = 100
@@ -12,6 +14,12 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HurtSound" type="AudioStreamPlayer" parent="GameOVer"]
+stream = ExtResource( 3 )
+
+[node name="GameOverSound" type="AudioStreamPlayer" parent="GameOVer"]
+stream = ExtResource( 2 )
 
 [node name="ColorRect" type="ColorRect" parent="GameOVer"]
 anchor_right = 1.0

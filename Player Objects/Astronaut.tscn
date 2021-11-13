@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Assets/Animation/astro_up.tres" type="Animation" id=1]
 [ext_resource path="res://Scripts/Astronaut.gd" type="Script" id=2]
@@ -14,8 +14,9 @@
 [ext_resource path="res://Assets/Animation/astro_down.tres" type="Animation" id=12]
 [ext_resource path="res://Assets/Animation/astro_idle_up.tres" type="Animation" id=13]
 [ext_resource path="res://Assets/Shadows/shadow.png" type="Texture" id=14]
-
-
+[ext_resource path="res://Assets/Sounds/laser shot.wav" type="AudioStream" id=15]
+[ext_resource path="res://Assets/Sounds/hurt.wav" type="AudioStream" id=16]
+[ext_resource path="res://Assets/Sounds/dirtstep.wav" type="AudioStream" id=17]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 5.13465
@@ -94,6 +95,7 @@ __meta__ = {
 "_edit_group_": true,
 "_edit_horizontal_guides_": [ 1.65895 ]
 }
+STEP_SOUND_FREQUENCY = 0.3
 
 [node name="Shadow" type="Sprite" parent="."]
 modulate = Color( 0.117647, 0.101961, 0.101961, 0.34902 )
@@ -119,6 +121,10 @@ script = ExtResource( 4 )
 
 [node name="FiringPoint" type="Node2D" parent="Primary Weapon"]
 position = Vector2( 9.408, -1.44 )
+
+[node name="LaserSound" type="AudioStreamPlayer2D" parent="Primary Weapon"]
+stream = ExtResource( 15 )
+volume_db = -10.0
 
 [node name="HealthBar" parent="." instance=ExtResource( 5 )]
 margin_left = -7.67318
@@ -150,3 +156,10 @@ active = true
 parameters/playback = SubResource( 15 )
 parameters/Idle/blend_position = Vector2( 0, 0 )
 parameters/Run/blend_position = Vector2( 0, 0 )
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 16 )
+
+[node name="StepSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 17 )
+volume_db = -10.0

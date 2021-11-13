@@ -1,7 +1,5 @@
 extends KinematicBody2D
 
-const FixedStack = preload("res://Scripts/FixedStack.gd")
-
 export var MAX_SPEED = 150
 export var ACCELERATION = 450
 export var FRICTION = 650
@@ -9,7 +7,7 @@ export var MAX_HP = 5
 export var INVULN_TIME = 1.5
 export var FLASH_FREQ = .15
 export var KNOCKBACK_RESISTANCE = 1.1 # how quickly the astronaut recovers from (1 is no resistance)
-export var MOVEMENT_AVERAGE = 1 # length of history of previous movements
+export var STEP_SOUND_FREQUENCY = .5 # how often the step sound gets played while moving
 
 export var design_width = 320 # design resolution; different from real resolution
 export var design_height = 180
@@ -24,13 +22,15 @@ var invuln_timer
 var flash_timer
 var impulses = []
 var is_alive = true
+var recent_movement
+var step_sound_timer = 0
 
 onready var HEALTH_BAR = $HealthBar
 onready var SPRITE = $Sprite
 onready var WEAPON = $"Primary Weapon"
 onready var TWEEN = $Tween
-onready var recent_movement = FixedStack.new()
-
+onready var soundHurt = $HurtSound
+onready var soundStep = $StepSound
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
@@ -38,6 +38,7 @@ onready var animationState = animationTree.get("parameters/playback")
 func damage_player(damage):
 	if is_invuln:
 		return
+	soundHurt.play()
 	health -= damage # do damage
 	HEALTH_BAR.update_hp(health) # update health bar
 	 # trigger invuln
@@ -57,10 +58,7 @@ func get_collision_center():
 	return collision_shape.global_position
 	
 func get_velocity():
-	var average = Vector2()
-	for i in range(recent_movement.size()):
-		average += recent_movement.get(i)
-	return average / MOVEMENT_AVERAGE
+	return recent_movement
 
 func set_speed(new_speed):
 	MAX_SPEED = new_speed
@@ -86,7 +84,6 @@ func can_see_point(point):
 
 func _ready():
 	_init_hp()
-	recent_movement.set_size(MOVEMENT_AVERAGE)
 
 #Movement for player
 func _physics_process(delta):
@@ -96,6 +93,8 @@ func _physics_process(delta):
 
 func _process(delta):
 	_handle_invuln(delta)
+	if step_sound_timer > 0:
+		step_sound_timer -= delta
 	
 func _do_movement(delta):
 	var input_vector = Vector2.ZERO
@@ -104,6 +103,10 @@ func _do_movement(delta):
 	input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
+		if step_sound_timer <= 0:
+			soundStep.play()
+			step_sound_timer = STEP_SOUND_FREQUENCY
+		
 		animationTree.set("parameters/Idle/blend_position", input_vector)
 		animationTree.set("parameters/Run/blend_position", input_vector)
 		animationState.travel("Run")
@@ -112,7 +115,7 @@ func _do_movement(delta):
 		animationState.travel("Idle")
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 	velocity = move_and_slide(velocity)
-	recent_movement.append(velocity)
+	recent_movement = velocity
 
 func _handle_impulses(delta):
 	var pop_list = [] # used to remove impulses without modifying list during main loop
