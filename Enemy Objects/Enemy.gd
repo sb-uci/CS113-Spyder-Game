@@ -15,6 +15,7 @@ var knockback_cd = 0
 var health
 var PLAYER
 var NAVIGATION
+var INDICATOR
 
 onready var sprite = $AnimatedSprite
 onready var player_node_name = "Astronaut"
@@ -23,12 +24,14 @@ onready var HP = $HealthBar
 onready var POWERUP_LIST = [preload("res://PowerUps Objects/MovementPowerUp.tscn"),
 							preload("res://PowerUps Objects/FireRatePowerUp.tscn"),
 							preload("res://PowerUps Objects/HealthPowerUp.tscn")]
+onready var INDICATOR_SCENE = preload("res://Overlays-Menus/Enemy Indicator.tscn")
 
 func register_hit(DAMAGE):
 	health -= DAMAGE
 	HP.update_hp(health)
 	if health <= 0:
 		_spawn_powerup()
+		INDICATOR.queue_free()
 		self.queue_free()
 
 # when an enemy is spawned, it's not attached to the tree, so it's PLAYER and NAVIGATION
@@ -40,10 +43,18 @@ func refresh_node_references():
 func _ready():
 	refresh_node_references()
 	_init_hp(MAX_HP)
+	_spawn_indicator()
 	
 func _process(delta):
 	if knockback_cd > 0:
 		knockback_cd -= delta
+	
+	if _is_on_screen():
+		INDICATOR.visible = false
+		INDICATOR.set_process(false)
+	else:
+		INDICATOR.visible = true
+		INDICATOR.set_process(true)
 
 func _physics_process(delta):
 	_do_movement(delta)
@@ -140,3 +151,11 @@ func _predict_future_player_location(cycles, speed):
 		predicted_location = PLAYER.get_collision_center() + distance_offset
 	
 	return predicted_location
+
+func _spawn_indicator():
+	INDICATOR = INDICATOR_SCENE.instance()
+	INDICATOR.set_enemy(self)
+	get_tree().get_root().add_child(INDICATOR)
+
+func _is_on_screen():
+	return PLAYER.can_see_point(global_position)

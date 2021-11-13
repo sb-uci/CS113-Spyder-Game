@@ -26,9 +26,6 @@ func _can_shoot(target):
 func _is_in_range(target):
 	return (target - global_position).length() <= FIRE_RANGE
 
-func _is_on_screen():
-	return PLAYER.can_see_point(global_position)
-
 func _do_movement(delta):
 	var move_target = _predict_future_player_location(MOVEMENT_TRACKING, SPEED)
 	var move_vectors = _navigate(SPEED * delta, global_position, move_target)
