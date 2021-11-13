@@ -5,9 +5,6 @@
 [ext_resource path="res://Assets/Enemies/flyingEnemy.png" type="Texture" id=4]
 [ext_resource path="res://Assets/Shadows/small_shadow.png" type="Texture" id=5]
 
-
-
-
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 32, 32 )
@@ -36,6 +33,7 @@ position = Vector2( -0.222733, 0.111362 )
 collision_layer = 32
 collision_mask = 40
 script = ExtResource( 2 )
+MAX_HP = 2.0
 TYPE = "flyer"
 FIRE_RATE = 1.5
 FIRE_RANGE = 100

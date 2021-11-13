@@ -5,7 +5,6 @@
 [ext_resource path="res://Assets/Shadows/big_shadow.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Enemies/brute_left.png" type="Texture" id=4]
 
-
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 128, 128 )
@@ -38,6 +37,9 @@ height = 11.5835
 collision_layer = 4
 collision_mask = 15
 script = ExtResource( 2 )
+SPEED = 35.0
+MAX_HP = 6.0
+DAMAGE = 2.0
 KNOCKBACK_FORCE = 450
 TYPE = "brute"
 
@@ -50,6 +52,7 @@ offset = Vector2( -1, 5 )
 position = Vector2( 1.25993, -0.31498 )
 frames = SubResource( 5 )
 animation = "walk"
+frame = 3
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
