@@ -155,7 +155,7 @@ func _predict_future_player_location(cycles, speed):
 func _spawn_indicator():
 	INDICATOR = INDICATOR_SCENE.instance()
 	INDICATOR.set_enemy(self)
-	get_tree().get_root().add_child(INDICATOR)
+	get_tree().get_root().get_node("World").add_child(INDICATOR)
 
 func _is_on_screen():
 	return PLAYER.can_see_point(global_position)
