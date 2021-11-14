@@ -1,7 +1,105 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Overlays-Menus/Main.gd" type="Script" id=1]
 [ext_resource path="res://Overlays-Menus/DifficultySelect.gd" type="Script" id=2]
+[ext_resource path="res://Overlays-Menus/menu_theme.tres" type="Theme" id=3]
+[ext_resource path="res://Assets/World/earth.png" type="Texture" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 4 )
+region = Rect2( 285, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 4 )
+region = Rect2( 570, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 4 )
+region = Rect2( 855, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 4 )
+region = Rect2( 1140, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 4 )
+region = Rect2( 1425, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 4 )
+region = Rect2( 1710, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 4 )
+region = Rect2( 1995, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 4 )
+region = Rect2( 2280, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 4 )
+region = Rect2( 2565, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 4 )
+region = Rect2( 2850, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 4 )
+region = Rect2( 3135, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 4 )
+region = Rect2( 3420, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 4 )
+region = Rect2( 3705, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 4 )
+region = Rect2( 3990, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 4 )
+region = Rect2( 4275, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 4 )
+region = Rect2( 4560, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 4 )
+region = Rect2( 4845, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 4 )
+region = Rect2( 5130, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 4 )
+region = Rect2( 5415, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 4 )
+region = Rect2( 5700, 0, 285, 256 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 4 )
+region = Rect2( 5985, 0, 285, 256 )
+
+[sub_resource type="SpriteFrames" id=23]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ) ],
+"loop": true,
+"name": "default",
+"speed": 12.0
+} ]
 
 [node name="MainMenu" type="CanvasLayer"]
 
@@ -9,6 +107,7 @@
 visible = false
 margin_right = 40.0
 margin_bottom = 40.0
+theme = ExtResource( 3 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -17,16 +116,16 @@ __meta__ = {
 [node name="ColorRect" type="ColorRect" parent="Main"]
 margin_right = 320.0
 margin_bottom = 180.0
-color = Color( 0.14902, 0.101961, 0.215686, 1 )
+color = Color( 0.113725, 0.0862745, 0.152941, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="Main"]
-margin_left = 112.0
-margin_top = 24.0
-margin_right = 208.0
-margin_bottom = 46.0
+margin_left = 8.0
+margin_top = 16.0
+margin_right = 204.0
+margin_bottom = 39.0
 text = "Game Name"
 align = 1
 valign = 1
@@ -35,39 +134,47 @@ __meta__ = {
 }
 
 [node name="Start" type="Button" parent="Main"]
-margin_left = 128.0
+margin_left = 24.0
 margin_top = 56.0
-margin_right = 192.0
-margin_bottom = 76.0
+margin_right = 112.0
+margin_bottom = 79.0
 text = "Start"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Credits" type="Button" parent="Main"]
-margin_left = 128.0
+margin_left = 24.0
 margin_top = 88.0
-margin_right = 192.0
-margin_bottom = 108.0
+margin_right = 140.0
+margin_bottom = 111.0
 text = "Credits"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Quit" type="Button" parent="Main"]
-margin_left = 128.0
+margin_left = 24.0
 margin_top = 120.0
-margin_right = 192.0
-margin_bottom = 140.0
+margin_right = 96.0
+margin_bottom = 143.0
 text = "Quit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Main"]
+position = Vector2( 224, 96 )
+scale = Vector2( 0.671875, 0.671875 )
+frames = SubResource( 23 )
+frame = 6
+playing = true
+
 [node name="DifficultySelect" type="Control" parent="."]
 visible = false
 margin_right = 40.0
 margin_bottom = 40.0
+theme = ExtResource( 3 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -76,17 +183,18 @@ __meta__ = {
 [node name="ColorRect" type="ColorRect" parent="DifficultySelect"]
 margin_right = 320.0
 margin_bottom = 180.0
-color = Color( 0.14902, 0.101961, 0.215686, 1 )
+color = Color( 0.113725, 0.0862745, 0.152941, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="DifficultySelect"]
-margin_left = 104.0
-margin_top = 24.0
-margin_right = 216.0
-margin_bottom = 46.0
-text = "Select Difficulty"
+margin_left = 72.0
+margin_top = 8.0
+margin_right = 250.0
+margin_bottom = 62.0
+text = "Select 
+Difficulty"
 align = 1
 valign = 1
 __meta__ = {
@@ -95,19 +203,19 @@ __meta__ = {
 
 [node name="Easy" type="Button" parent="DifficultySelect"]
 margin_left = 128.0
-margin_top = 56.0
-margin_right = 192.0
-margin_bottom = 76.0
+margin_top = 64.0
+margin_right = 190.0
+margin_bottom = 87.0
 text = "Easy"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Medium" type="Button" parent="DifficultySelect"]
-margin_left = 128.0
-margin_top = 88.0
-margin_right = 192.0
-margin_bottom = 108.0
+margin_left = 112.0
+margin_top = 96.0
+margin_right = 206.0
+margin_bottom = 121.0
 text = "Medium"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -115,14 +223,13 @@ __meta__ = {
 
 [node name="Hard" type="Button" parent="DifficultySelect"]
 margin_left = 128.0
-margin_top = 120.0
+margin_top = 128.0
 margin_right = 192.0
-margin_bottom = 140.0
+margin_bottom = 151.0
 text = "Hard"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
 [connection signal="pressed" from="Main/Start" to="Main" method="_on_Start_pressed"]
 [connection signal="pressed" from="Main/Credits" to="Main" method="_on_Credits_pressed"]
 [connection signal="pressed" from="Main/Quit" to="Main" method="_on_Quit_pressed"]
