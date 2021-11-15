@@ -6,7 +6,7 @@
 [ext_resource path="res://Overlays-Menus/PauseOverlay.tres" type="StyleBox" id=5]
 [ext_resource path="res://PressStart2P-Regular.ttf" type="DynamicFontData" id=6]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=1]
 size = 14
 outline_size = 1
 outline_color = Color( 0.431373, 0.603922, 0.752941, 0.337255 )
@@ -24,7 +24,7 @@ corner_detail = 9
 shadow_color = Color( 0.027451, 0.0117647, 0.0980392, 0.6 )
 shadow_offset = Vector2( 1, 1 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=3]
 outline_size = 1
 outline_color = Color( 0.431373, 0.603922, 0.752941, 0.337255 )
 extra_spacing_char = 2
@@ -33,14 +33,14 @@ font_data = ExtResource( 6 )
 [sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 6 )
 
-[sub_resource type="Theme" id=7]
+[sub_resource type="Theme" id=5]
 default_font = SubResource( 4 )
 Button/colors/font_color = Color( 1, 1, 1, 1 )
 Button/colors/font_color_disabled = Color( 0.901961, 0.901961, 0.901961, 0.2 )
 Button/colors/font_color_hover = Color( 0.360784, 0.411765, 0.635294, 1 )
 Button/colors/font_color_pressed = Color( 0.0784314, 0.0627451, 0.160784, 1 )
 Button/constants/hseparation = 2
-Button/fonts/font = SubResource( 5 )
+Button/fonts/font = SubResource( 1 )
 Button/styles/disabled = null
 Button/styles/focus = ExtResource( 5 )
 Button/styles/hover = SubResource( 2 )
@@ -53,7 +53,7 @@ Label/constants/line_spacing = 3
 Label/constants/shadow_as_outline = 0
 Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
-Label/fonts/font = SubResource( 6 )
+Label/fonts/font = SubResource( 3 )
 Label/styles/normal = null
 
 [node name="Game Over" type="CanvasLayer"]
@@ -62,7 +62,7 @@ layer = 100
 [node name="GameOVer" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 7 )
+theme = SubResource( 5 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -97,32 +97,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Play Again" type="Button" parent="GameOVer/ColorRect"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -88.0
-margin_top = -18.0
-margin_right = 90.0
-margin_bottom = 5.0
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOVer/ColorRect"]
+margin_left = 80.0
+margin_top = 72.0
+margin_right = 238.0
+margin_bottom = 114.0
+custom_constants/separation = 16
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Play Again" type="Button" parent="GameOVer/ColorRect/VBoxContainer"]
+margin_right = 158.0
+margin_bottom = 13.0
 text = "Play Again"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Quit" type="Button" parent="GameOVer/ColorRect"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -40.0
-margin_top = 22.0
-margin_right = 37.0
+[node name="Quit" type="Button" parent="GameOVer/ColorRect/VBoxContainer"]
+margin_top = 29.0
+margin_right = 158.0
 margin_bottom = 42.0
 text = "Quit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="GameOVer/ColorRect/Play Again" to="GameOVer" method="_on_Play_Again_pressed"]
-[connection signal="pressed" from="GameOVer/ColorRect/Quit" to="GameOVer" method="_on_Quit_pressed"]
+[connection signal="pressed" from="GameOVer/ColorRect/VBoxContainer/Play Again" to="GameOVer" method="_on_Play_Again_pressed"]
+[connection signal="pressed" from="GameOVer/ColorRect/VBoxContainer/Quit" to="GameOVer" method="_on_Quit_pressed"]
