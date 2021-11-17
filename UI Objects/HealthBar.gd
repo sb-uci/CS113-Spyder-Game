@@ -7,7 +7,7 @@ export (Color) var P_CRITICAL_COLOR = Color.red
 export (float) var HURT_THRESH = 0.5
 export (float) var CRITICAL_THRESH = 0.25
 export (Color) var ENEMY_COLOR = Color.darkred
-export var ISENEMY = true 
+export var IS_ENEMY = true 
 
 onready var HEALTH_BAR = $HealthBar
 onready var DAMAGE_BAR = $DamageBar
@@ -15,6 +15,8 @@ onready var TWEEN = $Tween
 
 func update_hp(new_hp):
 	new_hp *= 100 # scaled for smoother tweening
+	if new_hp > HEALTH_BAR.max_value:
+		new_hp = HEALTH_BAR.max_value
 	HEALTH_BAR.value = new_hp
 	_do_health_tween(new_hp)
 	_update_color(new_hp)
@@ -30,7 +32,7 @@ func _do_health_tween(new_hp):
 	TWEEN.start()
 
 func _update_color(new_hp):
-	if ISENEMY:
+	if IS_ENEMY:
 		return
 
 	if new_hp < CRITICAL_THRESH * HEALTH_BAR.max_value:
@@ -41,7 +43,7 @@ func _update_color(new_hp):
 		HEALTH_BAR.tint_progress = P_HEALTHY_COLOR
 
 func _init_color():
-	if ISENEMY:
+	if IS_ENEMY:
 		HEALTH_BAR.tint_progress = ENEMY_COLOR
 	else:
 		HEALTH_BAR.tint_progress = P_HEALTHY_COLOR

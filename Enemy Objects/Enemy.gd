@@ -24,7 +24,7 @@ onready var HP = $HealthBar
 onready var POWERUP_LIST = [preload("res://PowerUps Objects/MovementPowerUp.tscn"),
 							preload("res://PowerUps Objects/FireRatePowerUp.tscn"),
 							preload("res://PowerUps Objects/HealthPowerUp.tscn")]
-onready var INDICATOR_SCENE = preload("res://Overlays-Menus/Enemy Indicator.tscn")
+onready var INDICATOR_SCENE = preload("res://UI Objects/Enemy Indicator.tscn")
 
 func register_hit(DAMAGE):
 	health -= DAMAGE

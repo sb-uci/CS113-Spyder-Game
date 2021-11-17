@@ -3,6 +3,7 @@ extends "res://Enemy Objects/Enemy.gd"
 
 onready var BULLET = preload("res://Enemy Objects/Enemy Bullet.tscn")
 onready var BULLET_WIDTH = _get_bullet_sprite_width(BULLET)
+onready var soundLaser = $LaserSound
 
 export var BULLET_SPEED = 250
 export var FIRE_RATE = 1.0
@@ -58,7 +59,7 @@ func _has_line_of_sight(target):
 func _shoot(target):
 	if fire_timer > 0:
 		return
-		
+	
 	var direction = target - global_position
 	var bullet_instance = BULLET.instance()
 	bullet_instance.damage = DAMAGE
@@ -66,6 +67,7 @@ func _shoot(target):
 	bullet_instance.rotation_degrees = direction.angle() * 180/PI
 	bullet_instance.apply_impulse(Vector2(), Vector2(BULLET_SPEED, 0).rotated(direction.angle()))
 	get_tree().get_root().add_child(bullet_instance)
+	soundLaser.play()
 	fire_timer = FIRE_RATE
 
 func _parallel_translate(pt1, pt2, distance):

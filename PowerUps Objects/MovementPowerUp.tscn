@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://PowerUps Objects/MovementPowerUp.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Power-ups/Movement PU.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Sounds/powerup.wav" type="AudioStream" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6.13514, 5.94668 )
@@ -21,5 +22,9 @@ texture = ExtResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -2.08111 )
 shape = SubResource( 1 )
+
+[node name="PowerupSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = -15.0
 
 [connection signal="body_entered" from="." to="." method="_on_Movement_PowerUp_body_entered"]

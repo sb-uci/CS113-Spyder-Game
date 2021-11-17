@@ -3,7 +3,7 @@
 [ext_resource path="res://Overlays-Menus/PauseOverlay.tres" type="StyleBox" id=2]
 [ext_resource path="res://PressStart2P-Regular.ttf" type="DynamicFontData" id=3]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=1]
 size = 14
 outline_size = 1
 outline_color = Color( 0.431373, 0.603922, 0.752941, 0.337255 )
@@ -21,7 +21,7 @@ corner_detail = 9
 shadow_color = Color( 0.027451, 0.0117647, 0.0980392, 0.6 )
 shadow_offset = Vector2( 1, 1 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=3]
 outline_size = 1
 outline_color = Color( 0.431373, 0.603922, 0.752941, 0.337255 )
 extra_spacing_char = 2
@@ -37,7 +37,7 @@ Button/colors/font_color_disabled = Color( 0.901961, 0.901961, 0.901961, 0.2 )
 Button/colors/font_color_hover = Color( 0.360784, 0.411765, 0.635294, 1 )
 Button/colors/font_color_pressed = Color( 0.0784314, 0.0627451, 0.160784, 1 )
 Button/constants/hseparation = 2
-Button/fonts/font = SubResource( 5 )
+Button/fonts/font = SubResource( 1 )
 Button/styles/disabled = null
 Button/styles/focus = ExtResource( 2 )
 Button/styles/hover = SubResource( 2 )
@@ -50,5 +50,5 @@ Label/constants/line_spacing = 3
 Label/constants/shadow_as_outline = 0
 Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
-Label/fonts/font = SubResource( 6 )
+Label/fonts/font = SubResource( 3 )
 Label/styles/normal = null

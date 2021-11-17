@@ -7,6 +7,7 @@ onready var SPAWNER = PLAYER.get_node("Spawner")
 onready var PLAYER_GUN = PLAYER.get_node("Primary Weapon")
 onready var DIFFICULTY_CONTROLLER = $DifficultyController
 onready var MAX_STAGE = 5 # number of ship parts on map
+onready var soundPickup = $PartPickupSound
 
 onready var isBeaten = false
 onready var stage = 0 # measures progress (number of ship parts collected)
@@ -28,6 +29,7 @@ func start(difficulty):
 
 func advance():
 	print("advancing stage")
+	soundPickup.play()
 	stage += 1
 	if stage == MAX_STAGE:
 		stage = MAX_STAGE - 1 # so spawner can keep functioning if need be

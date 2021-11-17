@@ -2,12 +2,21 @@ extends PowerUp
 
 export var HEALTH_INCREASE = 1 #Greater value = more health
 
+onready var soundHeal = $HealSound
+
 func _ready():
 	pass
 
 func _on_Health_PowerUp_body_entered(body):
 	if body.is_in_group("Player"):
 		if PLAYER.health != PLAYER.MAX_HP:
+			for child in get_children():
+				if child != soundHeal:
+					child.queue_free()
+			soundHeal.play()
 			PLAYER.health += HEALTH_INCREASE
 			PLAYER.HEALTH_BAR.update_hp(PLAYER.health)
-			queue_free()
+			_create_powerUp_timer() # if health pack queue_frees here, sound won't play
+
+func _on_powerup_timeout():
+	queue_free()

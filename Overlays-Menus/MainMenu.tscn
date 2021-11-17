@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=2]
+[gd_scene load_steps=72 format=2]
 
 [ext_resource path="res://Overlays-Menus/Main.gd" type="Script" id=1]
 [ext_resource path="res://Overlays-Menus/DifficultySelect.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Assets/World/earth.png" type="Texture" id=4]
 [ext_resource path="res://Assets/World/red.png" type="Texture" id=5]
 [ext_resource path="res://Assets/World/stars.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Sounds/menu.wav" type="AudioStream" id=7]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 4 )
@@ -359,20 +360,21 @@ __meta__ = {
 position = Vector2( 168, 32 )
 scale = Vector2( 0.162109, 0.162109 )
 frames = SubResource( 23 )
-frame = 14
+frame = 2
 playing = true
 
 [node name="AnimatedSprite2" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 96, 104 )
 scale = Vector2( 0.71875, 0.71875 )
 frames = SubResource( 41 )
+frame = 9
 playing = true
 
 [node name="AnimatedSprite3" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 160, 152 )
 scale = Vector2( 0.224561, 0.25 )
 frames = SubResource( 64 )
-frame = 6
+frame = 16
 playing = true
 
 [node name="DifficultySelect" type="Control" parent="."]
@@ -444,6 +446,11 @@ text = "Hard"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="MenuSelectSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = -15.0
+
 [connection signal="pressed" from="Main/VBoxContainer/Start" to="Main" method="_on_Start_pressed"]
 [connection signal="pressed" from="Main/VBoxContainer/Credits" to="Main" method="_on_Credits_pressed"]
 [connection signal="pressed" from="Main/VBoxContainer/Quit" to="Main" method="_on_Quit_pressed"]

@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Game Over/GameOver.gd" type="Script" id=1]
-[ext_resource path="res://Assets/Sounds/death.wav" type="AudioStream" id=2]
+[ext_resource path="res://Assets/Sounds/game over.wav" type="AudioStream" id=2]
 [ext_resource path="res://Assets/Sounds/hurt.wav" type="AudioStream" id=3]
+[ext_resource path="res://Assets/Sounds/menu.wav" type="AudioStream" id=4]
 [ext_resource path="res://Overlays-Menus/PauseOverlay.tres" type="StyleBox" id=5]
 [ext_resource path="res://PressStart2P-Regular.ttf" type="DynamicFontData" id=6]
 
@@ -124,5 +125,10 @@ text = "Quit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="MenuSelectSound" type="AudioStreamPlayer" parent="GameOVer"]
+stream = ExtResource( 4 )
+volume_db = -15.0
+
 [connection signal="pressed" from="GameOVer/ColorRect/VBoxContainer/Play Again" to="GameOVer" method="_on_Play_Again_pressed"]
 [connection signal="pressed" from="GameOVer/ColorRect/VBoxContainer/Quit" to="GameOVer" method="_on_Quit_pressed"]

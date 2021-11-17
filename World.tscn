@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Assets/Tiles/Floor/floor(6x6).png" type="Texture" id=1]
 [ext_resource path="res://Player Objects/Astronaut.tscn" type="PackedScene" id=2]
@@ -13,11 +13,12 @@
 [ext_resource path="res://Assets/Tiles/dirt_tile.png" type="Texture" id=11]
 [ext_resource path="res://Overlays-Menus/MainMenu.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Assets/Tiles/grass_tile.png" type="Texture" id=13]
-[ext_resource path="res://Assets/Pickups/broken_radio.png" type="Texture" id=14]
+[ext_resource path="res://Assets/Sounds/BGMusic (placeholder maybe).mp3" type="AudioStream" id=14]
 [ext_resource path="res://Assets/Pickups/battery.png" type="Texture" id=15]
 [ext_resource path="res://Assets/Pickups/circuit.png" type="Texture" id=16]
 [ext_resource path="res://Assets/Pickups/wires.png" type="Texture" id=17]
 [ext_resource path="res://Assets/Pickups/metal_scraps.png" type="Texture" id=18]
+[ext_resource path="res://Assets/Pickups/broken_radio.png" type="Texture" id=19]
 
 [sub_resource type="TileSet" id=1]
 0/name = "floor(6x6).png 0"
@@ -266,47 +267,47 @@ texture = ExtResource( 8 )
 
 [node name="fern" parent="grass" instance=ExtResource( 9 )]
 position = Vector2( 15.4396, -11.3339 )
-frame = 11
+frame = 13
 
 [node name="fern" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 85, 115.5 )
-frame = 8
+frame = 10
 
 [node name="fern2" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 212, 3 )
-frame = 12
+frame = 14
 
 [node name="fern3" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 432, -139 )
-frame = 22
+frame = 24
 
 [node name="fern4" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 405.5, 61 )
-frame = 22
+frame = 24
 
 [node name="fern5" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 419.5, 316 )
-frame = 5
+frame = 7
 
 [node name="fern6" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 362.5, 217 )
-frame = 12
+frame = 14
 
 [node name="fern7" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 135.621, 236.91 )
-frame = 16
+frame = 18
 
 [node name="fern8" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -109.5, 292 )
-frame = 18
+frame = 20
 
 [node name="fern9" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -136, 39 )
-frame = 21
+frame = 23
 
 [node name="fern10" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -1, -146 )
-frame = 4
+frame = 6
 
 [node name="ProgressController" parent="." instance=ExtResource( 4 )]
 DIFFICULTY = 2
@@ -333,7 +334,7 @@ position = Vector2( -72, 224 )
 [node name="Sprite2" type="Sprite" parent="ProgressController/ShipPart3"]
 position = Vector2( -3.42014, -1.13416 )
 scale = Vector2( 0.714643, 0.714643 )
-texture = ExtResource( 14 )
+texture = ExtResource( 19 )
 
 [node name="ShipPart4" parent="ProgressController" instance=ExtResource( 7 )]
 position = Vector2( 288, 256 )
@@ -357,5 +358,6 @@ pause_mode = 2
 [node name="MainMenu" parent="." instance=ExtResource( 12 )]
 
 [node name="BGMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
 volume_db = -10.0
 autoplay = true

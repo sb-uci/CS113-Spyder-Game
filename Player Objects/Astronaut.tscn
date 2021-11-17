@@ -132,7 +132,7 @@ margin_top = -17.8691
 margin_right = -7.67318
 margin_bottom = -17.8691
 rect_scale = Vector2( 0.16, 0.16 )
-ISENEMY = false
+IS_ENEMY = false
 
 [node name="Tween" type="Tween" parent="."]
 
