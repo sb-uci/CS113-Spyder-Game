@@ -35,7 +35,9 @@ func rotate_sprite():
 	
 	if direction == "Right" and mouse_pos.x < self.global_position.x:
 		self.set_flip_v(true)
+		$FiringPoint.position += Vector2(0,2.5) # "flip" the firing point around gun x axis
 		direction = "Left"
 	elif direction == "Left" and mouse_pos.x > self.global_position.x:
 		self.set_flip_v(false)
+		$FiringPoint.position += Vector2(0,-2.5)
 		direction = "Right"

@@ -8,9 +8,11 @@ onready var PLAYER_GUN = PLAYER.get_node("Primary Weapon")
 onready var DIFFICULTY_CONTROLLER = $DifficultyController
 onready var MAX_STAGE = 5 # number of ship parts on map
 onready var soundPickup = $PartPickupSound
+onready var stage_point = PLAYER.global_position
+onready var TEXTBOX = get_tree().get_root().get_node("World").get_node("TextBoxOverlay")
 
-onready var isBeaten = false
-onready var stage = 0 # measures progress (number of ship parts collected)
+var isBeaten = false
+var stage = 0 # measures progress (number of ship parts collected)
 
 func _ready():
 	SPAWNER.enabled = false
@@ -19,23 +21,104 @@ func _ready():
 	PLAYER_GUN.set_process(false)
 	
 func start(difficulty):
-	PLAYER.set_process(true)
-	PLAYER.set_physics_process(true)
-	PLAYER_GUN.set_process(true)
 	DIFFICULTY = difficulty
 	DIFFICULTY_CONTROLLER.DIFFICULTY = difficulty
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
-	SPAWNER.enabled = true
+	_do_dialogue()
+	yield(TEXTBOX, "has_become_inactive")
+	_soft_unpause()
 
 func advance():
 	print("advancing stage")
 	soundPickup.play()
-	stage += 1
-	if stage == MAX_STAGE:
-		stage = MAX_STAGE - 1 # so spawner can keep functioning if need be
-		SPAWNER.enabled = false
-		isBeaten = true
+
+	_clear_enemies()
+	_soft_pause()
+	_advance_stage()
+	_reset_player()
+	_do_dialogue()
+	yield(TEXTBOX, "has_become_inactive")
+	_soft_unpause()
+
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
+	if stage == MAX_STAGE:
+		SPAWNER.enabled = false
+		
 
 func get_stage():
 	return stage
+
+func _advance_stage():
+	stage += 1
+	if stage == MAX_STAGE:
+		isBeaten = true
+
+func _reset_player():
+	PLAYER.HEALTH_BAR.update_hp(PLAYER.MAX_HP)
+	PLAYER.global_position = stage_point
+	PLAYER.animationState.travel("Idle")
+
+func _do_dialogue():
+	match stage:
+		0:
+			_stage_zero_dialogue()
+		1:
+			_stage_one_dialogue()
+		2:
+			_stage_two_dialogue()
+		3:
+			_stage_three_dialogue()
+		4:
+			_stage_four_dialogue()
+		5:
+			_stage_five_dialogue()
+
+func _stage_zero_dialogue():
+	TEXTBOX.queue_text("This is some immediate dialogue")
+	TEXTBOX.queue_text("It plays right as the game starts (after the menu)")
+	TEXTBOX.queue_text("Narratively, this is right after the crash")
+	TEXTBOX.queue_text("Go collect the parts to advance")
+
+func _stage_one_dialogue():
+	TEXTBOX.queue_text("Oh boy, the player just collected their first part!")
+	TEXTBOX.queue_text("Aint that neat")
+	
+func _stage_two_dialogue():
+	TEXTBOX.queue_text("Part number 2!")
+	TEXTBOX.queue_text("At this point, the player might notice the game getting harder")
+	TEXTBOX.queue_text("And if they haven't, they definitely will soon")
+	TEXTBOX.queue_text("Maybe the other astronaut should tell the player the mobs are getting stronger")
+	
+func _stage_three_dialogue():
+	TEXTBOX.queue_text("Part number 3!")
+	TEXTBOX.queue_text("The game is pretty tough now")
+	TEXTBOX.queue_text("At this point, the other astronaut is alluding to the ending twist")
+	TEXTBOX.queue_text("Maybe they get a little pet alien or something, Idk")
+	
+func _stage_four_dialogue():
+	TEXTBOX.queue_text("Only 1 more part to go!")
+	TEXTBOX.queue_text("The player should probably be a little suspicious of the other astronaut now")
+	
+func _stage_five_dialogue():
+	TEXTBOX.queue_text("Wowee, look at you completing the game")
+	TEXTBOX.queue_text(". . .")
+	TEXTBOX.queue_text(". . .")
+	TEXTBOX.queue_text(". . . or did you")
+
+func _soft_pause():
+	PLAYER.set_process(false)
+	PLAYER.set_physics_process(false)
+	PLAYER_GUN.set_process(false)
+	SPAWNER.enabled = false
+	
+func _soft_unpause():
+	PLAYER.set_process(true)
+	PLAYER.set_physics_process(true)
+	PLAYER_GUN.set_process(true)
+	SPAWNER.enabled = true
+
+func _clear_enemies():
+	var root = get_tree().get_root().get_node("World")
+	for child in root.get_children():
+		if child is Enemy:
+			child.kill()

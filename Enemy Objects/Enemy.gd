@@ -31,8 +31,11 @@ func register_hit(DAMAGE):
 	HP.update_hp(health)
 	if health <= 0:
 		_spawn_powerup()
-		INDICATOR.queue_free()
-		self.queue_free()
+		kill()
+
+func kill():
+	INDICATOR.queue_free()
+	self.queue_free()
 
 # when an enemy is spawned, it's not attached to the tree, so it's PLAYER and NAVIGATION
 # references will be null. After adding to tree, run this.

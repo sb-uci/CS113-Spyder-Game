@@ -1,9 +1,9 @@
 [gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Assets/Animation/astro_up.tres" type="Animation" id=1]
-[ext_resource path="res://Scripts/Astronaut.gd" type="Script" id=2]
+[ext_resource path="res://Player Objects/Astronaut.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Player/Space Gun (PoC).png" type="Texture" id=3]
-[ext_resource path="res://Scripts/Primary Weapon.gd" type="Script" id=4]
+[ext_resource path="res://Player Objects/Primary Weapon.gd" type="Script" id=4]
 [ext_resource path="res://UI Objects/HealthBar.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Player/astro_spritesheet.png" type="Texture" id=6]
 [ext_resource path="res://Assets/Animation/astro_idle_down.tres" type="Animation" id=7]
@@ -120,7 +120,7 @@ texture = ExtResource( 3 )
 script = ExtResource( 4 )
 
 [node name="FiringPoint" type="Node2D" parent="Primary Weapon"]
-position = Vector2( 9.408, -1.44 )
+position = Vector2( 9.18925, -1.5025 )
 
 [node name="LaserSound" type="AudioStreamPlayer2D" parent="Primary Weapon"]
 stream = ExtResource( 15 )
