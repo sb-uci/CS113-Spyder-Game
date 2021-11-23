@@ -1,0 +1,123 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://Assets/Shadows/shadow.png" type="Texture" id=1]
+[ext_resource path="res://NPC/OtherAstro.gd" type="Script" id=2]
+[ext_resource path="res://NPC/other_astro.png" type="Texture" id=3]
+[ext_resource path="res://Overlays-Menus/PauseOverlay.tres" type="StyleBox" id=4]
+[ext_resource path="res://PressStart2P-Regular.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 3.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=11]
+radius = 5.34248
+height = 3.91752
+
+[sub_resource type="CircleShape2D" id=12]
+radius = 34.2076
+
+[sub_resource type="DynamicFont" id=6]
+size = 14
+outline_size = 1
+outline_color = Color( 0.431373, 0.603922, 0.752941, 0.337255 )
+extra_spacing_bottom = -1
+extra_spacing_char = 2
+font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.321569, 0.317647, 0.45098, 0 )
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 9
+shadow_color = Color( 0.027451, 0.0117647, 0.0980392, 0.6 )
+shadow_offset = Vector2( 1, 1 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 4
+outline_size = 1
+outline_color = Color( 0.431373, 0.603922, 0.752941, 0.337255 )
+extra_spacing_char = 2
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 5
+font_data = ExtResource( 5 )
+
+[sub_resource type="Theme" id=10]
+default_font = SubResource( 9 )
+Button/colors/font_color = Color( 1, 1, 1, 1 )
+Button/colors/font_color_disabled = Color( 0.901961, 0.901961, 0.901961, 0.2 )
+Button/colors/font_color_hover = Color( 0.360784, 0.411765, 0.635294, 1 )
+Button/colors/font_color_pressed = Color( 0.0784314, 0.0627451, 0.160784, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = SubResource( 6 )
+Button/styles/disabled = null
+Button/styles/focus = ExtResource( 4 )
+Button/styles/hover = SubResource( 7 )
+Button/styles/normal = ExtResource( 4 )
+Button/styles/pressed = ExtResource( 4 )
+Label/colors/font_color = Color( 1, 1, 1, 1 )
+Label/colors/font_color_shadow = Color( 0.00784314, 0.0196078, 0.0901961, 0 )
+Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+Label/constants/line_spacing = 3
+Label/constants/shadow_as_outline = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/fonts/font = SubResource( 8 )
+Label/styles/normal = null
+
+[node name="OtherAstro" type="StaticBody2D"]
+collision_layer = 256
+script = ExtResource( 2 )
+
+[node name="Shadow" type="Sprite" parent="."]
+modulate = Color( 0.0862745, 0.0745098, 0.0745098, 0.490196 )
+position = Vector2( 0.595284, 0.793701 )
+texture = ExtResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 3 )
+frame = 1
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.667419, 7.67533 )
+rotation = 1.5708
+shape = SubResource( 11 )
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 256
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0.471931, 11.1611 )
+shape = SubResource( 12 )
+
+[node name="Label" type="Label" parent="."]
+visible = false
+margin_left = -30.9119
+margin_top = -22.653
+margin_right = 39.0881
+margin_bottom = -16.653
+theme = SubResource( 10 )
+text = "Hello there!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

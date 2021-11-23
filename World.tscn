@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Assets/Tiles/Floor/floor(6x6).png" type="Texture" id=1]
 [ext_resource path="res://Player Objects/Astronaut.tscn" type="PackedScene" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://Assets/Pickups/metal_scraps.png" type="Texture" id=18]
 [ext_resource path="res://Assets/Pickups/broken_radio.png" type="Texture" id=19]
 [ext_resource path="res://UI Objects/TextBoxOverlay.tscn" type="PackedScene" id=20]
+[ext_resource path="res://NPC/OtherAstro.tscn" type="PackedScene" id=21]
 
 [sub_resource type="TileSet" id=1]
 0/name = "floor(6x6).png 0"
@@ -269,47 +270,47 @@ texture = ExtResource( 8 )
 
 [node name="fern" parent="grass" instance=ExtResource( 9 )]
 position = Vector2( 15.4396, -11.3339 )
-frame = 23
+frame = 11
 
 [node name="fern" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 85, 115.5 )
-frame = 20
+frame = 8
 
 [node name="fern2" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 212, 3 )
-frame = 24
+frame = 12
 
 [node name="fern3" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 432, -139 )
-frame = 9
+frame = 22
 
 [node name="fern4" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 405.5, 61 )
-frame = 9
+frame = 22
 
 [node name="fern5" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 419.5, 316 )
-frame = 17
+frame = 5
 
 [node name="fern6" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 362.5, 217 )
-frame = 24
+frame = 12
 
 [node name="fern7" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 135.621, 236.91 )
-frame = 3
+frame = 16
 
 [node name="fern8" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -109.5, 292 )
-frame = 5
+frame = 18
 
 [node name="fern9" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -136, 39 )
-frame = 8
+frame = 21
 
 [node name="fern10" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -1, -146 )
-frame = 16
+frame = 4
 
 [node name="ProgressController" parent="." instance=ExtResource( 4 )]
 DIFFICULTY = 2
@@ -365,3 +366,6 @@ volume_db = -10.0
 autoplay = true
 
 [node name="TextBoxOverlay" parent="." instance=ExtResource( 20 )]
+
+[node name="OtherAstro" parent="." instance=ExtResource( 21 )]
+position = Vector2( 149.5, -17.5 )
