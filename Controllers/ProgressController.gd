@@ -10,9 +10,16 @@ onready var MAX_STAGE = 5 # number of ship parts on map
 onready var soundPickup = $PartPickupSound
 onready var stage_point = PLAYER.global_position
 onready var TEXTBOX = get_tree().get_root().get_node("World").get_node("TextBoxOverlay")
+onready var BOSS = preload("res://Enemy Objects/Boss.tscn")
 
 var isBeaten = false
 var stage = 0 # measures progress (number of ship parts collected)
+var boss_entity
+
+func _process(delta):
+	if Input.is_action_just_pressed("dev_skip"):
+		stage = 4
+		advance()
 
 func _ready():
 	SPAWNER.enabled = false
@@ -40,7 +47,11 @@ func advance():
 	yield(TEXTBOX, "has_become_inactive")
 	if stage == MAX_STAGE:
 		if choice.outcome == TEXTBOX.BinaryChoice.option.LEFT:
+			TEXTBOX.queue_text(". . .")
+			TEXTBOX.queue_text("What a shame")
+			yield(TEXTBOX, "has_become_inactive")
 			_do_boss_scene()
+			yield(boss_entity, "is_ready")
 	_soft_unpause()
 
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
@@ -128,4 +139,8 @@ func _clear_enemies():
 			child.kill()
 
 func _do_boss_scene():
-	print("Boss scene!")
+	boss_entity = BOSS.instance()
+	var ASTRO_NPC = get_tree().get_root().get_node("World").get_node("OtherAstro")
+	boss_entity.global_position = ASTRO_NPC.global_position
+	ASTRO_NPC.queue_free()
+	get_tree().get_root().get_node("World").add_child(boss_entity)

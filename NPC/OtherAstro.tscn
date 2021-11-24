@@ -22,11 +22,11 @@ animations = [ {
 "speed": 3.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=11]
+[sub_resource type="CapsuleShape2D" id=4]
 radius = 5.34248
 height = 3.91752
 
-[sub_resource type="CircleShape2D" id=12]
+[sub_resource type="CircleShape2D" id=5]
 radius = 34.2076
 
 [sub_resource type="DynamicFont" id=6]
@@ -98,14 +98,14 @@ playing = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0.667419, 7.67533 )
 rotation = 1.5708
-shape = SubResource( 11 )
+shape = SubResource( 4 )
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 256
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 0.471931, 11.1611 )
-shape = SubResource( 12 )
+shape = SubResource( 5 )
 
 [node name="Label" type="Label" parent="."]
 visible = false

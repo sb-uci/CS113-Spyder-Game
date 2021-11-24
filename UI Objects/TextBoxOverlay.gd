@@ -58,7 +58,10 @@ func _process(delta):
 			# text has been read (or no text at all) and queue is empty
 			# textbox becomes inactive
 			emit_signal("has_become_inactive")
-			PARENT_MARGIN.visible = false
+			# this may seem redundant, but the emit_signal() implies concurrency,
+			# so other processes may have queued text after the signal was emitted
+			if queue.empty():
+				PARENT_MARGIN.visible = false
 		else:
 			# text has been read (or no text at all) but queue has text
 			# change to next text in queue
@@ -123,8 +126,8 @@ func _change_to_choice(choice):
 class BinaryChoice:
 	enum option {LEFT, RIGHT}
 	
-	var left_option = "yes"
-	var right_option = "no"
+	var left_option = "Yes"
+	var right_option = "No"
 	var outcome
 	
 	func left():

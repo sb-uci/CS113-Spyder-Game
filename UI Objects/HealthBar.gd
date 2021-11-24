@@ -7,6 +7,7 @@ export (Color) var P_CRITICAL_COLOR = Color.red
 export (float) var HURT_THRESH = 0.5
 export (float) var CRITICAL_THRESH = 0.25
 export (Color) var ENEMY_COLOR = Color.darkred
+export (Color) var TWEEN_COLOR = Color.lightcoral
 export var IS_ENEMY = true 
 
 onready var HEALTH_BAR = $HealthBar
@@ -43,6 +44,7 @@ func _update_color(new_hp):
 		HEALTH_BAR.tint_progress = P_HEALTHY_COLOR
 
 func _init_color():
+	DAMAGE_BAR.tint_progress = TWEEN_COLOR
 	if IS_ENEMY:
 		HEALTH_BAR.tint_progress = ENEMY_COLOR
 	else:

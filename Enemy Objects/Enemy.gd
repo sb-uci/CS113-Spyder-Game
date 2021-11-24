@@ -26,8 +26,8 @@ onready var POWERUP_LIST = [preload("res://PowerUps Objects/MovementPowerUp.tscn
 							preload("res://PowerUps Objects/HealthPowerUp.tscn")]
 onready var INDICATOR_SCENE = preload("res://UI Objects/Enemy Indicator.tscn")
 
-func register_hit(DAMAGE):
-	health -= DAMAGE
+func register_hit(damage):
+	health -= damage
 	HP.update_hp(health)
 	if health <= 0:
 		_spawn_powerup()
@@ -43,26 +43,31 @@ func refresh_node_references():
 	PLAYER = get_parent().get_node(player_node_name)
 	NAVIGATION = get_parent().get_node(navigate_node_name)
 
-func _ready():
+# Godot doesn't allow child classes to replace _ready(), _process(), etc of parent class.
+# Instead, it calls both! Using a separate method unique to the parent class allows
+# the child classes to override that method instead
+func _ready_override():
 	refresh_node_references()
 	_init_hp(MAX_HP)
 	_spawn_indicator()
-	
-func _process(delta):
-	if knockback_cd > 0:
-		knockback_cd -= delta
-	
-	if _is_on_screen():
-		INDICATOR.visible = false
-		INDICATOR.set_process(false)
-	else:
-		INDICATOR.visible = true
-		INDICATOR.set_process(true)
 
-func _physics_process(delta):
+func _process_override(delta):
+	_handle_knockdown_cd(delta)
+	_check_indicator_visibility()
+	
+func _physics_process_override(delta):
 	_do_movement(delta)
 	if _detect_player_collision(PLAYER):
 		_on_collide_with_player(PLAYER)
+
+func _ready():
+	_ready_override()
+	
+func _process(delta):
+	_process_override(delta)
+
+func _physics_process(delta):
+	_physics_process_override(delta)
 
 func _do_movement(delta):
 	var move_target = _predict_future_player_location(MOVEMENT_TRACKING, SPEED)
@@ -162,3 +167,15 @@ func _spawn_indicator():
 
 func _is_on_screen():
 	return PLAYER.can_see_point(global_position)
+	
+func _handle_knockdown_cd(delta):
+	if knockback_cd > 0:
+		knockback_cd -= delta
+
+func _check_indicator_visibility():
+	if _is_on_screen():
+		INDICATOR.visible = false
+		INDICATOR.set_process(false)
+	else:
+		INDICATOR.visible = true
+		INDICATOR.set_process(true)

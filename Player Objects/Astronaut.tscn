@@ -99,6 +99,8 @@ STEP_SOUND_FREQUENCY = 0.3
 
 [node name="Shadow" type="Sprite" parent="."]
 modulate = Color( 0.117647, 0.101961, 0.101961, 0.34902 )
+z_index = -1
+z_as_relative = false
 texture = ExtResource( 14 )
 offset = Vector2( 0, -1 )
 

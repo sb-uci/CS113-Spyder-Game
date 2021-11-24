@@ -49,7 +49,6 @@ collision_layer = 2
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 18.4704, -20.5518 )
 frames = SubResource( 9 )
-frame = 3
 playing = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
