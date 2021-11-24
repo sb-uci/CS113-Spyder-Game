@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Assets/World/crashedship.png" type="Texture" id=1]
+[ext_resource path="res://Assets/World/shipTopWing.png" type="Texture" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -48,9 +49,15 @@ collision_layer = 2
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 18.4704, -20.5518 )
 frames = SubResource( 9 )
-frame = 6
+frame = 3
 playing = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 position = Vector2( -115.625, 72.2064 )
-polygon = PoolVector2Array( 31.5, -117.5, 68.3746, -117.706, 63.6246, -144.456, 51.8746, -145.206, 51.6246, -148.206, 75.8746, -147.956, 100.875, -116.956, 127.375, -116.206, 131.75, -110, 157.75, -110.5, 165.25, -103.5, 202, -103.75, 214.5, -91, 237.25, -82.5, 240.5, -72.25, 229.25, -65.25, 202.25, -58, 169, -48.75, 117, -45, 97.25, -50, 91.75, -40.5, 78, -37.5, 51.5, -39.75, 56.5, -46.5, 57.75, -68.75, 48.25, -68, 43, -72, 42.75, -76.25, 33, -80.5, 27, -80.75, 25.25, -86.5, 25.75, -94.5, 27.75, -96.25, 24.5, -101.25, 24.5, -110.75 )
+polygon = PoolVector2Array( 31.5, -117.5, 68.3746, -117.706, 100.875, -116.956, 127.375, -116.206, 131.75, -110, 157.75, -110.5, 165.25, -103.5, 202, -103.75, 214.5, -91, 237.25, -82.5, 240.5, -72.25, 229.25, -65.25, 202.25, -58, 169, -48.75, 117, -45, 97.25, -50, 91.75, -40.5, 78, -37.5, 51.5, -39.75, 56.5, -46.5, 57.75, -68.75, 48.25, -68, 43, -72, 33, -80.5, 27, -80.75, 25.25, -86.5, 25.75, -94.5, 24.5, -101.25, 24.5, -110.75 )
+
+[node name="TopWing" type="Sprite" parent="."]
+position = Vector2( -41.03, -60.55 )
+z_index = 2
+z_as_relative = false
+texture = ExtResource( 2 )

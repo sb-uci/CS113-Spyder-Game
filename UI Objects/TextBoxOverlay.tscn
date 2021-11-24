@@ -38,12 +38,12 @@ __meta__ = {
 
 [node name="BG" type="Panel" parent="ParentMargin"]
 margin_right = 296.0
-margin_bottom = 69.0
+margin_bottom = 56.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="TextMargin" type="MarginContainer" parent="ParentMargin"]
 margin_right = 296.0
-margin_bottom = 69.0
+margin_bottom = 56.0
 custom_constants/margin_right = 8
 custom_constants/margin_top = 8
 custom_constants/margin_left = 8
@@ -53,7 +53,7 @@ custom_constants/margin_bottom = 8
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 288.0
-margin_bottom = 61.0
+margin_bottom = 48.0
 
 [node name="Start" type="Label" parent="ParentMargin/TextMargin/TextContainer"]
 margin_right = 10.0
@@ -87,7 +87,7 @@ text = "v"
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 288.0
-margin_bottom = 61.0
+margin_bottom = 48.0
 
 [node name="Text" type="HBoxContainer" parent="ParentMargin/TextMargin/ChoiceContainer"]
 margin_right = 280.0
