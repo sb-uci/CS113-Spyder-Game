@@ -62,8 +62,8 @@ var SpawnScale
 
 func scale_enemy_stats(enemy):
 	var stage = ProgressController.get_stage()
-	if stage == ProgressController.MAX_STAGE: # prevents index out of bounds if spawner used during last stage
-		stage -= 1
+	if stage == ProgressController.MAX_STAGE: # max stage is boss stage; enemies have stage 0 strength here
+		stage = 0
 	if enemy.TYPE == "brute":
 		enemy.MAX_HP += BruteHPScale[DIFFICULTY][stage]
 	else:
@@ -77,12 +77,15 @@ func scale_enemy_stats(enemy):
 	enemy.DAMAGE *= DamageFactor[DIFFICULTY][stage]
 	enemy.MOVEMENT_TRACKING += TrackScale[DIFFICULTY][stage]
 	
+	if ProgressController.get_stage() == ProgressController.MAX_STAGE:
+		enemy.POWERUP_DROP_CHANCE += .2
+	
 	return enemy
 
 func get_spawn_rate():
 	var stage = ProgressController.get_stage()
-	if stage == ProgressController.MAX_STAGE: # prevents index out of bounds if spawner used during last stage
-		stage -= 1
+	if stage == ProgressController.MAX_STAGE: # max stage is boss stage; enemies have stage 0 strength here
+		stage = 0
 	return SpawnScale[DIFFICULTY][stage]
 	
 func _ready():

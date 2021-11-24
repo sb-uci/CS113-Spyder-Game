@@ -36,8 +36,11 @@ func advance():
 	_soft_pause()
 	_advance_stage()
 	_reset_player()
-	_do_dialogue()
+	var choice = _do_dialogue()
 	yield(TEXTBOX, "has_become_inactive")
+	if stage == MAX_STAGE:
+		if choice.outcome == TEXTBOX.BinaryChoice.option.LEFT:
+			_do_boss_scene()
 	_soft_unpause()
 
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
@@ -50,8 +53,6 @@ func get_stage():
 
 func _advance_stage():
 	stage += 1
-	if stage == MAX_STAGE:
-		isBeaten = true
 
 func _reset_player():
 	PLAYER.HEALTH_BAR.update_hp(PLAYER.MAX_HP)
@@ -61,17 +62,17 @@ func _reset_player():
 func _do_dialogue():
 	match stage:
 		0:
-			_stage_zero_dialogue()
+			return _stage_zero_dialogue()
 		1:
-			_stage_one_dialogue()
+			return _stage_one_dialogue()
 		2:
-			_stage_two_dialogue()
+			return _stage_two_dialogue()
 		3:
-			_stage_three_dialogue()
+			return _stage_three_dialogue()
 		4:
-			_stage_four_dialogue()
+			return _stage_four_dialogue()
 		5:
-			_stage_five_dialogue()
+			return _stage_five_dialogue()
 
 func _stage_zero_dialogue():
 	TEXTBOX.queue_text("This is some immediate dialogue")
@@ -103,7 +104,10 @@ func _stage_five_dialogue():
 	TEXTBOX.queue_text("Wowee, look at you completing the game")
 	TEXTBOX.queue_text(". . .")
 	TEXTBOX.queue_text(". . .")
-	TEXTBOX.queue_text(". . . or did you")
+	TEXTBOX.queue_text("Are you going to radio home now?")
+	var choice = TEXTBOX.BinaryChoice.new().set_options("Radio home", "Do nothing")
+	TEXTBOX.queue_text(choice)
+	return choice
 
 func _soft_pause():
 	PLAYER.set_process(false)
@@ -122,3 +126,6 @@ func _clear_enemies():
 	for child in root.get_children():
 		if child is Enemy:
 			child.kill()
+
+func _do_boss_scene():
+	print("Boss scene!")
