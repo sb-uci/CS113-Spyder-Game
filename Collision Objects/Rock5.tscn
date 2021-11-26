@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Assets/Collision Objects/rock5.png" type="Texture" id=1]
+
+[node name="StaticBody2D" type="StaticBody2D"]
+scale = Vector2( 0.25, 0.25 )
+collision_layer = 2
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+rotation = -0.00429951
+scale = Vector2( 2, 2 )
+polygon = PoolVector2Array( 42.6344, -17.93, 39.1159, 24.2696, -13.4415, 23.7099, -43.7665, 13.735, -42.8433, -6.95127, -24.1622, -5.36925, -17.0969, -18.6874, 11.9693, -26.4047 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 1 )
