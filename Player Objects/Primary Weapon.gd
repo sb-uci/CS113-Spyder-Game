@@ -22,7 +22,7 @@ func _process(delta):
 		bullet_instance.position = $FiringPoint.get_global_position()
 		bullet_instance.rotation_degrees = rotation_degrees
 		bullet_instance.apply_impulse(Vector2(), Vector2(BULLET_SPEED, 0).rotated(rotation))
-		get_tree().get_root().add_child(bullet_instance)
+		get_tree().get_root().get_node("World").add_child(bullet_instance)
 		LASER_SOUND.play()
 		can_shoot = false
 		yield(get_tree().create_timer(BULLET_FIRE_RATE), "timeout")

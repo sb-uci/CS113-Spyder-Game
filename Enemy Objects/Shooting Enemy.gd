@@ -12,7 +12,10 @@ export var SHOT_TRACKING = 0
 
 var fire_timer = 0
 
-func _process(delta):
+func _process_override(delta):
+	_handle_knockdown_cd(delta)
+	_check_indicator_visibility()
+	
 	var shoot_target = _predict_future_player_location(SHOT_TRACKING, BULLET_SPEED)
 	if _can_shoot(shoot_target):
 		_shoot(shoot_target)
@@ -66,7 +69,7 @@ func _shoot(target):
 	bullet_instance.position = global_position
 	bullet_instance.rotation_degrees = direction.angle() * 180/PI
 	bullet_instance.apply_impulse(Vector2(), Vector2(BULLET_SPEED, 0).rotated(direction.angle()))
-	get_tree().get_root().add_child(bullet_instance)
+	get_tree().get_root().get_node("World").add_child(bullet_instance)
 	soundLaser.play()
 	fire_timer = FIRE_RATE
 

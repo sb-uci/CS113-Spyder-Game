@@ -3,18 +3,19 @@ extends Node
 export var DIFFICULTY = 1 # 0 = easy, 1 = medium, 2 = hard
 export var CAM_TRAN_TWEEN_TIME = 3 # time, in seconds, to transition between regular and boss cam (should match boss healthbar tween time)
 
-onready var PLAYER = get_tree().get_root().get_node("World").get_node("Astronaut")
-onready var SPAWNER = PLAYER.get_node("Spawner")
+onready var ROOT = get_tree().get_root().get_node("World")
+onready var PLAYER = ROOT.get_node("Astronaut")
+onready var SPAWNER = ROOT.get_node("Spawner")
 onready var PLAYER_GUN = PLAYER.get_node("Primary Weapon")
 onready var DIFFICULTY_CONTROLLER = $DifficultyController
 onready var MAX_STAGE = 5 # number of ship parts on map
 onready var soundPickup = $PartPickupSound
 onready var stage_point = PLAYER.global_position
-onready var TEXTBOX = get_tree().get_root().get_node("World").get_node("TextBoxOverlay")
-onready var BOSS = preload("res://Enemy Objects/Boss.tscn")
-onready var BOSS_CAM = get_tree().get_root().get_node("World").get_node("BossCamera")
+onready var TEXTBOX = ROOT.get_node("TextBoxOverlay")
+onready var BOSS = preload("res://Enemy Objects/Boss/Boss.tscn")
+onready var BOSS_CAM = ROOT.get_node("BossCamera")
 onready var TWEEN = $Tween
-onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
+onready var GLOBALS = ROOT.get_node("Globals")
 
 var isBossStage = false
 var stage = 0 # measures progress (number of ship parts collected)

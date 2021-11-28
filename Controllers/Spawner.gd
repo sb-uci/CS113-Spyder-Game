@@ -70,19 +70,19 @@ func _generate_spawn_point():
 	var screen = get_viewport()
 	if (point < horizontal):
 		# point is on top horizontal border
-		return global_position + Vector2(point - (horizontal/2), vertical/2)
+		return GLOBALS.cam_center + Vector2(point - (horizontal/2), vertical/2)
 	elif (point < horizontal + vertical):
 		# point is on right vertical border
 		point -= horizontal
-		return global_position + Vector2(horizontal/2, point - (vertical/2))
+		return GLOBALS.cam_center + Vector2(horizontal/2, point - (vertical/2))
 	elif (point < 2*horizontal + vertical):
 		# point is on bottom horizontal border
 		point -= horizontal + vertical
-		return global_position + Vector2(point - (horizontal/2), -1 * (vertical/2))
+		return GLOBALS.cam_center + Vector2(point - (horizontal/2), -1 * (vertical/2))
 	else:
 		# point is on left vertical border
 		point -= 2*horizontal + vertical
-		return global_position + Vector2(-1 * (horizontal/2), point - (vertical/2))
+		return GLOBALS.cam_center + Vector2(-1 * (horizontal/2), point - (vertical/2))
 
 func _choose_enemy():
 	var total_weight = basic_weight + flyer_weight + shooter_weight + brute_weight

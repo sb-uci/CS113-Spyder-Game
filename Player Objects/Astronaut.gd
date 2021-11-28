@@ -106,6 +106,8 @@ func _do_movement(delta):
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 	velocity = move_and_slide(velocity)
 	recent_movement = velocity
+	position.x = clamp(position.x, GLOBALS.cam_center.x - GLOBALS.cam_width/2, GLOBALS.cam_center.x + GLOBALS.cam_width/2)
+	position.y = clamp(position.y, GLOBALS.cam_center.y - GLOBALS.cam_height/2, GLOBALS.cam_center.y + GLOBALS.cam_height/2)
 
 func _handle_impulses(delta):
 	var pop_list = [] # used to remove impulses without modifying list during main loop
