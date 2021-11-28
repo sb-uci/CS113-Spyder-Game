@@ -12,14 +12,6 @@ export var interval_thresh = 10 # clips spawn intervals to not be too long
 export var screen_edge_buffer = 50 # n pixel "deadzone" around screen where spawning cannot occur
 export var enabled = true
 
-export var design_width = 320 # design resolution; different from real resolution
-export var design_height = 180
-
-# define boundary within which enemies cannot spawn
-onready var horizontal = design_width + 2*screen_edge_buffer
-onready var vertical = design_height + 2*screen_edge_buffer
-onready var box_perimeter = 2*horizontal + 2*vertical
-
 onready var rng = RandomNumberGenerator.new()
 
 onready var basic = preload("res://Enemy Objects/Enemy.tscn")
@@ -28,8 +20,12 @@ onready var shooter = preload("res://Enemy Objects/Shooting Enemy.tscn")
 onready var brute = preload("res://Enemy Objects/Brute Enemy.tscn")
 
 onready var DIFFICULTY_CONTROLLER = get_tree().get_root().get_node("World").get_node("ProgressController").get_node("DifficultyController")
+onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
 
 var next_spawn
+var horizontal
+var vertical
+var box_perimeter
 
 func change_rate(new_rate):
 	rate = new_rate
@@ -41,10 +37,12 @@ func change_weights(weights):
 	brute_weight = weights[3]
 
 func _ready():
+	_calc_spawn_box()
 	rng.randomize()
 	next_spawn = _generate_interval()
 
 func _process(delta):
+	_calc_spawn_box()
 	if enabled:
 		if next_spawn <= 0:
 			_spawn()
@@ -103,3 +101,9 @@ func _choose_enemy():
 	else:
 		next_spawn += brute_time_comp
 		return brute.instance()
+
+func _calc_spawn_box():
+	# define boundary within which enemies cannot spawn
+	horizontal = GLOBALS.cam_width + 2*screen_edge_buffer
+	vertical = GLOBALS.cam_height + 2*screen_edge_buffer
+	box_perimeter = 2*horizontal + 2*vertical

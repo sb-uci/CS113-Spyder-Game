@@ -15,11 +15,10 @@ var knockback_cd = 0
 var health
 var PLAYER
 var NAVIGATION
+var GLOBALS
 var INDICATOR
 
 onready var sprite = $AnimatedSprite
-onready var player_node_name = "Astronaut"
-onready var navigate_node_name = "Navigation"
 onready var HP = $HealthBar
 onready var POWERUP_LIST = [preload("res://PowerUps Objects/MovementPowerUp.tscn"),
 							preload("res://PowerUps Objects/FireRatePowerUp.tscn"),
@@ -40,8 +39,9 @@ func kill():
 # when an enemy is spawned, it's not attached to the tree, so it's PLAYER and NAVIGATION
 # references will be null. After adding to tree, run this.
 func refresh_node_references():
-	PLAYER = get_parent().get_node(player_node_name)
-	NAVIGATION = get_parent().get_node(navigate_node_name)
+	PLAYER = get_parent().get_node("Astronaut")
+	NAVIGATION = get_parent().get_node("Navigation")
+	GLOBALS = get_parent().get_node("Globals")
 
 # Godot doesn't allow child classes to replace _ready(), _process(), etc of parent class.
 # Instead, it calls both! Using a separate method unique to the parent class allows
@@ -113,11 +113,6 @@ func _detect_player_collision(player_node):
 			return true
 	return false
 
-func _get_player_collision_node(player_node):
-	for child in player_node.get_children():
-		if child.get_class() == "CollisionShape2D":
-			return child
-
 func _init_hp(max_hp):
 	health = max_hp
 	HP.set_max(max_hp)
@@ -166,7 +161,14 @@ func _spawn_indicator():
 	get_tree().get_root().get_node("World").add_child(INDICATOR)
 
 func _is_on_screen():
-	return PLAYER.can_see_point(global_position)
+	var x_low = GLOBALS.cam_center.x - GLOBALS.cam_width/2
+	var x_high = GLOBALS.cam_center.x + GLOBALS.cam_width/2
+	var y_low = GLOBALS.cam_center.y - GLOBALS.cam_height/2
+	var y_high = GLOBALS.cam_center.y + GLOBALS.cam_height/2
+	
+	var is_in_x_bound = global_position.x >= x_low and global_position.x <= x_high
+	var is_in_y_bound = global_position.y >= y_low and global_position.y <= y_high
+	return is_in_x_bound and is_in_y_bound
 	
 func _handle_knockdown_cd(delta):
 	if knockback_cd > 0:

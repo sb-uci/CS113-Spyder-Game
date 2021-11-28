@@ -26,9 +26,12 @@ height = 12.7596
 
 [node name="Boss" type="KinematicBody2D"]
 collision_layer = 4
-collision_mask = 15
+collision_mask = 13
 script = ExtResource( 1 )
+SPEED = 50.0
 MAX_HP = 100.0
+DAMAGE = 2.0
+KNOCKBACK_FORCE = 550
 
 [node name="Shadow" type="Sprite" parent="."]
 modulate = Color( 0.0862745, 0.0745098, 0.0745098, 0.490196 )

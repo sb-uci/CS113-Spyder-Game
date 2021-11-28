@@ -16,10 +16,10 @@ onready var DIFFICULTY = ProgressController.DIFFICULTY # 0 = easy, 1 = medium, 2
 # Enemy Health
 export var eGeneralHPScale = [-1,-1,-1,0,0]
 export var eBruteHPScale = [-2,-1,-1,0,0]
-export var mGeneralHPScale = [0,0,0,0,1]
+export var mGeneralHPScale = [0,0,0,0,0]
 export var mBruteHPScale = [0,0,1,1,2]
-export var hGeneralHPScale = [0,0,1,1,2]
-export var hBruteHPScale = [0,1,2,3,4,5]
+export var hGeneralHPScale = [0,0,0,1,1]
+export var hBruteHPScale = [0,1,2,2,3,3]
 
 # Enemy Speed
 export var eSpeedFactor = [0.9,0.9,1,1,1]
@@ -48,8 +48,8 @@ export var hTrackScale = [1,1,2,4,8] # tracking has diminishing returns
 
 # Spawn Rate (avg spawns per minute)
 export var eSpawnScale = [20,20,25,25,30]
-export var mSpawnScale = [30,30,35,35,40]
-export var hSpawnScale = [35,35,40,40,45]
+export var mSpawnScale = [25,30,35,35,40]
+export var hSpawnScale = [30,35,40,40,45]
 
 var GeneralHPScale
 var BruteHPScale
@@ -77,7 +77,7 @@ func scale_enemy_stats(enemy):
 	enemy.DAMAGE *= DamageFactor[DIFFICULTY][stage]
 	enemy.MOVEMENT_TRACKING += TrackScale[DIFFICULTY][stage]
 	
-	if ProgressController.get_stage() == ProgressController.MAX_STAGE:
+	if ProgressController.isBossStage:
 		enemy.POWERUP_DROP_CHANCE += .2
 	
 	return enemy

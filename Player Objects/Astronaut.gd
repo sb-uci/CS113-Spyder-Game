@@ -9,9 +9,6 @@ export var FLASH_FREQ = .15
 export var KNOCKBACK_RESISTANCE = 1.1 # how quickly the astronaut recovers from (1 is no resistance)
 export var STEP_SOUND_FREQUENCY = .5 # how often the step sound gets played while moving
 
-export var design_width = 320 # design resolution; different from real resolution
-export var design_height = 180
-
 var DEFAULT_MASK = 0b00000000000001010110
 var INVULN_MASK =  0b00000000000001000010
 
@@ -34,6 +31,7 @@ onready var soundStep = $StepSound
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
+onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
 
 func damage_player(damage):
 	if is_invuln:
@@ -72,24 +70,16 @@ func apply_pseudo_impulse(direction, force):
 	var impulse = direction * force
 	impulses.append(impulse)
 
-func can_see_point(point):
-	var x_low = global_position.x - design_width/2
-	var x_high = global_position.x + design_width/2
-	var y_low = global_position.y - design_height/2
-	var y_high = global_position.y + design_height/2
-	
-	var is_in_x_bound = point.x >= x_low and point.x <= x_high
-	var is_in_y_bound = point.y >= y_low and point.y <= y_high
-	return is_in_x_bound and is_in_y_bound
-
 func _ready():
 	_init_hp()
+	GLOBALS.set_cam_center(global_position)
 
 #Movement for player
 func _physics_process(delta):
 	if is_alive == true:
 		_do_movement(delta)
 		_handle_impulses(delta)
+	GLOBALS.set_cam_center(global_position)
 
 func _process(delta):
 	_handle_invuln(delta)

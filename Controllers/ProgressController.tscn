@@ -12,3 +12,5 @@ script = ExtResource( 2 )
 
 [node name="PartPickupSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
+
+[node name="Tween" type="Tween" parent="."]

@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+export var START_TWEEN_TIME = 3
 export var TWEEN_DELAY = 0.1
 export (Color) var HEALTH_COLOR = Color.darkred
 export (Color) var TWEEN_COLOR = Color.lightcoral
@@ -40,8 +41,8 @@ func set_max(max_hp):
 	HEALTH_BAR.max_value = true_max * 100 # values scaled for smoother tweening
 	TWEEN_BAR.max_value = true_max * 100
 	
-	TWEEN.interpolate_property(HEALTH_BAR, "value", HEALTH_BAR.value, HEALTH_BAR.max_value, 3, TWEEN.TRANS_SINE, TWEEN.EASE_IN_OUT, 0)
-	TWEEN.interpolate_property(TWEEN_BAR, "value", TWEEN_BAR.value, TWEEN_BAR.max_value, 3, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
+	TWEEN.interpolate_property(HEALTH_BAR, "value", HEALTH_BAR.value, HEALTH_BAR.max_value, START_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_IN_OUT, 0)
+	TWEEN.interpolate_property(TWEEN_BAR, "value", TWEEN_BAR.value, TWEEN_BAR.max_value, START_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
 	TWEEN.start()
 
 func _do_health_tween(new_hp):

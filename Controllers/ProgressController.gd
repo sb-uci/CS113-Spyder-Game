@@ -1,6 +1,7 @@
 extends Node
 
 export var DIFFICULTY = 1 # 0 = easy, 1 = medium, 2 = hard
+export var CAM_TRAN_TWEEN_TIME = 3 # time, in seconds, to transition between regular and boss cam (should match boss healthbar tween time)
 
 onready var PLAYER = get_tree().get_root().get_node("World").get_node("Astronaut")
 onready var SPAWNER = PLAYER.get_node("Spawner")
@@ -11,8 +12,11 @@ onready var soundPickup = $PartPickupSound
 onready var stage_point = PLAYER.global_position
 onready var TEXTBOX = get_tree().get_root().get_node("World").get_node("TextBoxOverlay")
 onready var BOSS = preload("res://Enemy Objects/Boss.tscn")
+onready var BOSS_CAM = get_tree().get_root().get_node("World").get_node("BossCamera")
+onready var TWEEN = $Tween
+onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
 
-var isBeaten = false
+var isBossStage = false
 var stage = 0 # measures progress (number of ship parts collected)
 var boss_entity
 
@@ -47,11 +51,14 @@ func advance():
 	yield(TEXTBOX, "has_become_inactive")
 	if stage == MAX_STAGE:
 		if choice.outcome == TEXTBOX.BinaryChoice.option.LEFT:
+			isBossStage = true
 			TEXTBOX.queue_text(". . .")
 			TEXTBOX.queue_text("What a shame")
 			yield(TEXTBOX, "has_become_inactive")
 			_do_boss_scene()
 			yield(boss_entity, "is_ready")
+			_update_cam_globals()
+			_enable_spawner_for_boss_scene()
 	_soft_unpause()
 
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
@@ -139,8 +146,28 @@ func _clear_enemies():
 			child.kill()
 
 func _do_boss_scene():
+	_switch_to_boss_cam()
 	boss_entity = BOSS.instance()
 	var ASTRO_NPC = get_tree().get_root().get_node("World").get_node("OtherAstro")
 	boss_entity.global_position = ASTRO_NPC.global_position
 	ASTRO_NPC.queue_free()
 	get_tree().get_root().get_node("World").add_child(boss_entity)
+	boss_entity.refresh_node_references()
+	boss_entity.set_process(false)
+	boss_entity.set_physics_process(false)
+
+func _switch_to_boss_cam():
+	BOSS_CAM.current = true
+	TWEEN.interpolate_property(BOSS_CAM, "position", BOSS_CAM.position, BOSS_CAM.position + Vector2(0,16), CAM_TRAN_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
+	TWEEN.interpolate_property(BOSS_CAM, "zoom", BOSS_CAM.zoom, BOSS_CAM.zoom + Vector2(.25,.25), CAM_TRAN_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
+	TWEEN.start()
+
+func _enable_spawner_for_boss_scene():
+	stage = 0 # use stage 0 difficulty scaling
+	SPAWNER.enabled = true
+	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate() - 10)
+
+func _update_cam_globals():
+	GLOBALS.cam_width *= 1.25
+	GLOBALS.cam_height *= 1.25
+	GLOBALS.fix_cam_center(BOSS_CAM.global_position)
