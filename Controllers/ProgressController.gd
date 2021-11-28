@@ -73,6 +73,7 @@ func _advance_stage():
 	stage += 1
 
 func _reset_player():
+	PLAYER.health = PLAYER.MAX_HP
 	PLAYER.HEALTH_BAR.update_hp(PLAYER.MAX_HP)
 	PLAYER.global_position = stage_point
 	PLAYER.animationState.travel("Idle")
