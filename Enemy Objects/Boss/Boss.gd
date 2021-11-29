@@ -2,10 +2,11 @@ extends "res://Enemy Objects/Shooting Enemy.gd"
 
 signal is_ready
 
+enum health_state {FULL, }
 enum state {DEFAULT, CHARGING}
 enum path_point {CENTER, LEFT, RIGHT}
 enum sweep_dir {LEFT, RIGHT}
-enum bullets {BASIC, BIG, WHIP}
+enum bullets {BASIC, BIG, WHIP, HOMING}
 
 export var BASIC_BULLET_DAMAGE = 1
 export var BASIC_BULLET_SPEED = 175
@@ -16,11 +17,14 @@ export var BIG_BULLET = preload("res://Enemy Objects/Boss/Big Bullet.tscn")
 export var WHIP_BULLET_DAMAGE = 1
 export var WHIP_BULLET_SPEED = 20
 export var WHIP_BULLET = preload("res://Enemy Objects/Boss/Whip Bullet.tscn")
+export var HOMING_BULLET_DAMAGE = 1
+export var HOMING_BULLET_SPEED = 100
+export var HOMING_BULLET = preload("res://Enemy Objects/Boss/Homing Bullet.tscn")
 
 export var BURST_FREQ = 1
 export var ROT_BURST_FREQ = .35
 export var SWEEP_BURST_FREQ = .1
-export var SWEEP_FREQ = .1
+export var SWEEP_FREQ = .05
 export var SHOTGUN_FREQ = 1
 
 export var BURST_NUM_BULLETS = 10
@@ -28,16 +32,18 @@ export var ROT_BURST_NUM_BULLETS = 10
 export var SWEEP_BURST_NUM_BULLETS = 10
 export var SHOTGUN_NUM_BULLETS = 8
 
-export var SWEEP_DURATION = 1
+export var SWEEP_DURATION = .75
 export var ROT_BURST_DURATION = 3
 export var SWEEP_BURST_DURATION = 1
 
 export var SHOTGUN_SPREAD = 10
-export var SHOTGUN_SPEED_VARIANCE = 50
-export var SHOTWHIP_SPEED_VARIANCE = 15
+export var SHOTGUN_VARIANCE_FACTOR = 2
+
+export var REBAKE_FREQ = .2 # how often to rebake the mesh (fixes a specific bug; don't worry abt it)
 
 onready var cur_state = state.DEFAULT
 onready var sweep_state = sweep_dir.LEFT
+onready var cur_bullet = bullets.BASIC
 
 onready var next_point = path_point.LEFT
 onready var path_point_center = global_position
@@ -53,6 +59,7 @@ onready var SPAWNER = get_tree().get_root().get_node("World").get_node("Spawner"
 
 var burst_timer = 0
 var shotgun_timer = 0
+var rebake_timer = 0
 var rng = RandomNumberGenerator.new()
 
 func register_hit(damage):
@@ -68,15 +75,20 @@ func _ready_override():
 	emit_signal("is_ready")
 
 func _process_override(delta):
+	cur_bullet = bullets.BIG
 	SPAWNER.enabled = false
 	_elapse_timers(delta)
 	#_rotating_burst(ROT_BURST_DURATION)
 	#_burst(BURST_NUM_BULLETS)
 	#_sweep_attack(false)
-	#_sweep_attack(true)
+	#_sweep_attack(true) # burst variant
 	#_shotgun(PLAYER.global_position)
-	#_shotgun_whip(PLAYER.global_position)
+	var bullet = _make_current_bullet()
+	_shoot_target(PLAYER, bullet[0], bullet[1], soundBasicLaser)
 	_handle_knockdown_cd(delta)
+	if rebake_timer <= 0:
+		NAVIGATION.rebake_mesh()
+		rebake_timer = REBAKE_FREQ
 
 func _physics_process_override(delta):
 	#_do_movement(delta)
@@ -132,32 +144,23 @@ func _sweep_attack(isBurst=false):
 		return
 
 	if sweep_state == sweep_dir.LEFT:
-		_sweep_burst(-15, 15) if isBurst else _sweep(180, 90)
+		_sweep_burst(-15, 15) if isBurst else _sweep(205, 90)
 		sweep_state = sweep_dir.RIGHT
 	else:
-		_sweep_burst(15, -15) if isBurst else _sweep(0, 90)
+		_sweep_burst(15, -15) if isBurst else _sweep(-25, 90)
 		sweep_state = sweep_dir.LEFT
 
 func _sweep_burst(angle_start, angle_end):
 	SWEEP_TWEEN.interpolate_method(self, "_sweep_burst_wrapper", angle_start, angle_end, SWEEP_BURST_DURATION, Tween.TRANS_LINEAR)
 	SWEEP_TWEEN.start()
-	
-func _shotgun_whip(target, num_bullets=SHOTGUN_NUM_BULLETS, spread=SHOTGUN_SPREAD, bullet_speed=WHIP_BULLET_SPEED, speed_variance=SHOTWHIP_SPEED_VARIANCE):
-	if shotgun_timer > 0:
-		return
-	var direction = (target - global_position).angle() * 180/PI
-	for i in range(num_bullets):
-		var angle_offset = rng.randf_range(-spread/2, spread/2)
-		var speed_offset = rng.randf_range(-speed_variance/2, speed_variance/2)
-		_shoot_direction(direction + angle_offset, _make_whip_bullet(), bullet_speed + speed_offset, soundBasicLaser, 0)
-	shotgun_timer = SHOTGUN_FREQ
 
-func _burst(num_bullets, offset=0, bullet_speed=BASIC_BULLET_SPEED, cd=BURST_FREQ):
+func _burst(num_bullets, offset=0, bullet_speed_mod=0, cd=BURST_FREQ):
 	if burst_timer > 0:
 		return
 	var direction = offset # in degrees
 	for i in range(num_bullets):
-		_shoot_direction(direction, _make_basic_bullet(), bullet_speed, soundBasicLaser, 0)
+		var bullet = _make_current_bullet()
+		_shoot_direction(direction, bullet[0], bullet[1] + bullet_speed_mod, soundBasicLaser, 0)
 		direction += 360/num_bullets
 	burst_timer = cd
 
@@ -165,16 +168,33 @@ func _sweep(angle_start, angle_end, duration=SWEEP_DURATION):
 	SWEEP_TWEEN.interpolate_method(self, "_sweep_wrapper", angle_start, angle_end, duration, Tween.TRANS_LINEAR)
 	SWEEP_TWEEN.start()
 
-func _shotgun(target, num_bullets=SHOTGUN_NUM_BULLETS, spread=SHOTGUN_SPREAD, bullet_speed=BASIC_BULLET_SPEED, speed_variance=SHOTGUN_SPEED_VARIANCE):
+func _shotgun(target, num_bullets=SHOTGUN_NUM_BULLETS, spread=SHOTGUN_SPREAD):
 	if shotgun_timer > 0:
 		return
+		
 	var direction = (target - global_position).angle() * 180/PI
+	var bullet = _make_current_bullet()
+	var bullet_speed = bullet[1]
+	var speed_variance = bullet[1]/SHOTGUN_VARIANCE_FACTOR
+	bullet[0].queue_free()
+	
 	for i in range(num_bullets):
 		var angle_offset = rng.randf_range(-spread/2, spread/2)
 		var speed_offset = rng.randf_range(-speed_variance/2, speed_variance/2)
-		_shoot_direction(direction + angle_offset, _make_basic_bullet(), bullet_speed + speed_offset, soundBasicLaser, 0)
+		_shoot_direction(direction + angle_offset, _make_current_bullet()[0], bullet_speed + speed_offset, soundBasicLaser, 0)
 	shotgun_timer = SHOTGUN_FREQ
 		
+func _make_current_bullet():
+	match cur_bullet:
+		bullets.BASIC:
+			return [_make_basic_bullet(), BASIC_BULLET_SPEED]
+		bullets.BIG:
+			return [_make_big_bullet(), BIG_BULLET_SPEED]
+		bullets.WHIP:
+			return [_make_whip_bullet(), WHIP_BULLET_SPEED]
+		bullets.HOMING:
+			return [_make_homing_bullet(HOMING_BULLET_SPEED), HOMING_BULLET_SPEED]
+
 func _make_basic_bullet():
 	var bullet_instance = BASIC_BULLET.instance()
 	bullet_instance.damage = BASIC_BULLET_DAMAGE
@@ -193,10 +213,18 @@ func _make_whip_bullet():
 	bullet_instance.position = global_position
 	return bullet_instance
 		
+func _make_homing_bullet(speed):
+	var bullet_instance = HOMING_BULLET.instance()
+	bullet_instance.damage = HOMING_BULLET_DAMAGE
+	bullet_instance.position = global_position
+	bullet_instance.target = PLAYER
+	bullet_instance.speed = speed
+	return bullet_instance
+
 func _shoot_target(target, bullet, speed, sound, cd=FIRE_RATE):
 	if fire_timer > 0:
 		return
-	var direction = target - global_position
+	var direction = target.global_position - global_position
 	bullet.rotation_degrees = direction.angle() * 180/PI
 	bullet.apply_impulse(Vector2(), Vector2(speed, 0).rotated(direction.angle()))
 	get_tree().get_root().get_node("World").add_child(bullet)
@@ -213,15 +241,18 @@ func _shoot_direction(direction, bullet, speed, sound, cd=FIRE_RATE):
 	fire_timer = cd
 
 func _sweep_wrapper(direction):
-	_shoot_direction(direction, _make_basic_bullet(), BASIC_BULLET_SPEED, soundBasicLaser, SWEEP_FREQ)
+	var bullet = _make_current_bullet()
+	_shoot_direction(direction, bullet[0], bullet[1], soundBasicLaser, SWEEP_FREQ)
 
 func _rotate_burst_wrapper(offset):
-	_burst(ROT_BURST_NUM_BULLETS, offset, BASIC_BULLET_SPEED - 50, ROT_BURST_FREQ)
+	var bullet = _make_current_bullet()
+	_burst(ROT_BURST_NUM_BULLETS, offset, -50, ROT_BURST_FREQ)
 
 func _sweep_burst_wrapper(offset):
-	_burst(SWEEP_BURST_NUM_BULLETS, offset, BASIC_BULLET_SPEED - 50, SWEEP_BURST_FREQ)
+	_burst(SWEEP_BURST_NUM_BULLETS, offset, -50, SWEEP_BURST_FREQ)
 	
 func _elapse_timers(delta):
 	fire_timer -= delta
 	burst_timer -= delta
 	shotgun_timer -= delta
+	rebake_timer -= delta

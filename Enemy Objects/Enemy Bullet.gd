@@ -12,4 +12,6 @@ func _process(delta):
 func _on_Enemy_Bullet_body_entered(body):
 	if body.is_in_group("Player"):
 		body.damage_player(damage)
+	elif body.is_in_group("Bullet") or body.is_in_group("Boss"):
+		return
 	queue_free()

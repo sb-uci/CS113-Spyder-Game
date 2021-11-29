@@ -1,9 +1,11 @@
 extends Navigation2D
 
+var base_mesh # copy of the navigation mesh outline (pre-collision objects added)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	base_mesh = $NavMesh.get_navigation_polygon().duplicate()
 	generate_mesh()
-	var mesh = $NavMesh.get_navigation_polygon().get_outline_count()
 	get_node("NavMesh").enabled = false
 	get_node("NavMesh").enabled = true
 
@@ -25,6 +27,13 @@ func generate_mesh():
 					
 	mesh.make_polygons_from_outlines()
 	$NavMesh.set_navigation_polygon(mesh)
+	
+func rebake_mesh():
+	$NavMesh.set_navigation_polygon(base_mesh.duplicate())
+	generate_mesh()
+	generate_mesh()
+	get_node("NavMesh").enabled = false
+	get_node("NavMesh").enabled = true
 
 func _create_cutout(collision_node):
 	var new_cutout = PoolVector2Array()

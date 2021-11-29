@@ -7,7 +7,9 @@
 radius = 1.875
 height = 5.25
 
-[node name="Enemy Bullet" type="RigidBody2D"]
+[node name="Enemy Bullet" type="RigidBody2D" groups=[
+"Bullet",
+]]
 collision_layer = 16
 collision_mask = 2
 gravity_scale = 0.0

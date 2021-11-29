@@ -4,6 +4,7 @@ var cam_width = 320
 var cam_height = 180
 var cam_center = Vector2(0,0)
 var isCamCenterFixed = false
+var reparent_counter = 1
 
 func set_cam_center(center):
 	if !isCamCenterFixed:
