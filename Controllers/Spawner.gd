@@ -36,6 +36,12 @@ func change_weights(weights):
 	shooter_weight = weights[2]
 	brute_weight = weights[3]
 
+func do_boss_scene():
+	basic_weight = 1
+	flyer_weight = 0
+	shooter_weight = 0
+	brute_weight = 0
+
 func _ready():
 	_calc_spawn_box()
 	rng.randomize()

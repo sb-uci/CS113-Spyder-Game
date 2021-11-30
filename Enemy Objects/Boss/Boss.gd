@@ -2,11 +2,11 @@ extends "res://Enemy Objects/Shooting Enemy.gd"
 
 signal is_ready
 
-enum stage {}
-enum state {DEFAULT, CHARGING}
+enum stage {ONE, TWO, THREE, FOUR, FIVE}
+enum phase {BULLET_PHASE, ADD_PHASE}
 enum path_point {CENTER, LEFT, RIGHT}
 enum sweep_dir {LEFT, RIGHT}
-enum bullets {BASIC, BIG, WHIP, HOMING}
+enum bullets {BASIC, BIG, WHIP, HOMING, BOUNCE}
 
 export var BASIC_BULLET_DAMAGE = 1
 export var BASIC_BULLET_SPEED = 175
@@ -20,6 +20,9 @@ export var WHIP_BULLET = preload("res://Enemy Objects/Boss/Whip Bullet.tscn")
 export var HOMING_BULLET_DAMAGE = 1
 export var HOMING_BULLET_SPEED = 90
 export var HOMING_BULLET = preload("res://Enemy Objects/Boss/Homing Bullet.tscn")
+export var BOUNCE_BULLET_DAMAGE = 1
+export var BOUNCE_BULLET_SPEED = 125
+export var BOUNCE_BULLET = preload("res://Enemy Objects/Boss/Bouncing Bullet.tscn")
 
 export var BURST_FREQ = 1
 export var ROT_BURST_FREQ = .35
@@ -41,7 +44,8 @@ export var SHOTGUN_VARIANCE_FACTOR = 2
 
 export var REBAKE_FREQ = .2 # how often to rebake the mesh (fixes a specific bug; don't worry abt it)
 
-onready var cur_state = state.DEFAULT
+onready var cur_phase = phase.BULLET_PHASE
+onready var cur_stage = stage.ONE
 onready var sweep_state = sweep_dir.LEFT
 onready var sweep_burst_state = sweep_dir.LEFT
 onready var cur_bullet = bullets.BASIC
@@ -81,15 +85,11 @@ func _ready_override():
 	PLAYER.apply_pseudo_impulse((PLAYER.global_position - global_position).normalized(), KNOCKBACK_FORCE - 100)
 
 func _process_override(delta):
-	cur_bullet = bullets.BASIC
-	SPAWNER.enabled = false
+	_process_stage(delta)
+	_process_phase(delta)
+	_do_movement(delta)
+	_do_attacks(delta)
 	_elapse_timers(delta)
-	_rotating_burst(ROT_BURST_DURATION)
-	#_alternating_sweeping_burst()
-	_alternating_sweep()
-	_shoot_player(bullets.BIG)
-	#_shotgun_player(bullets.BASIC)
-	_handle_knockdown_cd(delta)
 	if rebake_timer <= 0:
 		NAVIGATION.rebake_mesh()
 		rebake_timer = REBAKE_FREQ
@@ -108,6 +108,15 @@ func _init_hp(max_hp):
 # =====================
 #  STATES AND MOVEMENT
 # =====================
+func _process_stage(delta):
+	pass
+	
+func _process_phase(delta):
+	pass
+
+func _do_attacks(delta):
+	pass
+
 func _do_movement(delta):
 	if cur_state == state.DEFAULT:
 		var move_vector = (_get_next_point() - global_position).normalized()
@@ -249,6 +258,8 @@ func _make_bullet(bullet_type):
 			return [_make_whip_bullet(), WHIP_BULLET_SPEED]
 		bullets.HOMING:
 			return [_make_homing_bullet(HOMING_BULLET_SPEED), HOMING_BULLET_SPEED]
+		bullets.BOUNCE:
+			return [_make_bouncing_bullet(), BOUNCE_BULLET_SPEED]
 
 func _make_basic_bullet():
 	var bullet_instance = BASIC_BULLET.instance()
@@ -274,6 +285,12 @@ func _make_homing_bullet(speed):
 	bullet_instance.position = global_position
 	bullet_instance.target = PLAYER
 	bullet_instance.speed = speed
+	return bullet_instance
+
+func _make_bouncing_bullet():
+	var bullet_instance = BOUNCE_BULLET.instance()
+	bullet_instance.damage = BOUNCE_BULLET_DAMAGE
+	bullet_instance.position = global_position
 	return bullet_instance
 
 # =========================
@@ -312,3 +329,4 @@ func _elapse_timers(delta):
 	sweep_burst_timer -= delta
 	shotgun_timer -= delta
 	rebake_timer -= delta
+	_handle_knockdown_cd(delta)

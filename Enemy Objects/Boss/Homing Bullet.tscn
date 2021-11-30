@@ -32,6 +32,8 @@ animations = [ {
 } ]
 
 [node name="Homing Bullet" type="KinematicBody2D"]
+collision_layer = 16
+collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=[
@@ -44,6 +46,9 @@ shape = SubResource( 1 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 9, 2.00887 )
 frames = SubResource( 6 )
-frame = 3
 speed_scale = 1.5
 playing = true
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( 7.04348, 0.378824 )
+scale = Vector2( 0.71216, 0.394731 )

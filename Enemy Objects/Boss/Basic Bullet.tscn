@@ -5,7 +5,7 @@
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 1.875
-height = 5.25
+height = 4.8
 
 [node name="Basic Bullet" type="RigidBody2D" groups=[
 "Bullet",
@@ -26,4 +26,9 @@ position = Vector2( 3.875, 0.5 )
 rotation = 1.5708
 shape = SubResource( 1 )
 
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( 3.97663, 0.472468 )
+scale = Vector2( 0.405475, 0.165302 )
+
 [connection signal="body_entered" from="." to="." method="_on_Enemy_Bullet_body_entered"]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

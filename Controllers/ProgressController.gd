@@ -168,6 +168,7 @@ func _enable_spawner_for_boss_scene():
 	stage = 0 # use stage 0 difficulty scaling
 	SPAWNER.enabled = true
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate() - 10)
+	SPAWNER.do_boss_scene()
 
 func _update_cam_globals():
 	GLOBALS.cam_width *= 1.25
