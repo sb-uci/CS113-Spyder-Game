@@ -8,6 +8,7 @@ export var INVULN_TIME = 1.5
 export var FLASH_FREQ = .15
 export var KNOCKBACK_RESISTANCE = 1.1 # how quickly the astronaut recovers from (1 is no resistance)
 export var STEP_SOUND_FREQUENCY = .5 # how often the step sound gets played while moving
+export var HAS_GODMODE = false
 
 var DEFAULT_MASK = 0b00000000000001010110
 var INVULN_MASK =  0b00000000000001000010
@@ -34,7 +35,7 @@ onready var animationState = animationTree.get("parameters/playback")
 onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
 
 func damage_player(damage):
-	if is_invuln:
+	if is_invuln or HAS_GODMODE:
 		return
 	soundHurt.play()
 	health -= damage # do damage

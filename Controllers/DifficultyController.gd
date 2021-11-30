@@ -51,7 +51,7 @@ export var eSpawnScale = [20,20,25,25,30]
 export var mSpawnScale = [25,30,35,35,40]
 export var hSpawnScale = [30,35,40,40,45]
 
-export var powerUpBossWeights = [0,1,3]
+export var powerUpBossWeights = [0,1,5]
 
 var GeneralHPScale
 var BruteHPScale
@@ -80,7 +80,7 @@ func scale_enemy_stats(enemy):
 	enemy.MOVEMENT_TRACKING += TrackScale[DIFFICULTY][stage]
 	
 	if ProgressController.isBossStage:
-		enemy.POWERUP_DROP_CHANCE += .2
+		enemy.POWERUP_DROP_CHANCE = 1
 		enemy.POWERUP_WEIGHTS = powerUpBossWeights
 	
 	return enemy

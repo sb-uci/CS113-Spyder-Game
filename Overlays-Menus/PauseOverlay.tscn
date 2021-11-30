@@ -30,9 +30,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -56.0
-margin_top = -52.0
+margin_top = -164.0
 margin_right = 67.0
-margin_bottom = -20.0
+margin_bottom = -132.0
 text = "PAUSED"
 align = 1
 valign = 1
@@ -42,10 +42,10 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Pause"]
 margin_left = 104.0
-margin_top = 32.0
+margin_top = 56.0
 margin_right = 230.0
-margin_bottom = 115.0
-custom_constants/separation = 22
+margin_bottom = 174.0
+custom_constants/separation = 16
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -60,22 +60,28 @@ __meta__ = {
 }
 
 [node name="continue" type="Button" parent="Pause/VBoxContainer"]
-margin_top = 35.0
+margin_top = 29.0
 margin_right = 126.0
-margin_bottom = 48.0
+margin_bottom = 42.0
 text = "continue"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="quit" type="Button" parent="Pause/VBoxContainer"]
-margin_top = 70.0
+margin_top = 58.0
 margin_right = 126.0
-margin_bottom = 83.0
+margin_bottom = 71.0
 text = "quit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="godmode" type="Button" parent="Pause/VBoxContainer"]
+margin_top = 87.0
+margin_right = 126.0
+margin_bottom = 100.0
+text = "godmode"
 
 [node name="MenuSelectSound" type="AudioStreamPlayer" parent="Pause"]
 stream = ExtResource( 3 )
@@ -84,3 +90,4 @@ volume_db = -15.0
 [connection signal="pressed" from="Pause/VBoxContainer/restart" to="Pause" method="_on_restart_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/continue" to="Pause" method="_on_continue_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/quit" to="Pause" method="_on_quit_pressed"]
+[connection signal="pressed" from="Pause/VBoxContainer/godmode" to="Pause" method="_on_godmode_pressed"]

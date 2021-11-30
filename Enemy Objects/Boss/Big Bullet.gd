@@ -6,9 +6,12 @@ export var BURST_DAMAGE = 1
 export var BURST_BULLET = preload("res://Enemy Objects/Boss/Basic Bullet.tscn")
 
 onready var soundBurst = $BurstSound
-onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
 
-func _process(delta):
+func _process_override(delta):
+	lifetime -= delta
+	if lifetime <= 0:
+		_death_burst()
+		queue_free()
 	if !_is_on_screen():
 		_death_burst()
 		queue_free()
@@ -33,16 +36,6 @@ func _death_burst():
 		get_tree().get_root().get_node("World").add_child(bullet)
 		soundBurst.play()
 		direction += 360/BURST_NUM_BULLETS
-
-func _is_on_screen():
-	var x_low = GLOBALS.cam_center.x - GLOBALS.cam_width/2
-	var x_high = GLOBALS.cam_center.x + GLOBALS.cam_width/2
-	var y_low = GLOBALS.cam_center.y - GLOBALS.cam_height/2
-	var y_high = GLOBALS.cam_center.y + GLOBALS.cam_height/2
-	
-	var is_in_x_bound = global_position.x >= x_low and global_position.x <= x_high
-	var is_in_y_bound = global_position.y >= y_low and global_position.y <= y_high
-	return is_in_x_bound and is_in_y_bound
 
 # because of the obstacle-nesting solution for navmesh polygon joining,
 # simply destroying an obstacle will destroy any nested obstacles.

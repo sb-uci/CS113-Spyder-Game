@@ -3,7 +3,6 @@ extends "res://Enemy Objects/Enemy Bullet.gd"
 export var max_bounces = 2
 export var wall_buffer = 5
 
-onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
 onready var left_wall = GLOBALS.cam_center.x - (GLOBALS.cam_width/2) + wall_buffer
 onready var right_wall = GLOBALS.cam_center.x + (GLOBALS.cam_width/2) - wall_buffer
 onready var top_wall = GLOBALS.cam_center.y - (GLOBALS.cam_height/2) + wall_buffer
@@ -11,7 +10,11 @@ onready var bottom_wall = GLOBALS.cam_center.y + (GLOBALS.cam_height/2) - wall_b
 
 var bounces = 0
 
-func _process(delta):
+func _process_override(delta):
+	lifetime -= delta
+	if lifetime < 0:
+		queue_free()
+		
 	var did_bounce = false
 	if global_position.x < left_wall or global_position.x > right_wall:
 		linear_velocity *= Vector2(-1,1)

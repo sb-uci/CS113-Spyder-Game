@@ -8,7 +8,8 @@ export var brute_weight  = 2 # likelihood of brute enemy spawning
 export var flyer_time_comp = 1 # time compensation for spawning flyer
 export var shooter_time_comp = 2 # time compensation for spawning shooter
 export var brute_time_comp = 2 # time compensation for spawning brute
-export var interval_thresh = 10 # clips spawn intervals to not be too long
+export var interval_max = 10 # clips spawn intervals to be at most this long
+export var interval_min = 0 # clips spawn intervals to be at least this long
 export var screen_edge_buffer = 50 # n pixel "deadzone" around screen where spawning cannot occur
 export var enabled = true
 
@@ -53,8 +54,10 @@ func _process(delta):
 		if next_spawn <= 0:
 			_spawn()
 			next_spawn = _generate_interval() + next_spawn
-			if next_spawn > interval_thresh:
-				next_spawn = interval_thresh
+			if next_spawn > interval_max:
+				next_spawn = interval_max
+			elif next_spawn < interval_min:
+				next_spawn = interval_min
 			print("next spawn in {sec} seconds".format({"sec":next_spawn}))
 		else:
 			next_spawn -= delta
@@ -62,7 +65,6 @@ func _process(delta):
 func _spawn():
 	var point = _generate_spawn_point()
 	var enemy = _choose_enemy()
-	print("Spawning enemy at {point}".format({"point":point}))
 	enemy = DIFFICULTY_CONTROLLER.scale_enemy_stats(enemy)
 	get_tree().get_root().get_node("World").add_child(enemy)
 	enemy.position = point

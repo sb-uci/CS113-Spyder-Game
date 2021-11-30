@@ -367,9 +367,6 @@ position = Vector2( -1.39841, -3.22752 )
 scale = Vector2( 0.870638, 0.870638 )
 texture = ExtResource( 17 )
 
-[node name="PauseOverlay" parent="." instance=ExtResource( 10 )]
-pause_mode = 2
-
 [node name="MainMenu" parent="." instance=ExtResource( 12 )]
 
 [node name="BGMusic" type="AudioStreamPlayer" parent="."]
@@ -383,6 +380,9 @@ autoplay = true
 position = Vector2( 136, -24 )
 
 [node name="BossHealthBar" parent="." instance=ExtResource( 23 )]
+
+[node name="PauseOverlay" parent="." instance=ExtResource( 10 )]
+pause_mode = 2
 
 [node name="BossCamera" type="Camera2D" parent="."]
 position = Vector2( 136, 24 )

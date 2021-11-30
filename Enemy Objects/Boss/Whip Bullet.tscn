@@ -7,7 +7,10 @@
 radius = 1.875
 height = 5.25
 
-[node name="Whip Bullet" type="RigidBody2D"]
+[node name="Whip Bullet" type="RigidBody2D" groups=[
+"BossBullet",
+"Bullet",
+]]
 collision_layer = 16
 collision_mask = 2
 gravity_scale = 0.0

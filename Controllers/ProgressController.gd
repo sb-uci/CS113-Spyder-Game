@@ -25,8 +25,9 @@ var boss_entity
 
 func _process(delta):
 	if Input.is_action_just_pressed("dev_skip"):
-		stage = 4
-		advance()
+		if !isBossStage:
+			stage = 4
+			advance()
 
 func _ready():
 	SPAWNER.enabled = false
@@ -54,6 +55,7 @@ func advance():
 	yield(TEXTBOX, "has_become_inactive")
 	if stage == MAX_STAGE:
 		if choice.outcome == TEXTBOX.BinaryChoice.option.LEFT:
+			# player chose to radio home; boss fight ensues
 			isBossStage = true
 			TEXTBOX.queue_text(". . .")
 			TEXTBOX.queue_text("What a shame")
@@ -61,12 +63,17 @@ func advance():
 			_do_boss_scene()
 			yield(boss_entity, "is_ready")
 			_update_cam_globals()
-			_enable_spawner_for_boss_scene()
-	_soft_unpause()
-
-	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
-	if stage == MAX_STAGE:
-		SPAWNER.enabled = false
+			_edit_spawner_for_boss_scene()
+			_soft_unpause()
+			SPAWNER.enabled = false
+		else:
+			# player chose to do nothing; game ends
+			pass
+	else:
+		_soft_unpause()
+		SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
+		if stage == MAX_STAGE:
+			SPAWNER.enabled = false
 		
 
 func get_stage():
@@ -170,10 +177,11 @@ func _switch_to_boss_cam():
 	TWEEN.interpolate_property(BOSS_CAM, "zoom", BOSS_CAM.zoom, BOSS_CAM.zoom + Vector2(.25,.25), CAM_TRAN_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
 	TWEEN.start()
 
-func _enable_spawner_for_boss_scene():
+func _edit_spawner_for_boss_scene():
 	stage = 0 # use stage 0 difficulty scaling
-	SPAWNER.enabled = true
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate() - 10)
+	SPAWNER.interval_max = 5
+	SPAWNER.interval_min = 2
 	SPAWNER.do_boss_scene()
 
 func _update_cam_globals():
