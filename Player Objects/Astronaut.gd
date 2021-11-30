@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export var MAX_SPEED = 150
 export var ACCELERATION = 450
-export var FRICTION = 650
+export var FRICTION = 800
 export var MAX_HP = 5
 export var INVULN_TIME = 1.5
 export var FLASH_FREQ = .15

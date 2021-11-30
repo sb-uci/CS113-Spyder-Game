@@ -10,6 +10,7 @@ export var KNOCKBACK_COOLDOWN = 1
 export var POWERUP_DROP_CHANCE = 0.35
 export var MOVEMENT_TRACKING = 0
 export var TYPE = "basic"
+export var POWERUP_WEIGHTS = [1,1,1]
 
 var knockback_cd = 0
 var health
@@ -131,11 +132,26 @@ func _spawn_powerup():
 	powerUpDropChance.randomize()
 	var willDrop = powerUpDropChance.randf_range(0, 1)
 	if (willDrop < POWERUP_DROP_CHANCE):
-		var powerUpChosen = powerUpDropChance.randi_range(0, POWERUP_LIST.size()-1)
-		var powerUp = POWERUP_LIST[powerUpChosen].instance()
+		var powerUp = POWERUP_LIST[_choose_powerup(powerUpDropChance)].instance()
 		powerUp.position = global_position
 		get_parent().add_child(powerUp)
+
+func _choose_powerup(rng):
+	# generate random number
+	var weightSum = 0
+	for weight in POWERUP_WEIGHTS:
+		weightSum += weight
+	var randNum = rng.randi_range(0, weightSum-1)
 	
+	# map random number to choice
+	weightSum = 0
+	var i = 0
+	for weight in POWERUP_WEIGHTS:
+		weightSum += weight
+		if randNum < weightSum:
+			return i
+		i += 1
+
 # helper for _predict_future_player_location; calculates travel time to target by enemy or bullet
 func _predict_travel_time(target, speed):
 	var distance = target - global_position

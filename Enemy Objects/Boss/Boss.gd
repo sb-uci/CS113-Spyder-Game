@@ -118,7 +118,7 @@ func _do_attacks(delta):
 	pass
 
 func _do_movement(delta):
-	if cur_state == state.DEFAULT:
+	if cur_phase == phase.BULLET_PHASE:
 		var move_vector = (_get_next_point() - global_position).normalized()
 		var collision = move_and_collide(move_vector * delta * SPEED)
 		if collision != null:

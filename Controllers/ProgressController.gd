@@ -16,6 +16,8 @@ onready var BOSS = preload("res://Enemy Objects/Boss/Boss.tscn")
 onready var BOSS_CAM = ROOT.get_node("BossCamera")
 onready var TWEEN = $Tween
 onready var GLOBALS = ROOT.get_node("Globals")
+onready var musicBG = ROOT.get_node("BGMusic")
+onready var musicBoss = ROOT.get_node("BossMusic")
 
 var isBossStage = false
 var stage = 0 # measures progress (number of ship parts collected)
@@ -77,6 +79,8 @@ func _reset_player():
 	PLAYER.health = PLAYER.MAX_HP
 	PLAYER.HEALTH_BAR.update_hp(PLAYER.MAX_HP)
 	PLAYER.global_position = stage_point
+	GLOBALS.set_cam_center(stage_point)
+	PLAYER.velocity = Vector2(0,0)
 	PLAYER.animationState.travel("Idle")
 
 func _do_dialogue():
@@ -157,6 +161,8 @@ func _do_boss_scene():
 	boss_entity.refresh_node_references()
 	boss_entity.set_process(false)
 	boss_entity.set_physics_process(false)
+	musicBG.stop()
+	musicBoss.play()
 
 func _switch_to_boss_cam():
 	BOSS_CAM.current = true
