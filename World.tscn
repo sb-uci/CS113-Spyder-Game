@@ -282,47 +282,47 @@ texture = ExtResource( 8 )
 
 [node name="fern" parent="grass" instance=ExtResource( 9 )]
 position = Vector2( 15.4396, -11.3339 )
-frame = 15
+frame = 10
 
 [node name="fern" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 85, 115.5 )
-frame = 12
+frame = 7
 
 [node name="fern2" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 212, 3 )
-frame = 16
+frame = 11
 
 [node name="fern3" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 432, -139 )
-frame = 1
+frame = 21
 
 [node name="fern4" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 405.5, 61 )
-frame = 1
+frame = 21
 
 [node name="fern5" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 419.5, 316 )
-frame = 9
+frame = 4
 
 [node name="fern6" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 362.5, 217 )
-frame = 16
+frame = 11
 
 [node name="fern7" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( 135.621, 236.91 )
-frame = 20
+frame = 15
 
 [node name="fern8" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -109.5, 292 )
-frame = 22
+frame = 17
 
 [node name="fern9" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -136, 39 )
-frame = 0
+frame = 20
 
 [node name="fern10" parent="grass/fern" instance=ExtResource( 9 )]
 position = Vector2( -1, -146 )
-frame = 8
+frame = 3
 
 [node name="ProgressController" parent="." instance=ExtResource( 4 )]
 DIFFICULTY = 2

@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=2]
+[gd_scene load_steps=75 format=2]
 
 [ext_resource path="res://Overlays-Menus/Main.gd" type="Script" id=1]
 [ext_resource path="res://Overlays-Menus/DifficultySelect.gd" type="Script" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://Assets/World/red.png" type="Texture" id=5]
 [ext_resource path="res://Assets/World/stars.png" type="Texture" id=6]
 [ext_resource path="res://Assets/Sounds/menu.wav" type="AudioStream" id=7]
+[ext_resource path="res://Overlays-Menus/Credits.gd" type="Script" id=8]
+[ext_resource path="res://PressStart2P-Regular.ttf" type="DynamicFontData" id=9]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 4 )
@@ -276,6 +278,10 @@ animations = [ {
 "speed": 12.0
 } ]
 
+[sub_resource type="DynamicFont" id=65]
+size = 8
+font_data = ExtResource( 9 )
+
 [node name="MainMenu" type="CanvasLayer"]
 
 [node name="Main" type="Control" parent="."]
@@ -360,22 +366,93 @@ __meta__ = {
 position = Vector2( 168, 32 )
 scale = Vector2( 0.162109, 0.162109 )
 frames = SubResource( 23 )
-frame = 20
+frame = 12
 playing = true
 
 [node name="AnimatedSprite2" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 96, 104 )
 scale = Vector2( 0.71875, 0.71875 )
 frames = SubResource( 41 )
-frame = 12
+frame = 15
 playing = true
 
 [node name="AnimatedSprite3" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 160, 152 )
 scale = Vector2( 0.224561, 0.25 )
 frames = SubResource( 64 )
-frame = 12
+frame = 4
 playing = true
+
+[node name="Credits" type="Control" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+theme = ExtResource( 3 )
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="Credits"]
+margin_right = 320.0
+margin_bottom = 180.0
+color = Color( 0.113725, 0.0862745, 0.152941, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Credits"]
+margin_left = 72.0
+margin_top = 8.0
+margin_right = 250.0
+margin_bottom = 62.0
+text = "Credits"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Information" type="RichTextLabel" parent="Credits"]
+margin_left = 40.0
+margin_top = 45.0
+margin_right = 290.0
+margin_bottom = 145.0
+custom_fonts/normal_font = SubResource( 65 )
+tab_size = 2
+text = "Lead Developer: Stephen Brod
+
+Supporting Developers: Reichelle Robianes, Russle Robianes, & David Lee
+
+Lead Artists: Reichelle Robianes & Russle Robianes
+
+Story & Game Designers:
+Stephen Brod, Reichelle Robianes, Russle Robianes, Peter Tang, & David Lee
+
+Character Designers: Russle Robianes & Reichelle Robianes
+
+Assests Used: _____ "
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Credits"]
+margin_left = 112.0
+margin_top = 56.0
+margin_right = 206.0
+margin_bottom = 162.0
+custom_constants/separation = 18
+alignment = 2
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Main Menu" type="Button" parent="Credits/VBoxContainer"]
+margin_top = 100.0
+margin_right = 142.0
+margin_bottom = 113.0
+text = "Main Menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="DifficultySelect" type="Control" parent="."]
 visible = false
@@ -454,6 +531,7 @@ volume_db = -15.0
 [connection signal="pressed" from="Main/VBoxContainer/Start" to="Main" method="_on_Start_pressed"]
 [connection signal="pressed" from="Main/VBoxContainer/Credits" to="Main" method="_on_Credits_pressed"]
 [connection signal="pressed" from="Main/VBoxContainer/Quit" to="Main" method="_on_Quit_pressed"]
+[connection signal="pressed" from="Credits/VBoxContainer/Main Menu" to="Credits" method="_on_Main_Menu_pressed"]
 [connection signal="pressed" from="DifficultySelect/VBoxContainer/Easy" to="DifficultySelect" method="_on_Easy_pressed"]
 [connection signal="pressed" from="DifficultySelect/VBoxContainer/Medium" to="DifficultySelect" method="_on_Medium_pressed"]
 [connection signal="pressed" from="DifficultySelect/VBoxContainer/Hard" to="DifficultySelect" method="_on_Hard_pressed"]
