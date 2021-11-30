@@ -366,21 +366,20 @@ __meta__ = {
 position = Vector2( 168, 32 )
 scale = Vector2( 0.162109, 0.162109 )
 frames = SubResource( 23 )
-frame = 10
+frame = 8
 playing = true
 
 [node name="AnimatedSprite2" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 96, 104 )
 scale = Vector2( 0.71875, 0.71875 )
 frames = SubResource( 41 )
-frame = 11
+frame = 13
 playing = true
 
 [node name="AnimatedSprite3" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 160, 152 )
 scale = Vector2( 0.224561, 0.25 )
 frames = SubResource( 64 )
-frame = 2
 playing = true
 
 [node name="Credits" type="Control" parent="."]
@@ -400,11 +399,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Credits"]
-margin_left = 72.0
+[node name="VBoxContainer" type="VBoxContainer" parent="Credits"]
+visible = false
+margin_left = 32.0
 margin_top = 8.0
-margin_right = 250.0
-margin_bottom = 62.0
+margin_right = 288.0
+margin_bottom = 162.0
+custom_constants/separation = 18
+alignment = 2
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Credits/VBoxContainer"]
+margin_left = 66.0
+margin_right = 190.0
+margin_bottom = 16.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
 text = "Credits"
 align = 1
 valign = 1
@@ -412,11 +425,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Information" type="RichTextLabel" parent="Credits"]
-margin_left = 40.0
-margin_top = 45.0
-margin_right = 290.0
-margin_bottom = 145.0
+[node name="Information" type="RichTextLabel" parent="Credits/VBoxContainer"]
+margin_top = 34.0
+margin_right = 256.0
+margin_bottom = 123.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_fonts/normal_font = SubResource( 65 )
 tab_size = 2
 text = "Lead Developer: Stephen Brod
@@ -439,23 +453,17 @@ Music and Sound:
 
 Art Assets:
 * Boulders - 2 Minute Tabletop"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Credits"]
-margin_left = 88.0
-margin_top = 56.0
-margin_right = 230.0
-margin_bottom = 162.0
-custom_constants/separation = 18
-alignment = 2
 __meta__ = {
-"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
 [node name="Main Menu" type="Button" parent="Credits/VBoxContainer"]
-margin_top = 93.0
-margin_right = 142.0
-margin_bottom = 106.0
+margin_left = 57.0
+margin_top = 141.0
+margin_right = 199.0
+margin_bottom = 154.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "Main Menu"
 __meta__ = {
 "_edit_use_anchors_": false
