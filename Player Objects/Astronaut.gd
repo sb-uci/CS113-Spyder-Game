@@ -3,7 +3,7 @@ extends KinematicBody2D
 export var MAX_SPEED = 150
 export var ACCELERATION = 450
 export var FRICTION = 800
-export var MAX_HP = 5
+export var MAX_HP = 5.0
 export var INVULN_TIME = 1.5
 export var FLASH_FREQ = .15
 export var KNOCKBACK_RESISTANCE = 1.1 # how quickly the astronaut recovers from (1 is no resistance)
@@ -33,6 +33,13 @@ onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
 onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
+
+func heal(amount):
+	if health + amount > MAX_HP:
+		health = MAX_HP
+	else:
+		health += amount
+	HEALTH_BAR.update_hp(health)
 
 func damage_player(damage):
 	if is_invuln or HAS_GODMODE:

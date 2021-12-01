@@ -83,8 +83,7 @@ func _advance_stage():
 	stage += 1
 
 func _reset_player():
-	PLAYER.health = PLAYER.MAX_HP
-	PLAYER.HEALTH_BAR.update_hp(PLAYER.MAX_HP)
+	PLAYER.heal(PLAYER.MAX_HP)
 	PLAYER.global_position = stage_point
 	GLOBALS.set_cam_center(stage_point)
 	PLAYER.velocity = Vector2(0,0)
@@ -168,6 +167,7 @@ func _do_boss_scene():
 	boss_entity.refresh_node_references()
 	boss_entity.set_process(false)
 	boss_entity.set_physics_process(false)
+	boss_entity.set_difficulty(DIFFICULTY)
 	musicBG.stop()
 	musicBoss.play()
 

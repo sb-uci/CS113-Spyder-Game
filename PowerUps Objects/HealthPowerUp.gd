@@ -14,8 +14,7 @@ func _on_Health_PowerUp_body_entered(body):
 				if child != soundHeal:
 					child.queue_free()
 			soundHeal.play()
-			PLAYER.health += HEALTH_INCREASE
-			PLAYER.HEALTH_BAR.update_hp(PLAYER.health)
+			PLAYER.heal(HEALTH_INCREASE)
 			_create_powerUp_timer() # if health pack queue_frees here, sound won't play
 
 func _on_powerup_timeout():
