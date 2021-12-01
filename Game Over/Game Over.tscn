@@ -60,7 +60,8 @@ Label/styles/normal = null
 [node name="Game Over" type="CanvasLayer"]
 layer = 100
 
-[node name="GameOVer" type="Control" parent="."]
+[node name="GameOver" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 5 )
@@ -69,21 +70,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HurtSound" type="AudioStreamPlayer" parent="GameOVer"]
+[node name="HurtSound" type="AudioStreamPlayer" parent="GameOver"]
 stream = ExtResource( 3 )
 
-[node name="GameOverSound" type="AudioStreamPlayer" parent="GameOVer"]
+[node name="GameOverSound" type="AudioStreamPlayer" parent="GameOver"]
 stream = ExtResource( 2 )
 
-[node name="ColorRect" type="ColorRect" parent="GameOVer"]
+[node name="ColorRect" type="ColorRect" parent="GameOver"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.298039, 0.0392157, 0.0392157, 0.72549 )
+color = Color( 0.298039, 0.0392157, 0.0392157, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="GameOVer/ColorRect"]
+[node name="Label" type="Label" parent="GameOver/ColorRect"]
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -104.0
@@ -98,7 +99,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameOVer/ColorRect"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOver/ColorRect"]
 margin_left = 80.0
 margin_top = 72.0
 margin_right = 238.0
@@ -109,7 +110,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Play Again" type="Button" parent="GameOVer/ColorRect/VBoxContainer"]
+[node name="Play Again" type="Button" parent="GameOver/ColorRect/VBoxContainer"]
 margin_right = 158.0
 margin_bottom = 13.0
 text = "Play Again"
@@ -117,7 +118,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Quit" type="Button" parent="GameOVer/ColorRect/VBoxContainer"]
+[node name="Quit" type="Button" parent="GameOver/ColorRect/VBoxContainer"]
 margin_top = 29.0
 margin_right = 158.0
 margin_bottom = 42.0
@@ -126,9 +127,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MenuSelectSound" type="AudioStreamPlayer" parent="GameOVer"]
+[node name="MenuSelectSound" type="AudioStreamPlayer" parent="GameOver"]
 stream = ExtResource( 4 )
 volume_db = -15.0
 
-[connection signal="pressed" from="GameOVer/ColorRect/VBoxContainer/Play Again" to="GameOVer" method="_on_Play_Again_pressed"]
-[connection signal="pressed" from="GameOVer/ColorRect/VBoxContainer/Quit" to="GameOVer" method="_on_Quit_pressed"]
+[connection signal="pressed" from="GameOver/ColorRect/VBoxContainer/Play Again" to="GameOver" method="_on_Play_Again_pressed"]
+[connection signal="pressed" from="GameOver/ColorRect/VBoxContainer/Quit" to="GameOver" method="_on_Quit_pressed"]

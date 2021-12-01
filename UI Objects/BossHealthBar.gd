@@ -19,6 +19,9 @@ var true_min
 func show():
 	$HealthBars.visible = true
 
+func hide():
+	$HealthBars.visible = false
+
 func _ready():
 	HEALTH_BAR.tint_progress = HEALTH_COLOR
 	TWEEN_BAR.tint_progress = TWEEN_COLOR
@@ -41,11 +44,12 @@ func set_max(max_hp):
 	HEALTH_BAR.max_value = true_max * 100 # values scaled for smoother tweening
 	TWEEN_BAR.max_value = true_max * 100
 	
+	TWEEN.remove_all()
 	TWEEN.interpolate_property(HEALTH_BAR, "value", HEALTH_BAR.value, HEALTH_BAR.max_value, START_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_IN_OUT, 0)
 	TWEEN.interpolate_property(TWEEN_BAR, "value", TWEEN_BAR.value, TWEEN_BAR.max_value, START_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
 	TWEEN.start()
 
 func _do_health_tween(new_hp):
-	TWEEN.stop(TWEEN_BAR)
+	TWEEN.remove_all()
 	TWEEN.interpolate_property(TWEEN_BAR, "value", TWEEN_BAR.value, new_hp, 0.4, TWEEN.TRANS_SINE, TWEEN.EASE_IN_OUT, TWEEN_DELAY)
 	TWEEN.start()

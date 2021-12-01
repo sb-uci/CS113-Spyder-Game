@@ -41,25 +41,5 @@ func _death_burst():
 # simply destroying an obstacle will destroy any nested obstacles.
 # Instead, those should be reparented
 func _destroy(collision_object):
-	var has_seen_first_child = false
-	var new_parent = collision_object.get_parent()
-	for child in collision_object.get_children():
-		if child.is_in_group("CollisionObject"):
-			# gather parent transform data
-			var new_pos = child.global_position
-			var parent_scale = collision_object.scale
-			
-			# reparent
-			child.name += "%{id}".format({"id" : GLOBALS.reparent_counter})
-			GLOBALS.reparent_counter += 1
-			collision_object.remove_child(child)
-			new_parent.add_child(child)
-			
-			# apply parent transform
-			child.global_position = new_pos
-			child.scale *= parent_scale
-			
-			if !has_seen_first_child:
-				new_parent = child
-				has_seen_first_child = true
-	collision_object.queue_free()
+	collision_object.destroy()
+	return

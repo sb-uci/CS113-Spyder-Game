@@ -4,6 +4,8 @@ onready var ProgressController = get_tree().get_root().get_node("World").get_nod
 onready var soundMenuSelect = get_parent().get_node("MenuSelectSound")
 
 func _ready():
+	if GLOBALS.isBossReached:
+		ProgressController.start(GLOBALS.difficulty)
 	visible = false
 
 func _on_Easy_pressed():

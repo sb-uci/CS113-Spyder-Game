@@ -3,8 +3,6 @@ extends RigidBody2D
 export var offscreen_immunity = 1 # seconds before going offscreen will cause dequeue
 export var lifetime = 10 # seconds before forced dequeue
 
-onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
-
 var damage
 
 func _process_override(delta):

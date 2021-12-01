@@ -16,7 +16,6 @@ var knockback_cd = 0
 var health
 var PLAYER
 var NAVIGATION
-var GLOBALS
 var INDICATOR
 
 onready var sprite = $AnimatedSprite
@@ -42,7 +41,6 @@ func kill():
 func refresh_node_references():
 	PLAYER = get_parent().get_node("Astronaut")
 	NAVIGATION = get_parent().get_node("Navigation")
-	GLOBALS = get_parent().get_node("Globals")
 
 # Godot doesn't allow child classes to replace _ready(), _process(), etc of parent class.
 # Instead, it calls both! Using a separate method unique to the parent class allows

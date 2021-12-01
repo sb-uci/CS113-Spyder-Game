@@ -32,7 +32,21 @@ onready var soundStep = $StepSound
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
-onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
+
+func reset_to_defaults(point):
+	heal(MAX_HP)
+	global_position = point
+	GLOBALS.set_cam_center(point)
+	velocity = Vector2(0,0)
+	animationState.travel("Idle")
+	is_invuln = false
+	invuln_timer = 0
+	_cancel_flash()
+	is_alive = true
+	self.collision_mask = DEFAULT_MASK
+	self.collision_layer = 1
+	$Camera2D.current = true
+	impulses = []
 
 func heal(amount):
 	if health + amount > MAX_HP:
@@ -166,9 +180,8 @@ func _flash_sprite(sprite_node, color_state, easing):
 	
 func dead():
 	is_alive = false
-	get_tree().change_scene("res://Game Over/Game Over.tscn")
+	get_tree().get_root().get_node("World").get_node("ProgressController").game_over()
 	
 func _init_hp():
 	HEALTH_BAR.set_max(MAX_HP)
 	HEALTH_BAR.update_hp(MAX_HP)
-	

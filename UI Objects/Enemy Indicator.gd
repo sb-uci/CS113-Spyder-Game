@@ -2,7 +2,6 @@ extends Area2D
 
 export var MOVE_SPEED = 1000
 
-onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
 onready var collision_shape = $CollisionShape2D
 
 var EnemyNode

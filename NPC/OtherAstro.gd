@@ -7,6 +7,18 @@ onready var PARTS = [get_parent().get_node("ProgressController/ShipPart"),
 					get_parent().get_node("ProgressController/ShipPart5")
 					]
 onready var PLAYER = get_parent().get_node("Astronaut")
+onready var default_collision_layer = collision_layer
+onready var default_collision_mask = collision_mask
+
+func deactivate():
+	visible = false
+	collision_layer = 0
+	collision_mask = 0
+
+func activate():
+	visible = true
+	collision_layer = default_collision_layer
+	collision_mask = default_collision_mask
 
 func _on_Area2D_body_entered(body):
 	$Label.text = checkPartPosition()

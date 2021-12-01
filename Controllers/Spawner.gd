@@ -21,7 +21,6 @@ onready var shooter = preload("res://Enemy Objects/Shooting Enemy.tscn")
 onready var brute = preload("res://Enemy Objects/Brute Enemy.tscn")
 
 onready var DIFFICULTY_CONTROLLER = get_tree().get_root().get_node("World").get_node("ProgressController").get_node("DifficultyController")
-onready var GLOBALS = get_tree().get_root().get_node("World").get_node("Globals")
 
 var next_spawn
 var horizontal

@@ -7,21 +7,38 @@ onready var ROOT = get_tree().get_root().get_node("World")
 onready var PLAYER = ROOT.get_node("Astronaut")
 onready var SPAWNER = ROOT.get_node("Spawner")
 onready var PLAYER_GUN = PLAYER.get_node("Primary Weapon")
+onready var NAVIGATION = ROOT.get_node("Navigation")
 onready var DIFFICULTY_CONTROLLER = $DifficultyController
 onready var MAX_STAGE = 5 # number of ship parts on map
 onready var soundPickup = $PartPickupSound
 onready var stage_point = PLAYER.global_position
 onready var TEXTBOX = ROOT.get_node("TextBoxOverlay")
 onready var BOSS = preload("res://Enemy Objects/Boss/Boss.tscn")
+onready var BOSS_HP_BAR = ROOT.get_node("BossHealthBar")
 onready var BOSS_CAM = ROOT.get_node("BossCamera")
+onready var ASTRO_NPC = ROOT.get_node("OtherAstro")
 onready var TWEEN = $Tween
-onready var GLOBALS = ROOT.get_node("Globals")
 onready var musicBG = ROOT.get_node("BGMusic")
 onready var musicBoss = ROOT.get_node("BossMusic")
 
 var isBossStage = false
 var stage = 0 # measures progress (number of ship parts collected)
 var boss_entity
+
+func game_over():
+	_clear_and_bullets_enemies()
+	_reset_player()
+	musicBG.stop()
+	musicBoss.stop()
+	SPAWNER.enabled = false
+	BOSS_HP_BAR.hide()
+	BOSS_CAM.position -= Vector2(0,16)
+	BOSS_CAM.zoom = Vector2(1,1)
+	NAVIGATION.rebuild_objects()
+	GLOBALS.reset_cam()
+	_soft_pause()
+	get_tree().get_root().get_node("World").get_node("Game Over").get_node("GameOver").activate()
+	
 
 func _process(delta):
 	if Input.is_action_just_pressed("dev_skip"):
@@ -36,18 +53,22 @@ func _ready():
 	PLAYER_GUN.set_process(false)
 	
 func start(difficulty):
+	GLOBALS.difficulty = difficulty
 	DIFFICULTY = difficulty
 	DIFFICULTY_CONTROLLER.DIFFICULTY = difficulty
 	SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
-	_do_dialogue()
-	yield(TEXTBOX, "has_become_inactive")
-	_soft_unpause()
+	if GLOBALS.isBossReached:
+		_skip_to_boss()
+	else:
+		_do_dialogue()
+		yield(TEXTBOX, "has_become_inactive")
+		_soft_unpause()
 
 func advance():
 	print("advancing stage")
 	soundPickup.play()
 
-	_clear_enemies()
+	_clear_and_bullets_enemies()
 	_soft_pause()
 	_advance_stage()
 	_reset_player()
@@ -57,6 +78,7 @@ func advance():
 		if choice.outcome == TEXTBOX.BinaryChoice.option.LEFT:
 			# player chose to radio home; boss fight ensues
 			isBossStage = true
+			GLOBALS.isBossReached = true
 			TEXTBOX.queue_text(". . .")
 			TEXTBOX.queue_text("What a shame")
 			yield(TEXTBOX, "has_become_inactive")
@@ -83,11 +105,7 @@ func _advance_stage():
 	stage += 1
 
 func _reset_player():
-	PLAYER.heal(PLAYER.MAX_HP)
-	PLAYER.global_position = stage_point
-	GLOBALS.set_cam_center(stage_point)
-	PLAYER.velocity = Vector2(0,0)
-	PLAYER.animationState.travel("Idle")
+	PLAYER.reset_to_defaults(stage_point)
 
 func _do_dialogue():
 	match stage:
@@ -151,18 +169,19 @@ func _soft_unpause():
 	PLAYER_GUN.set_process(true)
 	SPAWNER.enabled = true
 
-func _clear_enemies():
+func _clear_and_bullets_enemies():
 	var root = get_tree().get_root().get_node("World")
 	for child in root.get_children():
-		if child is Enemy:
+		if child.is_in_group("Boss") or child.is_in_group("Bullet"):
+			child.queue_free()
+		elif child is Enemy:
 			child.kill()
 
 func _do_boss_scene():
 	_switch_to_boss_cam()
 	boss_entity = BOSS.instance()
-	var ASTRO_NPC = get_tree().get_root().get_node("World").get_node("OtherAstro")
 	boss_entity.global_position = ASTRO_NPC.global_position
-	ASTRO_NPC.queue_free()
+	ASTRO_NPC.deactivate()
 	get_tree().get_root().get_node("World").add_child(boss_entity)
 	boss_entity.refresh_node_references()
 	boss_entity.set_process(false)
@@ -174,7 +193,7 @@ func _do_boss_scene():
 func _switch_to_boss_cam():
 	BOSS_CAM.current = true
 	TWEEN.interpolate_property(BOSS_CAM, "position", BOSS_CAM.position, BOSS_CAM.position + Vector2(0,16), CAM_TRAN_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
-	TWEEN.interpolate_property(BOSS_CAM, "zoom", BOSS_CAM.zoom, BOSS_CAM.zoom + Vector2(.25,.25), CAM_TRAN_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
+	TWEEN.interpolate_property(BOSS_CAM, "zoom", BOSS_CAM.zoom, Vector2(1.25,1.25), CAM_TRAN_TWEEN_TIME, TWEEN.TRANS_SINE, TWEEN.EASE_OUT, 0)
 	TWEEN.start()
 
 func _edit_spawner_for_boss_scene():
@@ -188,3 +207,10 @@ func _update_cam_globals():
 	GLOBALS.cam_width *= 1.25
 	GLOBALS.cam_height *= 1.25
 	GLOBALS.fix_cam_center(BOSS_CAM.global_position)
+
+func _skip_to_boss():
+	ASTRO_NPC.activate()
+	isBossStage = false
+	stage = 4
+	_soft_unpause()
+	advance()
