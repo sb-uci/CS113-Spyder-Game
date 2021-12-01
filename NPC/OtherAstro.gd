@@ -34,16 +34,16 @@ func checkPartPosition():
 	print(PLAYER.position,PART.position)
 	#If the part is SW
 	if (PLAYER.position[0] > PART.position[0] && PLAYER.position[1] < PART.position[1]):
-		return "I saw a piece fly off South-West of here"
+		return "I saw a piece fly off\nSouth-West of here"
 	#If the part is NW
 	if (PLAYER.position[0] > PART.position[0] && PLAYER.position[1] > PART.position[1]):
-		return "I saw a piece fly off North-West of here"
+		return "I saw a piece fly off\nNorth-West of here"
 	#If the part is SE
 	if (PLAYER.position[0] < PART.position[0] && PLAYER.position[1] < PART.position[1]):
-		return "I saw a piece fly off South-East of here"
+		return "I saw a piece fly off\nSouth-East of here"
 	#If the part is NE
 	if (PLAYER.position[0] < PART.position[0] && PLAYER.position[1] > PART.position[1]):
-		return "I saw a piece fly off North-East of here"	
+		return "I saw a piece fly off\nNorth-East of here"	
 
 func findShipPart():
 	var count = 0
