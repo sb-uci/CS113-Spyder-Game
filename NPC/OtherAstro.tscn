@@ -109,10 +109,10 @@ shape = SubResource( 5 )
 
 [node name="Label" type="Label" parent="."]
 visible = false
-margin_left = -30.9119
-margin_top = -22.653
-margin_right = 39.0881
-margin_bottom = -16.653
+margin_left = -100.0
+margin_top = -10.0
+margin_right = -30.0
+margin_bottom = -4.0
 theme = SubResource( 10 )
 text = "Hello there!"
 __meta__ = {
