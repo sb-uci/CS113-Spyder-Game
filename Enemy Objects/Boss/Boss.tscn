@@ -60,3 +60,5 @@ pitch_scale = 0.8
 [node name="BurstTween" type="Tween" parent="."]
 
 [node name="SweepingBurstTween" type="Tween" parent="."]
+
+[node name="CascadingTween" type="Tween" parent="."]

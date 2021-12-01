@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-export var lifetime = 2.5 # seconds before forced dequeue
+export var lifetime = 4 # seconds before forced dequeue
 
 var target
 var speed

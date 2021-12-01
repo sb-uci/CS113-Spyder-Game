@@ -7,30 +7,31 @@ enum phase {BULLET_PHASE, ADD_PHASE, ADD_TO_BULLET}
 enum path_point {CENTER, LEFT, RIGHT}
 enum sweep_dir {LEFT, RIGHT}
 enum bullets {BASIC, BIG, WHIP, HOMING, BOUNCE}
+enum difficulty_level {EASY, MEDIUM, HARD}
 
 # INNATE BULLET PROPERTIES
-export var BASIC_BULLET_DAMAGE = 1
+export var BASIC_BULLET_DAMAGE = 1.0
 export var BASIC_BULLET_SPEED = 175
 export var BASIC_BULLET = preload("res://Enemy Objects/Boss/Basic Bullet.tscn")
-export var BIG_BULLET_DAMAGE = 2
+export var BIG_BULLET_DAMAGE = 2.0
 export var BIG_BULLET_SPEED = 100
 export var BIG_BULLET = preload("res://Enemy Objects/Boss/Big Bullet.tscn")
-export var WHIP_BULLET_DAMAGE = 1
+export var WHIP_BULLET_DAMAGE = 1.0
 export var WHIP_BULLET_SPEED = 20
 export var WHIP_BULLET = preload("res://Enemy Objects/Boss/Whip Bullet.tscn")
-export var HOMING_BULLET_DAMAGE = 1
-export var HOMING_BULLET_SPEED = 75
+export var HOMING_BULLET_DAMAGE = 1.0
+export var HOMING_BULLET_SPEED = 65
 export var HOMING_BULLET = preload("res://Enemy Objects/Boss/Homing Bullet.tscn")
-export var BOUNCE_BULLET_DAMAGE = 1
+export var BOUNCE_BULLET_DAMAGE = 1.0
 export var BOUNCE_BULLET_SPEED = 125
 export var BOUNCE_BULLET = preload("res://Enemy Objects/Boss/Bouncing Bullet.tscn")
 
-# ATTACK TIMING (higher is slower)
-export var BURST_FREQ = 1
-export var ROT_BURST_FREQ = .4
-export var SWEEP_BURST_FREQ = .1
-export var SWEEP_FREQ = .05
-export var SHOTGUN_FREQ = 1
+# ATTACK TIMING (higher is slower/easier)
+export var BURST_DELAY = 1
+export var ROT_BURST_DELAY = .4
+export var SWEEP_BURST_DELAY = .1
+export var SWEEP_DELAY = .1
+export var SHOTGUN_DELAY = 1
 
 # ATTACK QUANTITY
 export var BURST_NUM_BULLETS = 8
@@ -45,7 +46,7 @@ export var SWEEP_BURST_DURATION = 1 # smaller is harder
 
 # SHOTGUN PROPERTIES
 export var SHOTGUN_SPREAD = 10 # bigger is harder, until it's not
-export var SHOTGUN_VARIANCE_FACTOR = 2 # bigger is harder
+export var SHOTGUN_VARIANCE_RATIO = 2 # bigger is easier (less variance)
 
 # MISC TIMING
 export var PHASE_SWITCH_FREQ = 10 # how long boss spends in each phase (NOT stage)
@@ -57,6 +58,7 @@ onready var cur_stage = stage.ONE
 onready var sweep_state = sweep_dir.LEFT
 onready var sweep_burst_state = sweep_dir.LEFT
 onready var cur_bullet = bullets.BASIC
+onready var difficulty = difficulty_level.MEDIUM
 
 # MOVEMENT DEFAULTS
 onready var next_point = path_point.LEFT
@@ -71,6 +73,7 @@ onready var soundBasicLaser = $BasicLaserSound
 onready var SWEEP_TWEEN = $SweepTween
 onready var BURST_TWEEN = $BurstTween
 onready var SWEEP_BURST_TWEEN = $SweepingBurstTween
+onready var CASCADING_TWEEN = $CascadingTween
 
 # MISC
 onready var SPAWNER = get_tree().get_root().get_node("World").get_node("Spawner")
@@ -84,6 +87,16 @@ var sweep_burst_timer = 0
 var shotgun_timer = 0
 var rebake_timer = 0
 var rng = RandomNumberGenerator.new()
+
+func set_difficulty(difficulty_num):
+	match difficulty_num:
+		0:
+			difficulty = difficulty_level.EASY
+		1:
+			difficulty = difficulty_level.MEDIUM
+		2:
+			difficulty = difficulty_level.HARD
+	_global_difficulty_adjustment()
 
 # call to damage the boss
 func register_hit(damage):
@@ -135,31 +148,23 @@ func _process_stage():
 		stage.ONE:
 			if _health_percent() <= 0.8:
 				cur_stage = stage.TWO
-				BURST_NUM_BULLETS += 2
-				_attack_reset()
-				_clear_bullets()
+				_one_to_two_difficulty_adjustment()
+				_do_stage_transition()
 		stage.TWO:
 			if _health_percent() <= 0.6:
 				cur_stage = stage.THREE
-				BURST_FREQ += 0.25
-				BURST_NUM_BULLETS -= 2
-				SWEEP_BURST_FREQ += 0.05
-				_attack_reset()
-				_clear_bullets()
+				_two_to_three_difficulty_adjustment()
+				_do_stage_transition()
 		stage.THREE:
 			if _health_percent() <= 0.4:
 				cur_stage = stage.FOUR
-				SWEEP_BURST_FREQ -= 0.05
-				_attack_reset()
-				_clear_bullets()
+				_three_to_four_difficulty_adjustment()
+				_do_stage_transition()
 		stage.FOUR:
 			if _health_percent() <= 0.2:
 				cur_stage = stage.FIVE
-				BOUNCE_BULLET_SPEED += 25
-				BURST_NUM_BULLETS -= 2
-				SWEEP_FREQ += 0.05
-				_attack_reset()
-				_clear_bullets()
+				_four_to_five_difficulty_adjustment()
+				_do_stage_transition()
 		stage.FIVE:
 			pass
 
@@ -174,6 +179,8 @@ func _process_phase(delta):
 			phase.ADD_PHASE:
 				cur_phase = phase.ADD_TO_BULLET
 				SPAWNER.enabled = false
+				if cur_stage == stage.FOUR:
+					_clear_bullets()
 		phase_timer = PHASE_SWITCH_FREQ
 		_attack_reset()
 	
@@ -271,26 +278,26 @@ func _alternating_sweep():
 		_sweep(-25, 90)
 		sweep_state = sweep_dir.LEFT
 
-func _shoot_player(bullet_type):
+func _shoot_player(bullet_type, cooldown=FIRE_RATE):
 	if fire_timer > 0:
 		return
 	var bullet = _make_bullet(bullet_type)
 	_shoot_target(PLAYER, bullet[0], bullet[1], soundBasicLaser)
-	fire_timer = FIRE_RATE
+	fire_timer = cooldown
 
-func _shotgun_player(bullet_type):
+func _shotgun_player(bullet_type, cooldown=SHOTGUN_DELAY):
 	if shotgun_timer > 0:
 		return
 	_shotgun(PLAYER, bullet_type)
-	shotgun_timer = SHOTGUN_FREQ
+	shotgun_timer = cooldown
 
-func _spaced_bursts(bullet_type):
+func _spaced_bursts(bullet_type, cooldown=BURST_DELAY):
 	if burst_timer > 0:
 		return
 	_burst(BURST_NUM_BULLETS, 0, 0, bullet_type)
-	burst_timer = BURST_FREQ
+	burst_timer = cooldown
 
-func _twinned_big_shots(angle1, angle2, angle_variance=0):
+func _twinned_big_shots(angle1, angle2, angle_variance=0, cooldown=FIRE_RATE):
 	if fire_timer > 0:
 		return
 	angle1 += rng.randf_range(-angle_variance,angle_variance)
@@ -299,7 +306,7 @@ func _twinned_big_shots(angle1, angle2, angle_variance=0):
 	_shoot_direction(angle1, bullet1, BIG_BULLET_SPEED, soundBasicLaser)
 	var bullet2 = _make_big_bullet()
 	_shoot_direction(angle2, bullet2, BIG_BULLET_SPEED, soundBasicLaser)
-	fire_timer = FIRE_RATE
+	fire_timer = cooldown
 
 # ================
 #  ATTACK HELPERS
@@ -323,7 +330,7 @@ func _shotgun(target, bullet_type, num_bullets=SHOTGUN_NUM_BULLETS, spread=SHOTG
 	var direction = (target.global_position - global_position).angle() * 180/PI
 	var bullet = _make_bullet(bullet_type)
 	var bullet_speed = bullet[1]
-	var speed_variance = bullet[1]/SHOTGUN_VARIANCE_FACTOR
+	var speed_variance = bullet[1]/SHOTGUN_VARIANCE_RATIO
 	bullet[0].queue_free()
 	
 	for i in range(num_bullets):
@@ -406,19 +413,19 @@ func _sweep_wrapper(direction):
 		return
 	var bullet = _make_current_bullet()
 	_shoot_direction(direction, bullet[0], bullet[1], soundBasicLaser)
-	sweep_timer = SWEEP_FREQ
+	sweep_timer = SWEEP_DELAY
 
 func _rotate_burst_wrapper(offset):
 	if rot_burst_timer > 0:
 		return
 	_burst(ROT_BURST_NUM_BULLETS, offset, -50)
-	rot_burst_timer = ROT_BURST_FREQ
+	rot_burst_timer = ROT_BURST_DELAY
 
 func _sweeping_burst_wrapper(offset):
 	if sweep_burst_timer > 0:
 		return
 	_burst(SWEEP_BURST_NUM_BULLETS, offset, -50)
-	sweep_burst_timer = SWEEP_BURST_FREQ
+	sweep_burst_timer = SWEEP_BURST_DELAY
 
 # ===============================
 #  STAGE-SPECIFIC ATTACK HELPERS
@@ -436,10 +443,16 @@ func _stage_two_attack():
 	match cur_phase:
 		phase.ADD_PHASE:
 			_spaced_bursts(bullets.BASIC)
-			_shotgun_player(bullets.WHIP)
+			if phase_timer < 8:
+				_shotgun_player(bullets.WHIP)
 		phase.BULLET_PHASE:
-			cur_bullet = bullets.WHIP
+			cur_bullet = bullets.BASIC
 			_alternating_sweep()
+			if !CASCADING_TWEEN.is_active() and fire_timer <= 0:
+				_shoot_player(bullets.BOUNCE, 0)
+				CASCADING_TWEEN.interpolate_callback(self, .33, "_shoot_player", bullets.BOUNCE, 0)
+				CASCADING_TWEEN.interpolate_callback(self, .67, "_shoot_player", bullets.BOUNCE)
+				CASCADING_TWEEN.start()
 	
 func _stage_three_attack():
 	match cur_phase:
@@ -453,7 +466,9 @@ func _stage_three_attack():
 func _stage_four_attack():
 	match cur_phase:
 		phase.ADD_PHASE:
-			_shoot_player(bullets.HOMING)
+			if phase_timer < 8:
+				_shotgun_player(bullets.BASIC)
+			_shoot_player(bullets.HOMING, FIRE_RATE * 3)
 		phase.BULLET_PHASE:
 			_twinned_big_shots(45,135,20)
 			cur_bullet = bullets.BASIC
@@ -469,6 +484,65 @@ func _stage_five_attack():
 			_twinned_big_shots(0,180)
 			cur_bullet = bullets.BOUNCE
 			_rotating_burst()
+
+# ===============================
+#  DIFFICULTY ADJUSTMENT HELPERS
+# ===============================
+func _global_difficulty_adjustment():
+	match difficulty:
+		difficulty_level.EASY:
+			BASIC_BULLET_DAMAGE /= 2
+			BIG_BULLET_DAMAGE /= 2
+			WHIP_BULLET_DAMAGE /= 2
+			HOMING_BULLET_DAMAGE /= 2
+			BOUNCE_BULLET_DAMAGE /= 2
+		difficulty_level.MEDIUM:
+			pass
+		difficulty_level.HARD:
+			pass
+
+func _one_to_two_difficulty_adjustment():
+	match difficulty:
+		difficulty_level.EASY:
+			pass
+		difficulty_level.MEDIUM:
+			BURST_NUM_BULLETS += 2
+		difficulty_level.HARD:
+			pass
+
+func _two_to_three_difficulty_adjustment():
+	BURST_DELAY += 0.25
+	BURST_NUM_BULLETS -= 2
+	SWEEP_BURST_DELAY += 0.05
+	match difficulty:
+		difficulty_level.EASY:
+			pass
+		difficulty_level.MEDIUM:
+			pass
+		difficulty_level.HARD:
+			pass
+	
+func _three_to_four_difficulty_adjustment():
+	SHOTGUN_SPREAD += 35
+	SHOTGUN_VARIANCE_RATIO += 10
+	match difficulty:
+		difficulty_level.EASY:
+			SHOTGUN_NUM_BULLETS -= 4
+		difficulty_level.MEDIUM:
+			SWEEP_BURST_DELAY -= 0.05
+		difficulty_level.HARD:
+			pass
+	
+func _four_to_five_difficulty_adjustment():
+	BOUNCE_BULLET_SPEED += 25
+	BURST_NUM_BULLETS -= 2
+	match difficulty:
+		difficulty_level.EASY:
+			pass
+		difficulty_level.MEDIUM:
+			pass
+		difficulty_level.HARD:
+			pass
 
 # ===============
 #  OTHER METHODS
@@ -510,3 +584,7 @@ func _clear_bullets():
 	for child in root.get_children():
 		if child.is_in_group("BossBullet"):
 			child.queue_free()
+
+func _do_stage_transition():
+	_attack_reset()
+	_clear_bullets()
