@@ -52,7 +52,7 @@ func _has_line_of_sight(target):
 	
 	# perform raycasts
 	var space_state = get_world_2d().direct_space_state
-	var collision_mask = 0b00000000000000000011 # player and obstacle collision
+	var collision_mask = 0b00000000001000000011 # player and obstacle collision
 	var raycast_upper = space_state.intersect_ray(upper_ray[1], upper_ray[0], [self], collision_mask)
 	var raycast_lower = space_state.intersect_ray(lower_ray[1], lower_ray[0], [self], collision_mask)
 	var raycast_center = space_state.intersect_ray(pt2, pt1, [self], collision_mask)

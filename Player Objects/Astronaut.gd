@@ -10,8 +10,10 @@ export var KNOCKBACK_RESISTANCE = 1.1 # how quickly the astronaut recovers from 
 export var STEP_SOUND_FREQUENCY = .5 # how often the step sound gets played while moving
 export var HAS_GODMODE = false
 
-var DEFAULT_MASK = 0b00000000000001010110
-var INVULN_MASK =  0b00000000000001000010
+var DEFAULT_LAYER = collision_layer
+var DEFAULT_MASK = collision_mask
+var INVULN_MASK =  0b00000000001001000010
+var INVULN_LAYER = 0b00000000001001000000
 
 var velocity = Vector2.ZERO
 var health = MAX_HP
@@ -44,7 +46,7 @@ func reset_to_defaults(point):
 	_cancel_flash()
 	is_alive = true
 	self.collision_mask = DEFAULT_MASK
-	self.collision_layer = 1
+	self.collision_layer = DEFAULT_LAYER
 	$Camera2D.current = true
 	impulses = []
 
@@ -65,7 +67,7 @@ func damage_player(damage):
 	is_invuln = true
 	invuln_timer = INVULN_TIME
 	self.collision_mask = INVULN_MASK
-	self.collision_layer = 128
+	self.collision_layer = INVULN_LAYER
 	# trigger invuln flash
 	flash_timer = FLASH_FREQ
 	_flash_sprite(SPRITE, Color(1,1,1,0), TWEEN.EASE_OUT)
@@ -149,7 +151,7 @@ func _handle_invuln(delta):
 		if invuln_timer <= 0:
 			is_invuln = false
 			self.collision_mask = DEFAULT_MASK
-			self.collision_layer = 1
+			self.collision_layer = DEFAULT_LAYER
 			_cancel_flash()
 
 func _invuln_flash(delta):

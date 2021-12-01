@@ -139,3 +139,5 @@ dev_skip={
 2d_physics/layer_6="Enemy (air)"
 2d_physics/layer_7="World Boundary"
 2d_physics/layer_8="PowerUps"
+2d_physics/layer_9="Something (forgot)"
+2d_physics/layer_10="Cliffs"
