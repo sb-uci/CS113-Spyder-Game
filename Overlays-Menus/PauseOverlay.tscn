@@ -68,20 +68,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="quit" type="Button" parent="Pause/VBoxContainer"]
+[node name="godmode" type="Button" parent="Pause/VBoxContainer"]
 margin_top = 58.0
 margin_right = 126.0
 margin_bottom = 71.0
+text = "godmode"
+
+[node name="quit" type="Button" parent="Pause/VBoxContainer"]
+margin_top = 87.0
+margin_right = 126.0
+margin_bottom = 100.0
 text = "quit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="godmode" type="Button" parent="Pause/VBoxContainer"]
-margin_top = 87.0
-margin_right = 126.0
-margin_bottom = 100.0
-text = "godmode"
 
 [node name="MenuSelectSound" type="AudioStreamPlayer" parent="Pause"]
 stream = ExtResource( 3 )
@@ -89,5 +89,5 @@ volume_db = -15.0
 
 [connection signal="pressed" from="Pause/VBoxContainer/restart" to="Pause" method="_on_restart_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/continue" to="Pause" method="_on_continue_pressed"]
-[connection signal="pressed" from="Pause/VBoxContainer/quit" to="Pause" method="_on_quit_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/godmode" to="Pause" method="_on_godmode_pressed"]
+[connection signal="pressed" from="Pause/VBoxContainer/quit" to="Pause" method="_on_quit_pressed"]
