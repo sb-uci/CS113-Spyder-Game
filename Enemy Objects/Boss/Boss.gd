@@ -78,6 +78,9 @@ onready var CASCADING_TWEEN = $CascadingTween
 # MISC
 onready var SPAWNER = get_tree().get_root().get_node("World").get_node("Spawner")
 
+# SPRITE
+onready var SPRITE = $AnimatedSprite
+
 # PROPERTIES
 var phase_timer = PHASE_SWITCH_FREQ
 var rot_burst_timer = 0
@@ -188,6 +191,7 @@ func _process_phase(delta):
 		cur_phase = phase.BULLET_PHASE
 		phase_timer = PHASE_SWITCH_FREQ
 		_clear_enemies()
+		SPRITE.play("idle_front")
 		
 
 # do attacks for current stage, phase
@@ -218,7 +222,8 @@ func _do_movement(delta):
 		if collision.collider == PLAYER:
 			_on_collide_with_player(PLAYER)
 	_update_move_state(move_vector)
-		
+	SPRITE.play("move")
+	SPRITE.flip_h = move_vector.x < 0
 
 # helper for movement
 func _get_next_point():
