@@ -801,15 +801,6 @@ position = Vector2( -130.932, 35.8999 )
 rotation = 3.09479
 scale = Vector2( 1, 1 )
 
-[node name="ERock8" parent="Navigation" instance=ExtResource( 30 )]
-position = Vector2( -176, 296 )
-rotation = 5.50092
-
-[node name="FRock" parent="Navigation/ERock8" instance=ExtResource( 32 )]
-position = Vector2( -130.932, 35.8999 )
-rotation = 3.09479
-scale = Vector2( 1, 1 )
-
 [node name="FRock" parent="Navigation" instance=ExtResource( 32 )]
 position = Vector2( 520, -272 )
 rotation = -0.453668
