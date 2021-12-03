@@ -27,4 +27,6 @@ shape = SubResource( 1 )
 stream = ExtResource( 3 )
 volume_db = -15.0
 
+[node name="Tween" type="Tween" parent="."]
+
 [connection signal="body_entered" from="." to="." method="_on_Movement_PowerUp_body_entered"]

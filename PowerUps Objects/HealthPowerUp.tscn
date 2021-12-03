@@ -22,4 +22,6 @@ shape = SubResource( 1 )
 [node name="HealSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
 
+[node name="Tween" type="Tween" parent="."]
+
 [connection signal="body_entered" from="." to="." method="_on_Health_PowerUp_body_entered"]

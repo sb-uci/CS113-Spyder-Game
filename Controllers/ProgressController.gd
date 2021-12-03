@@ -269,6 +269,8 @@ func _clear_bullets_and_enemies(include_boss=true):
 			child.queue_free()
 		elif child is Enemy and !child.is_in_group("Boss"):
 			child.kill()
+		elif child is PowerUp:
+			child.queue_free()
 
 func _do_boss_scene():
 	_switch_to_boss_cam()

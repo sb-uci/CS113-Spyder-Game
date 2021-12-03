@@ -4,6 +4,13 @@ export var MOVEMENT_SPEED_INCREASE = 1.5 #Greater value = Faster
 
 onready var soundPowerup = $PowerupSound
 
+func _process(delta):
+	lifetime -= delta
+	if lifetime <= 3 and lifetime > 1.5:
+		_flash_sprite($Sprite, $Tween)
+	elif lifetime <= 1.5:
+		_flash_sprite($Sprite, $Tween, 0.15)
+
 func _ready():
 	pass
 
