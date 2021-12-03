@@ -12,7 +12,7 @@ export var HAS_GODMODE = false
 
 var DEFAULT_LAYER = collision_layer
 var DEFAULT_MASK = collision_mask
-var INVULN_MASK =  0b00000000001001000010
+var INVULN_MASK =  0b00000000001011000010
 var INVULN_LAYER = 0b00000000001001000000
 
 var velocity = Vector2.ZERO

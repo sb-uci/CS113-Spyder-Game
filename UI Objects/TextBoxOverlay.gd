@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-const READ_DELAY = 0.04 # smaller = faster
+const READ_DELAY = 0.03 # smaller = faster
 
 signal has_become_inactive
 
