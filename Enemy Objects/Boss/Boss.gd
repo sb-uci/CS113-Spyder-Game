@@ -44,7 +44,7 @@ export var SWEEP_DURATION = .75 # smaller is easier
 export var ROT_BURST_DURATION = 3 # doesn't actually matter, I think
 export var SWEEP_BURST_DURATION = 1 # smaller is harder
 
-# SHOTGUN PROPERTIES
+# OTHER ATTACK PROPERTIES
 export var SHOTGUN_SPREAD = 10 # bigger is harder, until it's not
 export var SHOTGUN_VARIANCE_RATIO = 2 # bigger is easier (less variance)
 
@@ -77,6 +77,7 @@ onready var CASCADING_TWEEN = $CascadingTween
 
 # MISC
 onready var SPAWNER = get_tree().get_root().get_node("World").get_node("Spawner")
+onready var PROGRESS_CONTROLLER = get_tree().get_root().get_node("World").get_node("ProgressController")
 
 # SPRITE
 onready var SPRITE = $AnimatedSprite
@@ -105,6 +106,8 @@ func set_difficulty(difficulty_num):
 func register_hit(damage):
 	health -= damage
 	HP.update_hp(health)
+	if health <= 0:
+		_death()
 
 # overrides the _ready() method body in parent class
 func _ready_override():
@@ -593,3 +596,8 @@ func _clear_bullets():
 func _do_stage_transition():
 	_attack_reset()
 	_clear_bullets()
+
+func _death():
+	set_process(false)
+	set_physics_process(false)
+	PROGRESS_CONTROLLER.end_game()

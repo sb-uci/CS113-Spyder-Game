@@ -12,21 +12,57 @@ onready var DIFFICULTY_CONTROLLER = $DifficultyController
 onready var MAX_STAGE = 5 # number of ship parts on map
 onready var soundPickup = $PartPickupSound
 onready var stage_point = PLAYER.global_position
-onready var TEXTBOX = ROOT.get_node("TextBoxOverlay")
 onready var BOSS = preload("res://Enemy Objects/Boss/Boss.tscn")
-onready var BOSS_HP_BAR = ROOT.get_node("BossHealthBar")
 onready var BOSS_CAM = ROOT.get_node("BossCamera")
 onready var ASTRO_NPC = ROOT.get_node("OtherAstro")
 onready var TWEEN = $Tween
 onready var musicBG = ROOT.get_node("BGMusic")
 onready var musicBoss = ROOT.get_node("BossMusic")
+onready var musicOutro = ROOT.get_node("OutroMusic")
+onready var TEXTBOX = ROOT.get_node("TextBoxOverlay")
+onready var BOSS_HP_BAR = ROOT.get_node("BossHealthBar")
+onready var OUTRO_SCREEN = ROOT.get_node("OutroScreen").get_node("Controller")
 
 var isBossStage = false
 var stage = 0 # measures progress (number of ship parts collected)
 var boss_entity
 
+func end_game():
+	_clear_bullets_and_enemies()
+	SPAWNER.enabled = false
+	
+	if isBossStage:
+		# post-boss ending ("radio home" ending)
+		musicBoss.stop()
+		TEXTBOX.queue_text("You really are determined to go through with this then.")
+		TEXTBOX.queue_text("If you make it off this place. If they come. . .")
+		TEXTBOX.queue_text("when they come. . .")
+		TEXTBOX.queue_text("Don't ever forget what happened here.")
+		TEXTBOX.queue_text("I fought for what was right")
+		TEXTBOX.queue_text(". . . ")
+		TEXTBOX.queue_text("I hope one day you can say the same.")
+		yield(TEXTBOX, "has_become_inactive")
+		OUTRO_SCREEN.switch_to()
+		musicOutro.play()
+		TEXTBOX.queue_text("And so the two fought for their fates,")
+		TEXTBOX.queue_text("both leaving a piece of themselves behind")
+	else:
+		# no boss ending ("do nothing" ending)
+		musicBG.stop()
+		TEXTBOX.queue_text("I'm glad you understand what we have to do.")
+		TEXTBOX.queue_text("For once in our species' history. . .")
+		TEXTBOX.queue_text("we're doing the right thing.")
+		TEXTBOX.queue_text(". . .")
+		TEXTBOX.queue_text("And no one will even know.")
+		TEXTBOX.queue_text("No one but us.")
+		yield(TEXTBOX, "has_become_inactive")
+		OUTRO_SCREEN.switch_to()
+		musicOutro.play()
+		TEXTBOX.queue_text("And so the two enjoyed their final moments,")
+		TEXTBOX.queue_text("taking solace in what they felt was right.")
+
 func game_over():
-	_clear_and_bullets_enemies()
+	_clear_bullets_and_enemies()
 	_reset_player()
 	musicBG.stop()
 	musicBoss.stop()
@@ -68,7 +104,7 @@ func advance():
 	print("advancing stage")
 	soundPickup.play()
 
-	_clear_and_bullets_enemies()
+	_clear_bullets_and_enemies()
 	_soft_pause()
 	_advance_stage()
 	_reset_player()
@@ -90,7 +126,7 @@ func advance():
 			SPAWNER.enabled = false
 		else:
 			# player chose to do nothing; game ends
-			pass
+			end_game()
 	else:
 		_soft_unpause()
 		SPAWNER.change_rate(DIFFICULTY_CONTROLLER.get_spawn_rate())
@@ -123,10 +159,17 @@ func _do_dialogue():
 			return _stage_five_dialogue()
 
 func _stage_zero_dialogue():
-	TEXTBOX.queue_text("This is some immediate dialogue")
-	TEXTBOX.queue_text("It plays right as the game starts (after the menu)")
-	TEXTBOX.queue_text("Narratively, this is right after the crash")
-	TEXTBOX.queue_text("Go collect the parts to advance")
+	TEXTBOX.queue_text("Mission successful: we landed!")
+	TEXTBOX.queue_text(". . . just not how we were supposed to land.")
+	TEXTBOX.queue_text("Suffice it to say, our transport back home is a bit more")
+	TEXTBOX.queue_text("tenuous.")
+	TEXTBOX.queue_text("I think we can scrap some parts to radio back home,")
+	TEXTBOX.queue_text("but I saw a few pieces go flying off during the crash.")
+	TEXTBOX.queue_text("How about you go see if you can find them.")
+	TEXTBOX.queue_text("I'll see what we can pull from the ship.")
+	TEXTBOX.queue_text("Be careful though. . . ")
+	TEXTBOX.queue_text("When we were approaching the ground,")
+	TEXTBOX.queue_text("I thought I saw movement.")
 
 func _stage_one_dialogue():
 	TEXTBOX.queue_text("Oh boy, the player just collected their first part!")
@@ -169,7 +212,7 @@ func _soft_unpause():
 	PLAYER_GUN.set_process(true)
 	SPAWNER.enabled = true
 
-func _clear_and_bullets_enemies():
+func _clear_bullets_and_enemies():
 	var root = get_tree().get_root().get_node("World")
 	for child in root.get_children():
 		if child.is_in_group("Boss") or child.is_in_group("Bullet"):

@@ -1,5 +1,6 @@
 extends Node2D
 
+export var first_spawn_delay = 5 # number of seconds before first spawn
 export var rate = 30 # avg number of spawns per minute
 export var basic_weight = 7 # likelihood of basic enemy spawning
 export var flyer_weight = 2 # likelihood of flyer enemy spawning
@@ -45,7 +46,7 @@ func do_boss_scene():
 func _ready():
 	_calc_spawn_box()
 	rng.randomize()
-	next_spawn = _generate_interval()
+	next_spawn = first_spawn_delay
 
 func _process(delta):
 	_calc_spawn_box()
