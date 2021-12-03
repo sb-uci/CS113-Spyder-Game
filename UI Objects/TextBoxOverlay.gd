@@ -1,7 +1,5 @@
 extends CanvasLayer
 
-const READ_DELAY = 0.03 # smaller = faster
-
 signal has_become_inactive
 
 onready var PARENT_MARGIN = $ParentMargin
@@ -17,6 +15,7 @@ onready var SELECTOR_RIGHT = $ParentMargin/TextMargin/ChoiceContainer/Selector/S
 onready var TWEEN = $Tween
 onready var soundTextScroll = $TextScrollSound
 
+export var READ_DELAY = 0.03 # smaller = faster
 export var FLASH_FREQ = 0.5
 
 var is_end_sym_flashing = false
@@ -24,6 +23,9 @@ var flash_timer = FLASH_FREQ
 var is_complete = true # is tween complete (or inactive)
 var current_choice = null # current binary choice object
 var queue = [] # FIFO queue for text
+
+func change_scroll_speed(delay):
+	READ_DELAY = delay
 
 func queue_text(text):
 	PARENT_MARGIN.visible = true

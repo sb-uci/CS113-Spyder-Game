@@ -4,6 +4,7 @@ onready var TEXTBOX = get_tree().get_root().get_node("World").get_node("TextBoxO
 
 func _ready():
 	visible = false
+	$ColorRect.modulate = Color(1,1,1,0)
 	$Label.modulate = Color(1,1,1,0)
 
 func switch_to():
