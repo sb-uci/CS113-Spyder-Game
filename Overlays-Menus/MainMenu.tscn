@@ -419,20 +419,21 @@ __meta__ = {
 position = Vector2( 168, 32 )
 scale = Vector2( 0.162109, 0.162109 )
 frames = SubResource( 23 )
-frame = 8
+frame = 20
 playing = true
 
 [node name="AnimatedSprite2" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 96, 104 )
 scale = Vector2( 0.71875, 0.71875 )
 frames = SubResource( 41 )
-frame = 3
+frame = 6
 playing = true
 
 [node name="AnimatedSprite3" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 160, 152 )
 scale = Vector2( 0.224561, 0.25 )
 frames = SubResource( 64 )
+frame = 12
 playing = true
 
 [node name="Credits" type="Control" parent="."]
@@ -523,6 +524,7 @@ __meta__ = {
 }
 
 [node name="DifficultySelect" type="Control" parent="."]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 theme = ExtResource( 3 )
