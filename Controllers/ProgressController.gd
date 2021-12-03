@@ -28,8 +28,8 @@ var stage = 0 # measures progress (number of ship parts collected)
 var boss_entity
 
 func end_game():
-	_clear_bullets_and_enemies()
-	SPAWNER.enabled = false
+	_soft_pause()
+	_clear_bullets_and_enemies(false)
 	
 	if isBossStage:
 		# post-boss ending ("radio home" ending)
@@ -107,7 +107,6 @@ func start(difficulty):
 		_soft_unpause()
 
 func advance():
-	print("advancing stage")
 	soundPickup.play()
 
 	_clear_bullets_and_enemies()
@@ -244,7 +243,7 @@ func _stage_five_dialogue():
 	TEXTBOX.queue_text("Make your choice: our lives or theirs.")
 	TEXTBOX.queue_text("What will it be?")
 
-	var choice = TEXTBOX.BinaryChoice.new().set_options("Contact HQ/", "Say nothing")
+	var choice = TEXTBOX.BinaryChoice.new().set_options("Contact HQ", "Say nothing")
 	TEXTBOX.queue_text(choice)
 	return choice
 
@@ -260,12 +259,15 @@ func _soft_unpause():
 	PLAYER_GUN.set_process(true)
 	SPAWNER.enabled = true
 
-func _clear_bullets_and_enemies():
+func _clear_bullets_and_enemies(include_boss=true):
 	var root = get_tree().get_root().get_node("World")
 	for child in root.get_children():
-		if child.is_in_group("Boss") or child.is_in_group("Bullet"):
+		if child.is_in_group("Bullet"):
 			child.queue_free()
-		elif child is Enemy:
+		elif include_boss and child.is_in_group("Boss"):
+			BOSS_HP_BAR.hide()
+			child.queue_free()
+		elif child is Enemy and !child.is_in_group("Boss"):
 			child.kill()
 
 func _do_boss_scene():
