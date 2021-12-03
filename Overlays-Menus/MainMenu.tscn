@@ -307,7 +307,7 @@ margin_left = 16.0
 margin_top = 8.0
 margin_right = 176.0
 margin_bottom = 48.0
-text = "Game Name"
+text = "Red Planet"
 align = 1
 valign = 1
 __meta__ = {
@@ -366,21 +366,20 @@ __meta__ = {
 position = Vector2( 168, 32 )
 scale = Vector2( 0.162109, 0.162109 )
 frames = SubResource( 23 )
-frame = 9
 playing = true
 
 [node name="AnimatedSprite2" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 96, 104 )
 scale = Vector2( 0.71875, 0.71875 )
 frames = SubResource( 41 )
-frame = 16
+frame = 3
 playing = true
 
 [node name="AnimatedSprite3" type="AnimatedSprite" parent="Main/Sprites"]
 position = Vector2( 160, 152 )
 scale = Vector2( 0.224561, 0.25 )
 frames = SubResource( 64 )
-frame = 1
+frame = 14
 playing = true
 
 [node name="Credits" type="Control" parent="."]
