@@ -159,7 +159,7 @@ func _do_dialogue():
 			return _stage_five_dialogue()
 
 func _stage_zero_dialogue():
-	TEXTBOX.queue_text("Mission successful: we landed!")
+	TEXTBOX.queue_text("Red: Mission successful: we landed!")
 	TEXTBOX.queue_text(". . . just not how we were supposed to land.")
 	TEXTBOX.queue_text("Suffice it to say, our transport back home is a bit more")
 	TEXTBOX.queue_text("tenuous.")
@@ -172,31 +172,55 @@ func _stage_zero_dialogue():
 	TEXTBOX.queue_text("I thought I saw movement.")
 
 func _stage_one_dialogue():
-	TEXTBOX.queue_text("Oh boy, the player just collected their first part!")
-	TEXTBOX.queue_text("Aint that neat")
+	TEXTBOX.queue_text("Red: You're finally back!")
+	TEXTBOX.queue_text("I don't believe it, there's extraterrestrial life here!")
+	TEXTBOX.queue_text("We need to report this back to HQ stat.")
+	TEXTBOX.queue_text("What...")	
+	TEXTBOX.queue_text("...you...you killed some?")
+	TEXTBOX.queue_text("What's wrong with you!?")
+	TEXTBOX.queue_text("What happens if you run them extinct!?")
+	TEXTBOX.queue_text("...Look, it's fine, I can see more in the distance,")
+	TEXTBOX.queue_text("just get the parts like I told you to then we can leave")
 	
 func _stage_two_dialogue():
-	TEXTBOX.queue_text("Part number 2!")
-	TEXTBOX.queue_text("At this point, the player might notice the game getting harder")
-	TEXTBOX.queue_text("And if they haven't, they definitely will soon")
-	TEXTBOX.queue_text("Maybe the other astronaut should tell the player the mobs are getting stronger")
+	TEXTBOX.queue_text("Red: This planet seems to inhabit more aliens then I thought.")
+	TEXTBOX.queue_text("You didn't kill any this time, right?")
+	TEXTBOX.queue_text("Self-defense!? I can't believe you killed more!")
+	TEXTBOX.queue_text("...You're right...sorry I got carried away.")
+	TEXTBOX.queue_text("I'm glad you're still alive.")
+	TEXTBOX.queue_text("Be careful out there, it seems like words going around about us.")
+	TEXTBOX.queue_text("Wouldn't put it past them to figure out that they need stronger fighters.")
+	TEXTBOX.queue_text("Your gun would probably be meaningless to some of these guys, haha...")
 	
 func _stage_three_dialogue():
-	TEXTBOX.queue_text("Part number 3!")
-	TEXTBOX.queue_text("The game is pretty tough now")
-	TEXTBOX.queue_text("At this point, the other astronaut is alluding to the ending twist")
-	TEXTBOX.queue_text("Maybe they get a little pet alien or something, Idk")
+	TEXTBOX.queue_text("Red: Hey...what do you think HQ is going to do with these aliens?")
+	TEXTBOX.queue_text("Its just...almost feels like we're not suppose to be here.")
+	TEXTBOX.queue_text("I mean these guys are probably going to be treated like animals.")
+	TEXTBOX.queue_text("We're taking away their humanity, and for what? Research? Fame? Fortune?")
+	TEXTBOX.queue_text("...Forget what I said, just lost in thought while I was alone.")
 	
 func _stage_four_dialogue():
-	TEXTBOX.queue_text("Only 1 more part to go!")
-	TEXTBOX.queue_text("The player should probably be a little suspicious of the other astronaut now")
+	TEXTBOX.queue_text("Red: Great job! I'm almost done with the radio!")
+	TEXTBOX.queue_text("What do you mean it doesn't look like a radio?")
+	TEXTBOX.queue_text("What would you know, you're not an engineer.")
+	TEXTBOX.queue_text("A weapon? Don't be ridiculous. Why would I be building a weapon?")
+	TEXTBOX.queue_text("I care about the aliens, remember?")
+	TEXTBOX.queue_text("C'mon, I only need one more part.")
 	
 func _stage_five_dialogue():
-	TEXTBOX.queue_text("Wowee, look at you completing the game")
-	TEXTBOX.queue_text(". . .")
-	TEXTBOX.queue_text(". . .")
-	TEXTBOX.queue_text("Are you going to radio home now?")
-	var choice = TEXTBOX.BinaryChoice.new().set_options("Radio home", "Do nothing")
+	TEXTBOX.queue_text("Red: Finally! I completed the weapon!..I mean radio.")
+	TEXTBOX.queue_text("...Ok look. There are living beings here, with families and lives.")
+	TEXTBOX.queue_text("And you want to take that away from them?")
+	TEXTBOX.queue_text("They're just aliens? We're the aliens here!")
+	TEXTBOX.queue_text("What makes them any less human then us!?")
+	TEXTBOX.queue_text("...I'm going to give you a choice")
+	TEXTBOX.queue_text("If you agree to keep quiet about what we saw here,")
+	TEXTBOX.queue_text("I can dismantle this weapon and make a radio back home.")
+	TEXTBOX.queue_text("But if you're persistent on telling HQ about everything...")
+	TEXTBOX.queue_text("I'm going to do everything in my power to stop you.")
+	TEXTBOX.queue_text("What will it be.")
+
+	var choice = TEXTBOX.BinaryChoice.new().set_options("We should contact HQ/", "You're right")
 	TEXTBOX.queue_text(choice)
 	return choice
 
