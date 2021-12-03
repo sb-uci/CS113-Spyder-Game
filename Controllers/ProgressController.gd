@@ -194,20 +194,20 @@ func _stage_one_dialogue():
 	TEXTBOX.queue_text("just get the parts like I told you to then we can leave")
 	
 func _stage_two_dialogue():
-	TEXTBOX.queue_text("Red: This planet seems to inhabit more aliens then I thought.")
+	TEXTBOX.queue_text("Red: This planet seems to inhabit more aliens than I thought.")
 	TEXTBOX.queue_text("You didn't kill any this time, right?")
 	TEXTBOX.queue_text("Self-defense!? I can't believe you killed more!")
 	TEXTBOX.queue_text(". . .")
 	TEXTBOX.queue_text("You're right...sorry I got carried away.")
 	TEXTBOX.queue_text("I'm glad you're still alive.")
 	TEXTBOX.queue_text("Be careful out there, they seem to be learning from us.")
-	TEXTBOX.queue_text("It's incredible! They're biology is rapidly adapting to your threat.")
+	TEXTBOX.queue_text("It's incredible! Their biology is rapidly adapting to your threat.")
 	TEXTBOX.queue_text("Your gun might be meaningless to some of them soon, haha...")
 	
 func _stage_three_dialogue():
 	TEXTBOX.queue_text("Red: Hey...what do you think HQ is going to do with these aliens?")
-	TEXTBOX.queue_text("Its just...almost feels like we're not suppose to be here.")
-	TEXTBOX.queue_text("I mean these guys are probably going to be treated like animals.")
+	TEXTBOX.queue_text("It just...almost feels like we're not supposed to be here.")
+	TEXTBOX.queue_text("I mean, these guys are probably going to be treated like animals.")
 	TEXTBOX.queue_text("We're taking away their humanity, and for what? Research? Fame?")
 	TEXTBOX.queue_text(". . .")
 	TEXTBOX.queue_text("Forget what I said, just lost in thought while I was alone.")
@@ -230,7 +230,7 @@ func _stage_five_dialogue():
 	TEXTBOX.queue_text("Who are we to take their lives and their home from them?")
 	TEXTBOX.queue_text("We call them aliens, but we're the aliens here!")
 	TEXTBOX.queue_text("We're the ones that don't belong!")
-	TEXTBOX.queue_text("What makes them any less human then us!?")
+	TEXTBOX.queue_text("What makes them any less human than us!?")
 	TEXTBOX.queue_text(". . . ")
 	TEXTBOX.queue_text("There's a radio in the ship,") 
 	TEXTBOX.queue_text("but first you need to make a choice.")
@@ -242,7 +242,7 @@ func _stage_five_dialogue():
 	TEXTBOX.queue_text("they'll come and save you,")
 	TEXTBOX.queue_text("but annihilate everything here in the process.")
 	TEXTBOX.queue_text("Make your choice: our lives or theirs.")
-	TEXTBOX.queue_text("What will it be?")
+	TEXTBOX.queue_text("Which will it be?")
 
 	var choice = TEXTBOX.BinaryChoice.new().set_options("Contact HQ/", "Say nothing")
 	TEXTBOX.queue_text(choice)
