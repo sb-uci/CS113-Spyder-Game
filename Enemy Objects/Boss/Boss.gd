@@ -37,7 +37,7 @@ export var SHOTGUN_DELAY = 1
 export var BURST_NUM_BULLETS = 8
 export var ROT_BURST_NUM_BULLETS = 10
 export var SWEEP_BURST_NUM_BULLETS = 10
-export var SHOTGUN_NUM_BULLETS = 8
+export var SHOTGUN_NUM_BULLETS = 6
 
 # ATTACK DURATION
 export var SWEEP_DURATION = .75 # smaller is easier
@@ -45,12 +45,11 @@ export var ROT_BURST_DURATION = 3 # doesn't actually matter, I think
 export var SWEEP_BURST_DURATION = 1 # smaller is harder
 
 # OTHER ATTACK PROPERTIES
-export var SHOTGUN_SPREAD = 10 # bigger is harder, until it's not
-export var SHOTGUN_VARIANCE_RATIO = 2 # bigger is easier (less variance)
+export var SHOTGUN_SPREAD = 20 # bigger is harder, until it's not
+export var SHOTGUN_VARIANCE_RATIO = 4 # bigger is easier (less variance)
 
 # MISC TIMING
 export var PHASE_SWITCH_FREQ = 10 # how long boss spends in each phase (NOT stage)
-export var REBAKE_FREQ = .2 # how often to rebake the mesh (fixes a specific bug; don't worry abt it)
 
 # ENUM DEFAULTS
 onready var cur_phase = phase.ADD_PHASE
@@ -68,6 +67,7 @@ onready var path_point_right = global_position + Vector2(100,50)
 
 # SOUNDS
 onready var soundBasicLaser = $BasicLaserSound
+onready var soundDeath = $DeathSound
 
 # TWEENS
 onready var SWEEP_TWEEN = $SweepTween
@@ -89,8 +89,8 @@ var burst_timer = 0
 var sweep_timer = 0
 var sweep_burst_timer = 0
 var shotgun_timer = 0
-var rebake_timer = 0
 var rng = RandomNumberGenerator.new()
+var alive = true
 
 func set_difficulty(difficulty_num):
 	match difficulty_num:
@@ -121,21 +121,20 @@ func _ready_override():
 
 # overrides the _process() method body in parent class
 func _process_override(delta):
-	if Input.is_action_just_pressed("dev_skip"):
-		register_hit(MAX_HP * .2)
-	_process_stage()
-	_process_phase(delta)
-	_do_movement(delta)
-	_do_attacks(delta)
-	_elapse_timers(delta)
-	if rebake_timer <= 0:
-		NAVIGATION.rebake_mesh()
-		rebake_timer = REBAKE_FREQ
+	if alive:
+		if Input.is_action_just_pressed("dev_skip"):
+			register_hit(MAX_HP * .2)
+		_process_stage()
+		_process_phase(delta)
+		_do_movement(delta)
+		_do_attacks(delta)
+		_elapse_timers(delta)
+	else:
+		SPRITE.play("idle_front")
 
 # overrides the _physics_process() method body in parent class
 func _physics_process_override(delta):
-	#_do_movement(delta)
-	if _detect_player_collision(PLAYER):
+	if alive and _detect_player_collision(PLAYER):
 		_on_collide_with_player(PLAYER)
 	
 # initializes hp and healthbar with fancy animation sequence
@@ -286,11 +285,11 @@ func _alternating_sweep():
 		_sweep(-25, 90)
 		sweep_state = sweep_dir.LEFT
 
-func _shoot_player(bullet_type, cooldown=FIRE_RATE):
+func _shoot_player(bullet_type, cooldown=FIRE_RATE, angle_offset=0):
 	if fire_timer > 0:
 		return
 	var bullet = _make_bullet(bullet_type)
-	_shoot_target(PLAYER, bullet[0], bullet[1], soundBasicLaser)
+	_shoot_target(PLAYER, bullet[0], bullet[1], soundBasicLaser, angle_offset)
 	fire_timer = cooldown
 
 func _shotgun_player(bullet_type, cooldown=SHOTGUN_DELAY):
@@ -346,10 +345,11 @@ func _shotgun(target, bullet_type, num_bullets=SHOTGUN_NUM_BULLETS, spread=SHOTG
 		var speed_offset = rng.randf_range(-speed_variance/2, speed_variance/2)
 		_shoot_direction(direction + angle_offset, _make_bullet(bullet_type)[0], bullet_speed + speed_offset, soundBasicLaser)
 
-func _shoot_target(target, bullet, speed, sound):
-	var direction = target.global_position - global_position
-	bullet.rotation_degrees = direction.angle() * 180/PI
-	bullet.apply_impulse(Vector2(), Vector2(speed, 0).rotated(direction.angle()))
+func _shoot_target(target, bullet, speed, sound, angle_offset=0):
+	var radian_offset = angle_offset * PI/180
+	var direction = (target.global_position - global_position).angle()
+	bullet.rotation_degrees = (direction * 180/PI) + angle_offset
+	bullet.apply_impulse(Vector2(), Vector2(speed, 0).rotated(direction + radian_offset))
 	get_tree().get_root().get_node("World").add_child(bullet)
 	sound.play()
 
@@ -452,7 +452,7 @@ func _stage_two_attack():
 		phase.ADD_PHASE:
 			_spaced_bursts(bullets.BASIC)
 			if phase_timer < 8:
-				_shotgun_player(bullets.WHIP)
+				_shotgun_player(bullets.BASIC)
 		phase.BULLET_PHASE:
 			cur_bullet = bullets.BASIC
 			_alternating_sweep()
@@ -475,8 +475,11 @@ func _stage_four_attack():
 	match cur_phase:
 		phase.ADD_PHASE:
 			if phase_timer < 8:
-				_shotgun_player(bullets.BASIC)
-			_shoot_player(bullets.HOMING, FIRE_RATE * 3)
+				var num_bullets = 7
+				var offset_half = (num_bullets/2) * 15
+				for i in range(num_bullets-1):
+					_shoot_player(bullets.BASIC, 0, (i*15)-offset_half)
+				_shoot_player(bullets.BASIC, FIRE_RATE, ((num_bullets-1)*15)-offset_half)
 		phase.BULLET_PHASE:
 			_twinned_big_shots(45,135,20)
 			cur_bullet = bullets.BASIC
@@ -562,7 +565,6 @@ func _elapse_timers(delta):
 	sweep_timer -= delta
 	sweep_burst_timer -= delta
 	shotgun_timer -= delta
-	rebake_timer -= delta
 	_handle_knockdown_cd(delta)
 
 func _health_percent():
@@ -585,7 +587,8 @@ func _clear_enemies():
 	var root = get_tree().get_root().get_node("World")
 	for child in root.get_children():
 		if child is Enemy and child != self:
-			child.kill()
+			if child.health == child.MAX_HP:
+				child.kill()
 
 func _clear_bullets():
 	var root = get_tree().get_root().get_node("World")
@@ -598,6 +601,7 @@ func _do_stage_transition():
 	_clear_bullets()
 
 func _death():
-	set_process(false)
-	set_physics_process(false)
+	$ScreenFlash.flash()
+	soundDeath.play()
+	alive = false
 	PROGRESS_CONTROLLER.end_game()

@@ -54,7 +54,6 @@ func findShipPart():
 	if (is_instance_valid(PARTS[4]) == false):
 		return -1
 	for part in PARTS:
-		print(part)
 		if (is_instance_valid(part)):
 			return count;
 		count += 1;

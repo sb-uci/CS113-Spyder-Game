@@ -6,6 +6,7 @@ export var BURST_DAMAGE = 1
 export var BURST_BULLET = preload("res://Enemy Objects/Boss/Basic Bullet.tscn")
 
 onready var soundBurst = $BurstSound
+onready var NAVIGATION = get_tree().get_root().get_node("World").get_node("Navigation")
 
 func _process_override(delta):
 	lifetime -= delta
@@ -42,4 +43,5 @@ func _death_burst():
 # Instead, those should be reparented
 func _destroy(collision_object):
 	collision_object.destroy()
+	NAVIGATION.rebake_mesh()
 	return

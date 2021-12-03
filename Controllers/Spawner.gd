@@ -58,7 +58,6 @@ func _process(delta):
 				next_spawn = interval_max
 			elif next_spawn < interval_min:
 				next_spawn = interval_min
-			print("next spawn in {sec} seconds".format({"sec":next_spawn}))
 		else:
 			next_spawn -= delta
 
