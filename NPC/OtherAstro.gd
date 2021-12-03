@@ -21,7 +21,8 @@ func activate():
 	collision_mask = default_collision_mask
 
 func _on_Area2D_body_entered(body):
-	$Label.text = checkPartPosition()
+	if (findShipPart() != -1):
+		$Label.text = checkPartPosition()
 	$Label.visible = true
 
 
@@ -50,6 +51,8 @@ func checkPartPosition():
 
 func findShipPart():
 	var count = 0
+	if (is_instance_valid(PARTS[4]) == false):
+		return -1
 	for part in PARTS:
 		print(part)
 		if (is_instance_valid(part)):
