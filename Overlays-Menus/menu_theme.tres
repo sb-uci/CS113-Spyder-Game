@@ -21,7 +21,7 @@ corner_detail = 9
 shadow_color = Color( 0.027451, 0.0117647, 0.0980392, 0.6 )
 shadow_offset = Vector2( 1, 1 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=3]
 size = 19
 outline_size = 2
 outline_color = Color( 0.937255, 0.286275, 0.286275, 0.337255 )
@@ -52,5 +52,5 @@ Label/constants/line_spacing = 3
 Label/constants/shadow_as_outline = 0
 Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
-Label/fonts/font = SubResource( 5 )
+Label/fonts/font = SubResource( 3 )
 Label/styles/normal = null

@@ -43,7 +43,9 @@ animations = [ {
 "speed": 5.5
 } ]
 
-[node name="Ship" type="StaticBody2D"]
+[node name="Ship" type="StaticBody2D" groups=[
+"Ship",
+]]
 collision_layer = 2
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]

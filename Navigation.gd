@@ -27,6 +27,8 @@ func generate_mesh():
 						polygons.append(_create_cutout(collision_child))
 			if !polygons.empty():
 				mesh.add_outline(_merge_polygons(polygons))
+		elif child.is_in_group("Ship"):
+			mesh.add_outline(_create_cutout(child.get_node("CollisionPolygon2D")))
 					
 	mesh.make_polygons_from_outlines()
 	$NavMesh.set_navigation_polygon(mesh)
