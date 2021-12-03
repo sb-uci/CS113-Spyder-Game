@@ -45,6 +45,7 @@ func rebuild_objects():
 			for grand_child in child.get_children():
 				if grand_child.is_in_group("CollisionObject"):
 					grand_child.rebuild()
+	rebake_mesh()
 
 func _create_cutout(collision_node):
 	var new_cutout = PoolVector2Array()
