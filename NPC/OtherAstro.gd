@@ -1,10 +1,10 @@
 extends StaticBody2D
 
 onready var PARTS = [get_parent().get_node("ProgressController/ShipPart"),
-					get_parent().get_node("ProgressController/ShipPart2"),
 					get_parent().get_node("ProgressController/ShipPart3"),
 					get_parent().get_node("ProgressController/ShipPart4"),
-					get_parent().get_node("ProgressController/ShipPart5")
+					get_parent().get_node("ProgressController/ShipPart5"),
+					get_parent().get_node("ProgressController/ShipPart2")
 					]
 onready var PLAYER = get_parent().get_node("Astronaut")
 onready var default_collision_layer = collision_layer
@@ -30,8 +30,11 @@ func _on_Area2D_body_exited(body):
 
 
 func checkPartPosition():
-	var PART = PARTS[findShipPart()]
-	print(PLAYER.position,PART.position)
+	var part_index = findShipPart()
+	var PART = PARTS[part_index]
+	# part 5 is straight south, so doesn't fit the below checks
+	if part_index == 4:
+		return "I think the last piece\nis just South of here"
 	#If the part is SW
 	if (PLAYER.position[0] > PART.position[0] && PLAYER.position[1] < PART.position[1]):
 		return "I saw a piece fly off\nSouth-West of here"
