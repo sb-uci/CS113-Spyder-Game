@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=2]
+[gd_scene load_steps=81 format=2]
 
 [ext_resource path="res://Overlays-Menus/Main.gd" type="Script" id=1]
 [ext_resource path="res://Overlays-Menus/DifficultySelect.gd" type="Script" id=2]
@@ -9,12 +9,65 @@
 [ext_resource path="res://Assets/Sounds/menu.wav" type="AudioStream" id=7]
 [ext_resource path="res://Overlays-Menus/Credits.gd" type="Script" id=8]
 [ext_resource path="res://PressStart2P-Regular.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://Overlays-Menus/PauseOverlay.tres" type="StyleBox" id=10]
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="DynamicFont" id=1]
+size = 14
+outline_size = 1
+outline_color = Color( 0.431373, 0.603922, 0.752941, 0.337255 )
+extra_spacing_bottom = -1
+extra_spacing_char = 2
+font_data = ExtResource( 9 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.321569, 0.317647, 0.45098, 0 )
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 9
+shadow_color = Color( 0.027451, 0.0117647, 0.0980392, 0.6 )
+shadow_offset = Vector2( 1, 1 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 19
+outline_size = 2
+outline_color = Color( 0.937255, 0.286275, 0.286275, 0.337255 )
+extra_spacing_char = 3
+extra_spacing_space = -8
+font_data = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 9 )
+
+[sub_resource type="Theme" id=66]
+default_font = SubResource( 4 )
+Button/colors/font_color = Color( 1, 1, 1, 1 )
+Button/colors/font_color_disabled = Color( 0.901961, 0.901961, 0.901961, 0.2 )
+Button/colors/font_color_hover = Color( 0.360784, 0.411765, 0.635294, 1 )
+Button/colors/font_color_pressed = Color( 0.0784314, 0.0627451, 0.160784, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = SubResource( 1 )
+Button/styles/disabled = null
+Button/styles/focus = ExtResource( 10 )
+Button/styles/hover = SubResource( 2 )
+Button/styles/normal = ExtResource( 10 )
+Button/styles/pressed = ExtResource( 10 )
+Label/colors/font_color = Color( 0.996078, 0.85098, 0.890196, 1 )
+Label/colors/font_color_shadow = Color( 0.00784314, 0.0196078, 0.0901961, 0 )
+Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+Label/constants/line_spacing = 3
+Label/constants/shadow_as_outline = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/fonts/font = SubResource( 5 )
+Label/styles/normal = null
+
+[sub_resource type="AtlasTexture" id=67]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 285, 256 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=68]
 atlas = ExtResource( 4 )
 region = Rect2( 285, 0, 285, 256 )
 
@@ -22,11 +75,11 @@ region = Rect2( 285, 0, 285, 256 )
 atlas = ExtResource( 4 )
 region = Rect2( 570, 0, 285, 256 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=69]
 atlas = ExtResource( 4 )
 region = Rect2( 855, 0, 285, 256 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=70]
 atlas = ExtResource( 4 )
 region = Rect2( 1140, 0, 285, 256 )
 
@@ -100,7 +153,7 @@ region = Rect2( 5985, 0, 285, 256 )
 
 [sub_resource type="SpriteFrames" id=23]
 animations = [ {
-"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ) ],
+"frames": [ SubResource( 67 ), SubResource( 68 ), SubResource( 3 ), SubResource( 69 ), SubResource( 70 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ) ],
 "loop": true,
 "name": "default",
 "speed": 12.0
@@ -288,7 +341,7 @@ font_data = ExtResource( 9 )
 visible = false
 margin_right = 320.0
 margin_bottom = 184.0
-theme = ExtResource( 3 )
+theme = SubResource( 66 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -297,7 +350,7 @@ __meta__ = {
 [node name="ColorRect" type="ColorRect" parent="Main"]
 margin_right = 320.0
 margin_bottom = 180.0
-color = Color( 0.113725, 0.0862745, 0.152941, 1 )
+color = Color( 0.0901961, 0.0627451, 0.129412, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -366,6 +419,7 @@ __meta__ = {
 position = Vector2( 168, 32 )
 scale = Vector2( 0.162109, 0.162109 )
 frames = SubResource( 23 )
+frame = 8
 playing = true
 
 [node name="AnimatedSprite2" type="AnimatedSprite" parent="Main/Sprites"]
@@ -379,7 +433,6 @@ playing = true
 position = Vector2( 160, 152 )
 scale = Vector2( 0.224561, 0.25 )
 frames = SubResource( 64 )
-frame = 14
 playing = true
 
 [node name="Credits" type="Control" parent="."]
@@ -395,7 +448,7 @@ __meta__ = {
 [node name="ColorRect" type="ColorRect" parent="Credits"]
 margin_right = 320.0
 margin_bottom = 180.0
-color = Color( 0.113725, 0.0862745, 0.152941, 1 )
+color = Color( 0.0901961, 0.0627451, 0.129412, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -413,9 +466,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Credits/VBoxContainer"]
-margin_left = 66.0
-margin_right = 190.0
-margin_bottom = 16.0
+margin_left = 52.0
+margin_right = 203.0
+margin_bottom = 19.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 text = "Credits"
@@ -426,7 +479,7 @@ __meta__ = {
 }
 
 [node name="Information" type="RichTextLabel" parent="Credits/VBoxContainer"]
-margin_top = 34.0
+margin_top = 37.0
 margin_right = 256.0
 margin_bottom = 123.0
 size_flags_horizontal = 3
@@ -470,7 +523,6 @@ __meta__ = {
 }
 
 [node name="DifficultySelect" type="Control" parent="."]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 theme = ExtResource( 3 )
@@ -482,17 +534,17 @@ __meta__ = {
 [node name="ColorRect" type="ColorRect" parent="DifficultySelect"]
 margin_right = 320.0
 margin_bottom = 180.0
-color = Color( 0.113725, 0.0862745, 0.152941, 1 )
+color = Color( 0.0901961, 0.0627451, 0.129412, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="DifficultySelect"]
-margin_left = 72.0
+margin_left = 54.7387
 margin_top = 8.0
-margin_right = 250.0
+margin_right = 271.739
 margin_bottom = 62.0
-text = "Select 
+text = "Select
 Difficulty"
 align = 1
 valign = 1
