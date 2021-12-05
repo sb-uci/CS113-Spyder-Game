@@ -281,6 +281,8 @@ func _clear_bullets_and_enemies(include_boss=true):
 func _do_boss_scene():
 	_switch_to_boss_cam()
 	boss_entity = BOSS.instance()
+	if DIFFICULTY == 0:
+		boss_entity.MAX_HP -= 50
 	boss_entity.global_position = ASTRO_NPC.global_position
 	ASTRO_NPC.deactivate()
 	get_tree().get_root().get_node("World").add_child(boss_entity)

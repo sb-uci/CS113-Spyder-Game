@@ -8,7 +8,7 @@
 [ext_resource path="res://NPC/stand.png" type="Texture" id=6]
 [ext_resource path="res://NPC/charging.png" type="Texture" id=7]
 [ext_resource path="res://NPC/move.png" type="Texture" id=8]
-[ext_resource path="res://Assets/Sounds/boss_death.wav" type="AudioStream" id=9]
+[ext_resource path="res://Assets/Sounds/game over.wav" type="AudioStream" id=9]
 [ext_resource path="res://Enemy Objects/Boss/ScreenFlash.gd" type="Script" id=10]
 
 [sub_resource type="AtlasTexture" id=1]

@@ -82,6 +82,7 @@ func scale_enemy_stats(enemy):
 	if ProgressController.isBossStage:
 		enemy.POWERUP_DROP_CHANCE = 1
 		enemy.POWERUP_WEIGHTS = powerUpBossWeights
+		enemy.MOVEMENT_TRACKING = 0
 	
 	return enemy
 

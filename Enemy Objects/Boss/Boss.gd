@@ -32,12 +32,14 @@ export var ROT_BURST_DELAY = .4
 export var SWEEP_BURST_DELAY = .1
 export var SWEEP_DELAY = .1
 export var SHOTGUN_DELAY = 1
+export var WAVE_DELAY = 1
 
 # ATTACK QUANTITY
 export var BURST_NUM_BULLETS = 8
 export var ROT_BURST_NUM_BULLETS = 10
 export var SWEEP_BURST_NUM_BULLETS = 10
 export var SHOTGUN_NUM_BULLETS = 6
+export var WAVE_NUM_BULLETS = 7
 
 # ATTACK DURATION
 export var SWEEP_DURATION = .75 # smaller is easier
@@ -104,10 +106,11 @@ func set_difficulty(difficulty_num):
 
 # call to damage the boss
 func register_hit(damage):
-	health -= damage
-	HP.update_hp(health)
-	if health <= 0:
-		_death()
+	if alive:
+		health -= damage
+		HP.update_hp(health)
+		if health <= 0:
+			_death()
 
 # overrides the _ready() method body in parent class
 func _ready_override():
@@ -304,16 +307,22 @@ func _spaced_bursts(bullet_type, cooldown=BURST_DELAY):
 	_burst(BURST_NUM_BULLETS, 0, 0, bullet_type)
 	burst_timer = cooldown
 
-func _twinned_big_shots(angle1, angle2, angle_variance=0, cooldown=FIRE_RATE):
+func _twinned_shots(bullet_type, angle1, angle2, angle_variance=0, cooldown=FIRE_RATE):
 	if fire_timer > 0:
 		return
 	angle1 += rng.randf_range(-angle_variance,angle_variance)
 	angle2 += rng.randf_range(-angle_variance,angle_variance)
-	var bullet1 = _make_big_bullet()
-	_shoot_direction(angle1, bullet1, BIG_BULLET_SPEED, soundBasicLaser)
-	var bullet2 = _make_big_bullet()
-	_shoot_direction(angle2, bullet2, BIG_BULLET_SPEED, soundBasicLaser)
+	var bullet1 = _make_bullet(bullet_type)
+	_shoot_direction(angle1, bullet1[0], bullet1[1], soundBasicLaser)
+	var bullet2 = _make_bullet(bullet_type)
+	_shoot_direction(angle2, bullet2[0], bullet1[1], soundBasicLaser)
 	fire_timer = cooldown
+
+func _wave_at_player(bullet_type):
+	var offset_half = (WAVE_NUM_BULLETS/2) * 15
+	for i in range(WAVE_NUM_BULLETS-1):
+		_shoot_player(bullet_type, 0, (i*15)-offset_half)
+	_shoot_player(bullets.BASIC, WAVE_DELAY, ((WAVE_NUM_BULLETS-1)*15)-offset_half)
 
 # ================
 #  ATTACK HELPERS
@@ -456,12 +465,15 @@ func _stage_two_attack():
 		phase.BULLET_PHASE:
 			cur_bullet = bullets.BASIC
 			_alternating_sweep()
-			if !CASCADING_TWEEN.is_active() and fire_timer <= 0:
-				_shoot_player(bullets.BOUNCE, 0)
-				CASCADING_TWEEN.interpolate_callback(self, .33, "_shoot_player", bullets.BOUNCE, 0)
-				CASCADING_TWEEN.interpolate_callback(self, .67, "_shoot_player", bullets.BOUNCE)
-				CASCADING_TWEEN.start()
-	
+			if difficulty == difficulty_level.HARD:
+				_shoot_player(bullets.BOUNCE, .5)
+			else:
+				if !CASCADING_TWEEN.is_active() and fire_timer <= 0:
+					_shoot_player(bullets.BOUNCE, 0)
+					CASCADING_TWEEN.interpolate_callback(self, .33, "_shoot_player", bullets.BOUNCE, 0)
+					CASCADING_TWEEN.interpolate_callback(self, .67, "_shoot_player", bullets.BOUNCE)
+					CASCADING_TWEEN.start()
+		
 func _stage_three_attack():
 	match cur_phase:
 		phase.ADD_PHASE:
@@ -470,18 +482,16 @@ func _stage_three_attack():
 		phase.BULLET_PHASE:
 			cur_bullet = bullets.BOUNCE
 			_alternating_sweeping_burst()
+			if difficulty == difficulty_level.HARD:
+				_rotating_burst()
 
 func _stage_four_attack():
 	match cur_phase:
 		phase.ADD_PHASE:
 			if phase_timer < 8:
-				var num_bullets = 7
-				var offset_half = (num_bullets/2) * 15
-				for i in range(num_bullets-1):
-					_shoot_player(bullets.BASIC, 0, (i*15)-offset_half)
-				_shoot_player(bullets.BASIC, FIRE_RATE, ((num_bullets-1)*15)-offset_half)
+				_wave_at_player(bullets.BASIC)
 		phase.BULLET_PHASE:
-			_twinned_big_shots(45,135,20)
+			_twinned_shots(bullets.BIG,45,135,20)
 			cur_bullet = bullets.BASIC
 			_alternating_sweeping_burst()
 	
@@ -492,7 +502,8 @@ func _stage_five_attack():
 			_alternating_sweep()
 			_spaced_bursts(bullets.BOUNCE)
 		phase.BULLET_PHASE:
-			_twinned_big_shots(0,180)
+			_twinned_shots(bullets.BIG,0,180,0,0)
+			_twinned_shots(bullets.BASIC,45,135)
 			cur_bullet = bullets.BOUNCE
 			_rotating_burst()
 
@@ -510,7 +521,11 @@ func _global_difficulty_adjustment():
 		difficulty_level.MEDIUM:
 			pass
 		difficulty_level.HARD:
-			pass
+			BURST_NUM_BULLETS += 4
+			BURST_DELAY -= .2
+			ROT_BURST_NUM_BULLETS += 4
+			ROT_BURST_DELAY -= .05
+			WAVE_NUM_BULLETS += 4
 
 func _one_to_two_difficulty_adjustment():
 	match difficulty:
@@ -519,7 +534,7 @@ func _one_to_two_difficulty_adjustment():
 		difficulty_level.MEDIUM:
 			BURST_NUM_BULLETS += 2
 		difficulty_level.HARD:
-			pass
+			BURST_NUM_BULLETS += 4
 
 func _two_to_three_difficulty_adjustment():
 	BURST_DELAY += 0.25
@@ -531,7 +546,8 @@ func _two_to_three_difficulty_adjustment():
 		difficulty_level.MEDIUM:
 			pass
 		difficulty_level.HARD:
-			pass
+			BURST_NUM_BULLETS += 2
+			BURST_DELAY -= 0.25
 	
 func _three_to_four_difficulty_adjustment():
 	SHOTGUN_SPREAD += 35
@@ -542,7 +558,7 @@ func _three_to_four_difficulty_adjustment():
 		difficulty_level.MEDIUM:
 			SWEEP_BURST_DELAY -= 0.05
 		difficulty_level.HARD:
-			pass
+			BASIC_BULLET_SPEED -= 50
 	
 func _four_to_five_difficulty_adjustment():
 	BOUNCE_BULLET_SPEED += 25
@@ -553,7 +569,7 @@ func _four_to_five_difficulty_adjustment():
 		difficulty_level.MEDIUM:
 			pass
 		difficulty_level.HARD:
-			pass
+			BASIC_BULLET_SPEED += 50
 
 # ===============
 #  OTHER METHODS
