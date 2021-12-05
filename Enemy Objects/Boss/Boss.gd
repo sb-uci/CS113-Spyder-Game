@@ -125,8 +125,6 @@ func _ready_override():
 # overrides the _process() method body in parent class
 func _process_override(delta):
 	if alive:
-		if Input.is_action_just_pressed("dev_skip"):
-			register_hit(MAX_HP * .2)
 		_process_stage()
 		_process_phase(delta)
 		_do_movement(delta)

@@ -84,13 +84,6 @@ func game_over():
 	GLOBALS.reset_cam()
 	_soft_pause()
 	get_tree().get_root().get_node("World").get_node("Game Over").get_node("GameOver").activate()
-	
-
-func _process(delta):
-	if Input.is_action_just_pressed("dev_skip"):
-		if !isBossStage:
-			stage = 4
-			advance()
 
 func _ready():
 	SPAWNER.enabled = false
