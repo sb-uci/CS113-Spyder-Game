@@ -3,9 +3,9 @@ extends Sprite
 onready var LASER_SOUND = $LaserSound
 onready var BULLET = preload("res://Player Objects/Bullet.tscn")
 onready var BULLET_SPEED = 300
-onready var BULLET_FIRE_RATE = 0.35
 onready var BULLET_DAMAGE = 1
 
+var fire_rate
 var can_shoot = true
 var direction = "Right"
 
@@ -25,7 +25,7 @@ func _process(delta):
 		get_tree().get_root().get_node("World").add_child(bullet_instance)
 		LASER_SOUND.play()
 		can_shoot = false
-		yield(get_tree().create_timer(BULLET_FIRE_RATE), "timeout")
+		yield(get_tree().create_timer(fire_rate), "timeout")
 		can_shoot = true
 
 # Rotate gun sprite

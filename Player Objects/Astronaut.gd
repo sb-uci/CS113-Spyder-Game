@@ -9,6 +9,7 @@ export var FLASH_FREQ = .15
 export var KNOCKBACK_RESISTANCE = 1.1 # how quickly the astronaut recovers from (1 is no resistance)
 export var STEP_SOUND_FREQUENCY = .5 # how often the step sound gets played while moving
 export var HAS_GODMODE = false
+export var FIRE_RATE = 0.35
 
 var DEFAULT_LAYER = collision_layer
 var DEFAULT_MASK = collision_mask
@@ -24,6 +25,7 @@ var impulses = []
 var is_alive = true
 var recent_movement
 var step_sound_timer = 0
+var default_max_speed = MAX_SPEED
 
 onready var HEALTH_BAR = $HealthBar
 onready var SPRITE = $Sprite
@@ -49,6 +51,8 @@ func reset_to_defaults(point):
 	self.collision_layer = DEFAULT_LAYER
 	$Camera2D.current = true
 	impulses = []
+	WEAPON.fire_rate = FIRE_RATE
+	MAX_SPEED = default_max_speed
 
 func heal(amount):
 	if health + amount > MAX_HP:
@@ -87,7 +91,7 @@ func set_speed(new_speed):
 
 func set_fire_rate(fire_rate_increase):
 	var weaponInstance = get_node("Primary Weapon")
-	weaponInstance.BULLET_FIRE_RATE /= fire_rate_increase
+	weaponInstance.fire_rate /= fire_rate_increase
 	
 func apply_pseudo_impulse(direction, force):
 	direction = direction.normalized()
@@ -95,6 +99,7 @@ func apply_pseudo_impulse(direction, force):
 	impulses.append(impulse)
 
 func _ready():
+	WEAPON.fire_rate = FIRE_RATE
 	_init_hp()
 	GLOBALS.set_cam_center(global_position)
 
